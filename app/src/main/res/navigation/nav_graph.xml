@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    app:startDestination="@id/homeActivity">
+
+    <activity
+        android:id="@+id/detailActivity"
+        android:name="io.palette.view.ui.detail.DetailActivity"
+        android:label="DetailActivity" />
+    <navigation android:id="@+id/navigation2" app:startDestination="@id/homeActivity">
+        <activity
+            android:id="@+id/homeActivity"
+            android:name="io.palette.view.ui.home.HomeActivity"
+            android:label="HomeActivity" />
+        <action
+            android:id="@+id/action_global_detailActivity2"
+            app:destination="@id/detailActivity" />
+    </navigation>
+</navigation>
