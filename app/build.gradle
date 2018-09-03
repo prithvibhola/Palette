@@ -38,89 +38,81 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // Support Libs
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "com.android.support:appcompat-v7:$support_lib_version"
-    implementation "com.android.support:appcompat-v7:$support_lib_version"
-    implementation "com.android.support:design:$support_lib_version"
-    implementation "com.android.support:cardview-v7:$support_lib_version"
-    implementation "com.android.support:recyclerview-v7:$support_lib_version"
-    implementation "com.android.support:support-annotations:$support_lib_version"
-    implementation "com.android.support:customtabs:$support_lib_version"
-    implementation "com.android.support:palette-v7:$support_lib_version"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation 'com.android.support:multidex:1.0.3'
+    // Android Support Libraries
+    implementation deps.support.appcompat
+    implementation deps.support.design
+    implementation deps.support.cardview
+    implementation deps.support.recyclerview
+    implementation deps.support.annotations
+    implementation deps.support.customtabs
+    implementation deps.support.palette
+    implementation deps.support.multidex
+    implementation deps.others.constraint
 
     // Dagger
-    implementation "com.google.dagger:dagger:$dagger_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    implementation "com.google.dagger:dagger-android-support:$dagger_version"
-    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+    implementation deps.google.dagger
+    kapt deps.google.compiler
+    implementation deps.google.dagger_support
+    kapt deps.google.processor
 
-    // RxJava
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
-    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
-    implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
+    // Rx
+    implementation deps.reactivex.rxjava
+    implementation deps.reactivex.rxandroid
+    implementation deps.reactivex.rxkotlin
+    implementation deps.square.rxRelay
 
     // Retrofit and OkHttp
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
-    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
-    implementation 'com.squareup.moshi:moshi-kotlin:1.5.0'
-    debugImplementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+    implementation deps.square.retrofit
+    implementation deps.square.moshi
+    implementation deps.square.rxjava2
+    implementation deps.square.kotlin
+    implementation deps.square.okhttp
 
     // OkHttp interceptors
-    implementation "com.jakewharton.timber:timber:$timber_version"
-    debugImplementation "com.facebook.stetho:stetho:$stetho_version"
-    debugImplementation "com.facebook.stetho:stetho-okhttp3:$stetho_version"
-    debugImplementation "com.readystatesoftware.chuck:library:$chuck_version"
+    debugImplementation deps.square.okhttpInterceptor
+    debugImplementation deps.facebook.stetho
+    debugImplementation deps.facebook.okhttp3
+    debugImplementation deps.others.chuck
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "io.reactivex.rxjava2:rxkotlin:$rx_kotlin_version"
-    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.2.41'
+    implementation deps.kotlin.stdlib
+    implementation deps.kotlin.reflect
 
-    // Room
-    implementation "android.arch.persistence.room:runtime:$android_arch_version"
-    kapt "android.arch.persistence.room:compiler:$android_arch_version"
-    implementation "android.arch.persistence.room:rxjava2:$android_arch_version"
-    testImplementation "android.arch.persistence.room:testing:$android_arch_version"
+    // Android Architecture Component
+    implementation deps.androidarch.extensions
+    implementation deps.androidarch.viewmodel
+    implementation deps.androidarch.livedata
+    implementation deps.androidarch.common
+    implementation deps.androidarch.reactivestreams
+    implementation deps.androidarch.paging
+    implementation deps.androidarch.roomRuntime
+    kapt deps.androidarch.roomCompiler
+    implementation deps.androidarch.roomRxjava2
+    testImplementation deps.androidarch.roomTesting
 
-//    Android Architecture Component
-    implementation "android.arch.lifecycle:extensions:$android_architecture_component_version"
-    implementation "android.arch.lifecycle:viewmodel:$android_architecture_component_version"
-    implementation "android.arch.lifecycle:livedata:$android_architecture_component_version"
-    implementation "android.arch.lifecycle:common-java8:$android_architecture_component_version"
-    implementation "android.arch.lifecycle:reactivestreams:$android_architecture_component_version"
-    implementation "android.arch.paging:runtime:1.0.0"
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha01'
-
-    //Glide
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-
-    //Permission Dispatcher
-    implementation("com.github.hotchemi:permissionsdispatcher:$permission_dispatcher_version") {
+    // Others
+    implementation deps.square.timber
+    implementation deps.others.glide
+    implementation deps.others.progress
+    implementation(deps.others.permissions) {
         exclude module: "support-v13"
     }
-    kapt "com.github.hotchemi:permissionsdispatcher-processor:$permission_dispatcher_version"
+    kapt deps.others.permissions_processor
 
     //Firebase
-    implementation 'com.google.android.gms:play-services-auth:15.0.1'
-    implementation 'com.google.firebase:firebase-messaging:15.0.2'
-    implementation 'com.google.firebase:firebase-core:15.0.2'
-    implementation 'com.google.firebase:firebase-auth:15.1.0'
-    implementation 'com.google.firebase:firebase-firestore:16.0.0'
+    implementation deps.google.auth
+    implementation deps.firebase.messaging
+    implementation deps.firebase.core
+    implementation deps.firebase.auth
+    implementation deps.firebase.firestore
 
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.2@aar') {
+    implementation(deps.fabric.crashlytics) {
         transitive = true;
     }
 
-    implementation 'com.google.android:flexbox:0.3.2'
-
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation deps.test.junit
+    androidTestImplementation deps.test.runner
+    androidTestImplementation deps.test.espresso
 }
 
 apply plugin: 'com.google.gms.google-services'
