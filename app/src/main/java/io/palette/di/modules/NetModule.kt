@@ -9,6 +9,7 @@ import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
+import io.palette.R
 import io.palette.data.api.Api
 import okhttp3.Cache
 import okhttp3.OkHttpClient
@@ -49,9 +50,9 @@ class NetModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit {
+    fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi, context: Context): Retrofit {
         return Retrofit.Builder()
-                .baseUrl("http://prithvibhola-prod.apigee.net")
+                .baseUrl(context.resources.getString(R.string.base_url_unsplash))
                 .client(okHttpClient)
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
