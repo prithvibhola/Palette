@@ -4,34 +4,72 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-kapt'
 
+ext {
+//    debug_key_alias = "androiddebugkey"
+//    debug_key_password = "android"
+//    debug_keystore_path = "../debug.keystore"
+//    debug_keystore_password = "android"
+//    release_key_alias = "password"
+//    release_key_password = "password"
+//    release_keystore_path = "../app/keystore.jks"
+//    release_keystore_password = "password"
+}
+
 android {
     compileSdkVersion 27
+
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
     defaultConfig {
         applicationId "io.palette"
-        minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.compileSdk
+        versionCode versions.code
+        versionName versions.name
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        resValue "string", "base_url_unsplash", properties.getProperty("base.url.unsplash", "")
     }
+
+    //    signingConfigs {
+//        debug {
+//            keyAlias debug_key_alias
+//            keyPassword debug_key_password
+//            storeFile file(debug_keystore_path)
+//            storePassword debug_keystore_password
+//        }
+//        release {
+//            keyAlias release_key_alias
+//            keyPassword release_key_password
+//            storeFile file(release_keystore_path)
+//            storePassword release_keystore_password
+//        }
+//    }
+
     buildTypes {
         debug {
+            multiDexEnabled true
             minifyEnabled false
             shrinkResources false
-            multiDexEnabled true
-
+            zipAlignEnabled false
+//            applicationIdSuffix ".debug"
+//            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
+            multiDexEnabled true
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
+//            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility versions.sourceCompat
+        targetCompatibility versions.targetCompat
     }
 }
 
