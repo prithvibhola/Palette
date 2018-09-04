@@ -19,16 +19,16 @@ class ProfileViewModel @Inject constructor(
     val user: MutableLiveData<Response<FirebaseUser>> = MutableLiveData()
 
     fun login(activity: Activity, account: GoogleSignInAccount) {
-        user.value = Response(Response.ViewState.LOADING, null, null)
+        user.value = Response(Response.Status.LOADING, null, null)
         repository.profileRepository.firebaseAuthWithGoogle(activity, account)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                         onNext = {
-                            user.value = Response(Response.ViewState.SUCCESS, it, null)
+                            user.value = Response(Response.Status.SUCCESS, it, null)
                         },
                         onError = {
-                            user.value = Response(Response.ViewState.ERROR, null, it)
+                            user.value = Response(Response.Status.ERROR, null, it)
                         }
                 )
     }

@@ -1,4 +1,4 @@
-package io.palette.view.ui.profile
+package io.palette.ui.profile
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
@@ -21,7 +21,7 @@ import io.palette.di.FragmentScoped
 import io.palette.utility.extentions.getViewModel
 import io.palette.utility.extentions.toast
 import io.palette.utility.extentions.visible
-import io.palette.view.ui.base.BaseFragment
+import io.palette.ui.base.BaseFragment
 import io.palette.viewmodel.ProfileViewModel
 import kotlinx.android.synthetic.main.fragment_profile.*
 import timber.log.Timber
@@ -53,9 +53,9 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
         viewModel = getViewModel(ProfileViewModel::class.java, viewModelFactory)
         viewModel.user.observe(this, Observer {
             when (it?.status) {
-                Response.ViewState.LOADING -> requireActivity().toast("Login Loading ../")
-                Response.ViewState.SUCCESS -> requireActivity().toast("Login success")
-                Response.ViewState.ERROR -> requireActivity().toast("Login Error")
+                Response.Status.LOADING -> requireActivity().toast("Login Loading ../")
+                Response.Status.SUCCESS -> requireActivity().toast("Login success")
+                Response.Status.ERROR -> requireActivity().toast("Login Error")
                 null -> TODO()
             }
         })

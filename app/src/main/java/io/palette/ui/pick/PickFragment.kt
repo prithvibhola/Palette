@@ -1,4 +1,4 @@
-package io.palette.view.ui.pick
+package io.palette.ui.pick
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
@@ -11,8 +11,8 @@ import io.palette.data.models.Response
 import io.palette.data.models.Sources
 import io.palette.di.FragmentScoped
 import io.palette.utility.extentions.getViewModel
-import io.palette.view.ui.base.BaseFragment
-import io.palette.view.ui.detail.DetailActivity
+import io.palette.ui.base.BaseFragment
+import io.palette.ui.detail.DetailActivity
 import io.palette.viewmodel.PickViewModel
 import kotlinx.android.synthetic.main.fragment_pick.*
 import timber.log.Timber
@@ -43,9 +43,9 @@ class PickFragment @Inject constructor() : BaseFragment() {
 
         viewModel.image.observe(this, Observer {
             when (it?.status) {
-                Response.ViewState.LOADING -> TODO()
-                Response.ViewState.SUCCESS -> startActivity(DetailActivity.newInstance(requireContext(), it.data.toString()))
-                Response.ViewState.ERROR -> TODO()
+                Response.Status.LOADING -> TODO()
+                Response.Status.SUCCESS -> startActivity(DetailActivity.newInstance(requireContext(), it.data.toString()))
+                Response.Status.ERROR -> TODO()
                 null -> TODO()
             }
         })

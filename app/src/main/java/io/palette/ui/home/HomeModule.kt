@@ -1,4 +1,4 @@
-package io.palette.view.ui.home
+package io.palette.ui.home
 
 import android.support.v4.app.FragmentManager
 import dagger.Module
@@ -6,10 +6,10 @@ import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 import io.palette.di.ActivityScoped
 import io.palette.di.FragmentScoped
-import io.palette.view.ui.pick.PickFragment
-import io.palette.view.ui.profile.ProfileFragment
-import io.palette.view.ui.profile.ProfileModule
-import io.palette.view.ui.unsplash.UnsplashFragment
+import io.palette.ui.pick.PickFragment
+import io.palette.ui.profile.ProfileFragment
+import io.palette.ui.profile.ProfileModule
+import io.palette.ui.unsplash.UnsplashFragment
 
 @Module
 abstract class HomeModule {

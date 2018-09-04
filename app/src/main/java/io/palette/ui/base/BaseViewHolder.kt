@@ -1,4 +1,4 @@
-package io.palette.view.ui.base
+package io.palette.ui.base
 
 import android.support.v7.widget.RecyclerView
 import android.view.View

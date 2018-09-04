@@ -2,10 +2,10 @@ package io.palette.di.modules
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import io.palette.view.ui.home.HomeActivity
+import io.palette.ui.home.HomeActivity
 import io.palette.di.ActivityScoped
-import io.palette.view.ui.detail.DetailActivity
-import io.palette.view.ui.home.HomeModule
+import io.palette.ui.detail.DetailActivity
+import io.palette.ui.home.HomeModule
 
 @Module
 abstract class ActivityModule {

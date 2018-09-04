@@ -56,7 +56,7 @@ abstract class PaginatedAdapter<T>(
 
     override fun getItemCount() = super.getItemCount() + if (hasExtraRow()) 1 else 0
 
-    private fun hasExtraRow() = response != null && response != Response.ViewState.SUCCESS
+    private fun hasExtraRow() = response != null && response != Response.Status.SUCCESS
 
     fun setNetworkState(newResponse: Response<T>?) {
         if (currentList != null) {
@@ -86,10 +86,10 @@ abstract class PaginatedAdapter<T>(
 
         override fun bindNetwork(response: Response<T>?) {
             super.bindNetwork(response)
-            itemView.btnRetry.visible = response?.status == Response.ViewState.ERROR
-            itemView.pbLoading.visible = response?.status == Response.ViewState.LOADING
-            if (response?.status == Response.ViewState.LOADING) itemView.tvMessage.text = context.getString(loadingTitleRes)
-            if (response?.status == Response.ViewState.ERROR) itemView.tvMessage.text = context.getString(errorTitleRes)
+            itemView.btnRetry.visible = response?.status == Response.Status.ERROR
+            itemView.pbLoading.visible = response?.status == Response.Status.LOADING
+            if (response?.status == Response.Status.LOADING) itemView.tvMessage.text = context.getString(loadingTitleRes)
+            if (response?.status == Response.Status.ERROR) itemView.tvMessage.text = context.getString(errorTitleRes)
         }
     }
 

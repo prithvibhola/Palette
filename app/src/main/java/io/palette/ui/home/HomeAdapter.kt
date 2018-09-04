@@ -1,12 +1,12 @@
-package io.palette.view.ui.home
+package io.palette.ui.home
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import io.palette.di.ActivityScoped
-import io.palette.view.ui.pick.PickFragment
-import io.palette.view.ui.profile.ProfileFragment
-import io.palette.view.ui.unsplash.UnsplashFragment
+import io.palette.ui.pick.PickFragment
+import io.palette.ui.profile.ProfileFragment
+import io.palette.ui.unsplash.UnsplashFragment
 import javax.inject.Inject
 
 @ActivityScoped

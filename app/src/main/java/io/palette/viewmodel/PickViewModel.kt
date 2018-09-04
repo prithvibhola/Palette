@@ -21,10 +21,10 @@ class PickViewModel @Inject constructor(
         repository.pickRepository.getImage(getApplication(), sources)
                 .subscribeBy(
                         onNext = {
-                            image.sendAction(Response(status = Response.ViewState.SUCCESS, data = it, error = null))
+                            image.sendAction(Response(status = Response.Status.SUCCESS, data = it, error = null))
                         },
                         onError = {
-                            image.sendAction(Response(status = Response.ViewState.ERROR, data = null, error = it))
+                            image.sendAction(Response(status = Response.Status.ERROR, data = null, error = it))
                         }
                 )
     }

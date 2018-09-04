@@ -1,4 +1,4 @@
-package io.palette.view.ui.profile
+package io.palette.ui.profile
 
 import android.app.Activity
 import dagger.Module

@@ -1,4 +1,4 @@
-package io.palette.view.ui.detail
+package io.palette.ui.detail
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
@@ -8,15 +8,13 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import io.palette.R
 import io.palette.data.models.Response
+import io.palette.ui.base.BaseActivity
 import io.palette.utility.extentions.getViewModel
+import io.palette.utility.extentions.listen
+import io.palette.utility.extentions.observe
 import io.palette.utility.extentions.toast
-import io.palette.view.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_detail.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -30,6 +28,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
     lateinit var userName: String
     lateinit var mAdapter: DetailAdapter
     lateinit var viewModel: DetailViewModel
+
     var bitmap: Bitmap? = null
 
     companion object {
@@ -55,19 +54,27 @@ class DetailActivity @Inject constructor() : BaseActivity() {
             adapter = mAdapter
         }
 
+        ivImage.setOnClickListener { viewModel.savePalette(rvPalette, false, bitmap!!) }
+
         viewModel = getViewModel(DetailViewModel::class.java, viewModelFactory)
-        viewModel.palette.observe(this, Observer {
-            when (it?.status) {
-                Response.ViewState.LOADING -> TODO()
-                Response.ViewState.SUCCESS -> mAdapter.palette = it.data!!
-                Response.ViewState.ERROR -> TODO()
-                null -> TODO()
+        observe(viewModel.palette) {
+            it ?: return@observe
+            when (it.status) {
+                Response.Status.LOADING -> activityStatus.showLoading()
+                Response.Status.SUCCESS -> {
+                    it.data ?: return@observe
+                    mAdapter.palette = it.data
+                    activityStatus.showContent()
+                }
+                Response.Status.ERROR -> TODO()
             }
-        })
-        viewModel.shareUri.observe(this, Observer {
-            when (it?.status) {
-                Response.ViewState.LOADING -> TODO()
-                Response.ViewState.SUCCESS -> {
+        }
+
+        observe(viewModel.shareUri) {
+            it ?: return@observe
+            when (it.status) {
+                Response.Status.LOADING -> TODO()
+                Response.Status.SUCCESS -> {
                     startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK
                         type = "image/*"
@@ -75,41 +82,34 @@ class DetailActivity @Inject constructor() : BaseActivity() {
                         putExtra(Intent.EXTRA_SUBJECT, "Palette")
                     }, "Share news using"))
                 }
-                Response.ViewState.ERROR -> toast("Error sharing palette. Please try again.")
-                null -> toast("Some unexpected error occurred")
+                Response.Status.ERROR -> toast("Error sharing palette. Please try again.")
             }
-        })
+        }
+
         viewModel.savePalette.observe(this, Observer {
-            when (it?.status) {
-                Response.ViewState.LOADING -> TODO()
-                Response.ViewState.SUCCESS -> toast("Image saved successfully")
-                Response.ViewState.ERROR -> toast("Couldn't save image. Please try again.")
-                null -> toast("Some unexpected error occurred")
+            it ?: return@Observer
+            when (it.status) {
+                Response.Status.LOADING -> TODO()
+                Response.Status.SUCCESS -> toast("Image saved successfully")
+                Response.Status.ERROR -> toast("Couldn't save image. Please try again.")
             }
         })
 
         Glide.with(this)
                 .asBitmap()
                 .load(image)
-                .listener(object : RequestListener<Bitmap> {
-                    override fun onResourceReady(resource: Bitmap?, model: Any?, target: Target<Bitmap>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        resource?.let {
-                            ivImage.setImageBitmap(resource)
-                            viewModel.generatePalette(resource)
-                            bitmap = resource
+                .listen(
+                        resourceReady = { resource, _, _, _, _ ->
+                            resource?.let {
+                                ivImage.setImageBitmap(resource)
+                                viewModel.generatePalette(resource)
+                                bitmap = resource
+                            }
+                        },
+                        loadFailed = { e, _, _, _ ->
+                            Timber.e(e, "Glide error occurred!!")
                         }
-                        return true
-                    }
-
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap>?, isFirstResource: Boolean): Boolean {
-                        Timber.e(e, "Glide error occurred!!")
-                        return true
-                    }
-                })
+                )
                 .into(ivImage)
-
-        ivImage.setOnClickListener {
-            viewModel.savePalette(rvPalette, false, bitmap!!)
-        }
     }
 }

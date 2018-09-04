@@ -1,4 +1,4 @@
-package io.palette.view.ui.unsplash
+package io.palette.ui.unsplash
 
 import android.content.Context
 import android.view.View
@@ -9,7 +9,7 @@ import io.palette.data.models.Unsplash
 import io.palette.utility.PaginatedAdapter
 import io.palette.utility.extentions.inflate
 import io.palette.utility.extentions.maintainAspectRatio
-import io.palette.view.ui.detail.DetailActivity
+import io.palette.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.layout_unsplash.view.*
 import javax.inject.Inject
 

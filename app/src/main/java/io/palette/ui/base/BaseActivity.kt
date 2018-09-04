@@ -1,4 +1,4 @@
-package io.palette.view.ui.base
+package io.palette.ui.base
 
 import android.os.Bundle
 import android.os.PersistableBundle

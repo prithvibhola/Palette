@@ -9,7 +9,6 @@ import dagger.android.DaggerApplication
 import dagger.android.support.AndroidSupportInjectionModule
 import io.palette.PaletteApplication
 import io.palette.di.modules.*
-import io.palette.viewmodel.ViewModelModule
 import javax.inject.Singleton
 
 @Singleton
