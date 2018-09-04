@@ -1,4 +1,4 @@
-package io.palette.view.ui.detail
+package io.palette.ui.detail
 
 import android.annotation.SuppressLint
 import android.graphics.Color

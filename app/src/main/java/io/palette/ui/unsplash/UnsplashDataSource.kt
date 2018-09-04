@@ -1,4 +1,4 @@
-package io.palette.view.ui.unsplash
+package io.palette.ui.unsplash
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.ItemKeyedDataSource
@@ -26,38 +26,38 @@ class UnsplashDataSource(
     private var retryCompletable: Completable? = null
 
     override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Unsplash>) {
-        networkState.postValue(Response(Response.ViewState.LOADING, null, null))
-        initialLoad.postValue(Response(Response.ViewState.LOADING, null, null))
+        networkState.postValue(Response(Response.Status.LOADING, null, null))
+        initialLoad.postValue(Response(Response.Status.LOADING, null, null))
         compositeDisposable.add(
                 repository.unsplashRepository.getUnsplash(page++)
                         .subscribeBy(
                                 onNext = {
-                                    networkState.postValue(Response(Response.ViewState.SUCCESS, null, null))
-                                    initialLoad.postValue(Response(Response.ViewState.SUCCESS, null, null))
+                                    networkState.postValue(Response(Response.Status.SUCCESS, null, null))
+                                    initialLoad.postValue(Response(Response.Status.SUCCESS, null, null))
                                     callback.onResult(it)
                                 },
                                 onError = {
                                     page--
                                     setRetry(Action { loadInitial(params, callback) })
-                                    networkState.postValue(Response(Response.ViewState.ERROR, null, it))
-                                    initialLoad.postValue(Response(Response.ViewState.ERROR, null, it))
+                                    networkState.postValue(Response(Response.Status.ERROR, null, it))
+                                    initialLoad.postValue(Response(Response.Status.ERROR, null, it))
                                 })
         )
     }
 
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Unsplash>) {
-        networkState.postValue(Response(Response.ViewState.LOADING, null, null))
+        networkState.postValue(Response(Response.Status.LOADING, null, null))
         compositeDisposable.add(
                 repository.unsplashRepository.getUnsplash(page++)
                         .subscribeBy(
                                 onNext = {
-                                    networkState.postValue(Response(Response.ViewState.SUCCESS, null, null))
+                                    networkState.postValue(Response(Response.Status.SUCCESS, null, null))
                                     callback.onResult(it)
                                 },
                                 onError = {
                                     page--
                                     setRetry(Action { loadAfter(params, callback) })
-                                    networkState.postValue(Response(Response.ViewState.ERROR, null, it))
+                                    networkState.postValue(Response(Response.Status.ERROR, null, it))
                                 })
         )
     }

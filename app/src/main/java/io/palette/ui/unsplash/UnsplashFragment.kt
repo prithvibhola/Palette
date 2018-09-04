@@ -1,4 +1,4 @@
-package io.palette.view.ui.unsplash
+package io.palette.ui.unsplash
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
@@ -13,7 +13,7 @@ import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
 import io.palette.di.FragmentScoped
 import io.palette.utility.extentions.getViewModel
-import io.palette.view.ui.base.BaseFragment
+import io.palette.ui.base.BaseFragment
 import io.palette.viewmodel.UnsplashViewModel
 import kotlinx.android.synthetic.main.fragment_unsplash.*
 import javax.inject.Inject
@@ -53,11 +53,11 @@ class UnsplashFragment @Inject constructor() : BaseFragment() {
 
     private fun setInitialLoadingState(state: Response<Unsplash>?) {
         when (state?.status) {
-            Response.ViewState.SUCCESS -> {
+            Response.Status.SUCCESS -> {
             }
-            Response.ViewState.LOADING -> {
+            Response.Status.LOADING -> {
             }
-            Response.ViewState.ERROR -> {
+            Response.Status.ERROR -> {
             }
         }
     }

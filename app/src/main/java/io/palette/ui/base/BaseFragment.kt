@@ -1,4 +1,4 @@
-package io.palette.view.ui.base
+package io.palette.ui.base
 
 import dagger.android.support.DaggerFragment
 

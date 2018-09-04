@@ -1,9 +1,9 @@
-package io.palette.view.ui.home
+package io.palette.ui.home
 
 import android.os.Bundle
 import io.palette.R
 import io.palette.di.ActivityScoped
-import io.palette.view.ui.base.BaseActivity
+import io.palette.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_home.*
 import javax.inject.Inject
 

@@ -10,7 +10,7 @@ import android.arch.paging.PagedList
 import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
 import io.palette.repository.Repository
-import io.palette.view.ui.unsplash.UnsplashDataSource
+import io.palette.ui.unsplash.UnsplashDataSource
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
