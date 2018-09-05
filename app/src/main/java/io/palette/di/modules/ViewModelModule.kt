@@ -8,6 +8,8 @@ import dagger.multibindings.IntoMap
 import io.palette.di.ViewModelKey
 import io.palette.ui.detail.DetailViewModel
 import io.palette.ui.pick.PickViewModel
+import io.palette.ui.profile.ProfileViewModel
+import io.palette.ui.unsplash.UnsplashViewModel
 import io.palette.viewmodel.*
 
 @Module

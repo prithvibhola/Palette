@@ -8,13 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import io.palette.R
 import io.palette.data.models.Response
 import io.palette.di.FragmentScoped
@@ -22,7 +18,7 @@ import io.palette.utility.extentions.getViewModel
 import io.palette.utility.extentions.toast
 import io.palette.utility.extentions.visible
 import io.palette.ui.base.BaseFragment
-import io.palette.viewmodel.ProfileViewModel
+import io.palette.utility.extentions.observe
 import kotlinx.android.synthetic.main.fragment_profile.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -30,12 +26,9 @@ import javax.inject.Inject
 @FragmentScoped
 class ProfileFragment @Inject constructor() : BaseFragment() {
 
-    @Inject
-    lateinit var mAuth: FirebaseAuth
-    @Inject
-    lateinit var mGoogleSignInClient: GoogleSignInClient
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var mAuth: FirebaseAuth
+    @Inject lateinit var mGoogleSignInClient: GoogleSignInClient
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var viewModel: ProfileViewModel
 
@@ -51,14 +44,15 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = getViewModel(ProfileViewModel::class.java, viewModelFactory)
-        viewModel.user.observe(this, Observer {
-            when (it?.status) {
-                Response.Status.LOADING -> requireActivity().toast("Login Loading ../")
-                Response.Status.SUCCESS -> requireActivity().toast("Login success")
-                Response.Status.ERROR -> requireActivity().toast("Login Error")
-                null -> TODO()
+
+        observe(viewModel.user) {
+            it ?: return@observe
+            when (it.status) {
+                Response.Status.LOADING -> toast("Login Loading ../")
+                Response.Status.SUCCESS -> toast("Login success")
+                Response.Status.ERROR -> toast("Login Error")
             }
-        })
+        }
 
 //        val signIn = GoogleSignIn.getClient(requireActivity(), GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
 //                .requestIdToken("997316412435-ic3sug0ob2k3fuhjlstqp4qc4u6u9lf2.apps.googleusercontent.com")

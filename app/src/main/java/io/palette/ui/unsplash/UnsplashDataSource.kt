@@ -10,7 +10,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Action
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.rxkotlin.toSingle
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
@@ -26,21 +25,21 @@ class UnsplashDataSource(
     private var retryCompletable: Completable? = null
 
     override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Unsplash>) {
-        networkState.postValue(Response(Response.Status.LOADING, null, null))
-        initialLoad.postValue(Response(Response.Status.LOADING, null, null))
+        networkState.postValue(Response.loading())
+        initialLoad.postValue(Response.loading())
         compositeDisposable.add(
                 repository.unsplashRepository.getUnsplash(page++)
                         .subscribeBy(
                                 onNext = {
-                                    networkState.postValue(Response(Response.Status.SUCCESS, null, null))
-                                    initialLoad.postValue(Response(Response.Status.SUCCESS, null, null))
+                                    networkState.postValue(Response.success(null))
+                                    initialLoad.postValue(Response.success(null))
                                     callback.onResult(it)
                                 },
                                 onError = {
                                     page--
                                     setRetry(Action { loadInitial(params, callback) })
-                                    networkState.postValue(Response(Response.Status.ERROR, null, it))
-                                    initialLoad.postValue(Response(Response.Status.ERROR, null, it))
+                                    networkState.postValue(Response.error(it))
+                                    initialLoad.postValue(Response.error(it))
                                 })
         )
     }
@@ -51,13 +50,13 @@ class UnsplashDataSource(
                 repository.unsplashRepository.getUnsplash(page++)
                         .subscribeBy(
                                 onNext = {
-                                    networkState.postValue(Response(Response.Status.SUCCESS, null, null))
+                                    networkState.postValue(Response.success(null))
                                     callback.onResult(it)
                                 },
                                 onError = {
                                     page--
                                     setRetry(Action { loadAfter(params, callback) })
-                                    networkState.postValue(Response(Response.Status.ERROR, null, it))
+                                    networkState.postValue(Response.error(it))
                                 })
         )
     }
@@ -76,10 +75,6 @@ class UnsplashDataSource(
     }
 
     private fun setRetry(action: Action?) {
-        if (action == null) {
-            this.retryCompletable = null
-        } else {
-            this.retryCompletable = Completable.fromAction(action)
-        }
+        this.retryCompletable = if (action == null) null else Completable.fromAction(action)
     }
 }

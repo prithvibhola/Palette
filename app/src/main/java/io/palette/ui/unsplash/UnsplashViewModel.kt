@@ -1,4 +1,4 @@
-package io.palette.viewmodel
+package io.palette.ui.unsplash
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -10,7 +10,6 @@ import android.arch.paging.PagedList
 import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
 import io.palette.repository.Repository
-import io.palette.ui.unsplash.UnsplashDataSource
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
