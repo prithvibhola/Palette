@@ -1,7 +1,6 @@
 package io.palette.repository
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -10,7 +9,6 @@ import android.net.Uri
 import android.os.Environment
 import android.support.v4.content.FileProvider
 import android.support.v4.util.LruCache
-import android.support.v4.util.TimeUtils
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -18,33 +16,26 @@ import io.palette.data.models.GeneratedPalette
 import io.palette.utility.extentions.toHex
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
-import java.sql.Timestamp
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class DetailRepository @Inject constructor() {
 
-    @Inject
-    lateinit var context: Context
+    @Inject lateinit var context: Context
 
-    private val NEWS_FOLDER = File(Environment.getExternalStorageDirectory(), "Palette")
+    private val PALETTE_FOLDER = File(Environment.getExternalStorageDirectory(), "Palette")
 
-    fun getPalette(bitmap: Bitmap): Flowable<List<GeneratedPalette>> {
-        return Flowable.just(bitmap)
-                .map { Palette.from(bitmap).generate().swatches }
-                .flatMap { Flowable.fromIterable(it) }
-                .map { GeneratedPalette(hexCode = it.rgb.toHex(), population = it.population) }
-                .toList()
-                .map { it.sortedByDescending { it.population } }
-                .toFlowable()
-    }
+    fun getPalette(bitmap: Bitmap): Flowable<List<GeneratedPalette>> =
+            Flowable.just(bitmap)
+                    .map { Palette.from(bitmap).generate().swatches }
+                    .flatMap { Flowable.fromIterable(it) }
+                    .map { GeneratedPalette(hexCode = it.rgb.toHex(), population = it.population) }
+                    .toList()
+                    .map { it.sortedByDescending { it.population } }
+                    .toFlowable()
 
     fun generateBitmap(view: RecyclerView, imageBitmap: Bitmap): Bitmap? {
         val adapter = view.adapter
@@ -103,26 +94,25 @@ class DetailRepository @Inject constructor() {
         return cs
     }
 
-    fun saveBitmap(bitmap: Bitmap): Flowable<Uri> {
-        return Flowable.create<Uri>({ emitter ->
-            if (!NEWS_FOLDER.exists())
-                NEWS_FOLDER.mkdirs()
-            val newsFile = File(NEWS_FOLDER, "palette_${System.currentTimeMillis()}.jpg")
-            if (newsFile.exists()) newsFile.delete()
-            newsFile.createNewFile()
-            try {
-                val out = FileOutputStream(newsFile)
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-                val uri = FileProvider.getUriForFile(
-                        context,
-                        context.packageName + ".fileprovider", newsFile)
-                emitter.onNext(uri)
-                out.flush()
-                out.close()
-                emitter.onComplete()
-            } catch (exception: Exception) {
-                emitter.onError(exception)
-            }
-        }, BackpressureStrategy.BUFFER)
-    }
+    fun saveBitmap(bitmap: Bitmap): Flowable<Uri> =
+            Flowable.create<Uri>({ emitter ->
+                if (!PALETTE_FOLDER.exists())
+                    PALETTE_FOLDER.mkdirs()
+                val newsFile = File(PALETTE_FOLDER, "palette_${System.currentTimeMillis()}.jpg")
+                if (newsFile.exists()) newsFile.delete()
+                newsFile.createNewFile()
+                try {
+                    val out = FileOutputStream(newsFile)
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+                    val uri = FileProvider.getUriForFile(
+                            context,
+                            context.packageName + ".fileprovider", newsFile)
+                    emitter.onNext(uri)
+                    out.flush()
+                    out.close()
+                    emitter.onComplete()
+                } catch (exception: Exception) {
+                    emitter.onError(exception)
+                }
+            }, BackpressureStrategy.BUFFER)
 }

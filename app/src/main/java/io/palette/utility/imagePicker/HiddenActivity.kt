@@ -11,7 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import io.palette.data.models.Sources
+import io.palette.data.models.Source
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -105,15 +105,15 @@ class HiddenActivity : Activity() {
 
     private fun handleIntent(intent: Intent) {
         if (!checkPermission()) return
-        val sourceType = Sources.values()[intent.getIntExtra(IMAGE_SOURCE, 0)]
+        val sourceType = Source.values()[intent.getIntExtra(IMAGE_SOURCE, 0)]
         when (sourceType) {
-            Sources.CAMERA -> {
+            Source.CAMERA -> {
                 cameraPictureUrl = createImageUri()
                 val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraPictureUrl)
                 startActivityForResult(takePhotoIntent, TAKE_PHOTO)
             }
-            Sources.GALLERY -> {
+            Source.GALLERY -> {
                 val pictureChooseIntent = makePictureChooseIntent()
                 val manufacturer = Build.MANUFACTURER
                 if (manufacturer != null && manufacturer.toLowerCase() == "xiaomi") {
