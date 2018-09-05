@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import io.palette.di.ViewModelKey
 import io.palette.ui.detail.DetailViewModel
+import io.palette.ui.pick.PickViewModel
 import io.palette.viewmodel.*
 
 @Module
