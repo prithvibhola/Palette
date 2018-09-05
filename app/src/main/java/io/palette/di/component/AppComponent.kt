@@ -7,19 +7,21 @@ import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import dagger.android.support.AndroidSupportInjectionModule
+import io.palette.FlavourDI
 import io.palette.PaletteApplication
 import io.palette.di.modules.*
 import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [
-    (AppModule::class),
-    (NetModule::class),
-    (ActivityModule::class),
-    (ViewModelModule::class),
-    (AuthModule::class),
-    (AndroidSupportInjectionModule::class),
-    (AndroidInjectionModule::class)
+    AppModule::class,
+    NetModule::class,
+    ActivityModule::class,
+    ViewModelModule::class,
+    AuthModule::class,
+    FlavourDI::class,
+    AndroidSupportInjectionModule::class,
+    AndroidInjectionModule::class
 ])
 interface AppComponent : AndroidInjector<DaggerApplication> {
 
