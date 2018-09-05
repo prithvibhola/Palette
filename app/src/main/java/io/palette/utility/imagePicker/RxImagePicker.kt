@@ -6,8 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import io.palette.data.models.Sources
-
+import io.palette.data.models.Source
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
@@ -18,7 +17,7 @@ class RxImagePicker private constructor(private val context: Context) {
     val activeSubscription: Observable<Uri>?
         get() = publishSubject
 
-    fun requestImage(imageSource: Sources): Observable<Uri> {
+    fun requestImage(imageSource: Source): Observable<Uri> {
         publishSubject = PublishSubject.create()
         startImagePickHiddenActivity(imageSource.ordinal, false)
         return publishSubject!!
@@ -27,7 +26,7 @@ class RxImagePicker private constructor(private val context: Context) {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     fun requestMultipleImages(): Observable<List<Uri>> {
         publishSubjectMultipleImages = PublishSubject.create()
-        startImagePickHiddenActivity(Sources.GALLERY.ordinal, true)
+        startImagePickHiddenActivity(Source.GALLERY.ordinal, true)
         return publishSubjectMultipleImages!!
     }
 

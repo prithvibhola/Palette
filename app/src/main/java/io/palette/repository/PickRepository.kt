@@ -13,7 +13,5 @@ import javax.inject.Singleton
 class PickRepository @Inject constructor() {
 
     fun getImage(context: Context, source: Source): Flowable<Uri> =
-            RxImagePicker.with(context)
-                    .requestImage(source)
-                    .toFlowable(BackpressureStrategy.BUFFER)
+            RxImagePicker.with(context).requestImage(source).toFlowable(BackpressureStrategy.BUFFER)
 }

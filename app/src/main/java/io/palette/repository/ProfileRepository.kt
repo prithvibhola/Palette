@@ -15,25 +15,22 @@ import javax.inject.Singleton
 @Singleton
 class ProfileRepository @Inject constructor() {
 
-    @Inject
-    lateinit var mAuth: FirebaseAuth
+    @Inject lateinit var mAuth: FirebaseAuth
+//    @Inject lateinit var  activity: Activity
 
-//    @Inject
-//    lateinit var  activity: Activity
-//
     fun firebaseAuthWithGoogle(activity: Activity, account: GoogleSignInAccount): Flowable<FirebaseUser> {
         var user: FirebaseUser? = null
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         return Flowable.create({ emitter ->
             mAuth.signInWithCredential(credential)
-                    .addOnCompleteListener(activity, {
+                    .addOnCompleteListener(activity) {
                         if (it.isSuccessful) {
                             emitter.onNext(mAuth.currentUser!!)
                             emitter.onComplete()
                         } else {
                             emitter.onError(Exception("Failed to get the user"))
                         }
-                    })
+                    }
         }, BackpressureStrategy.BUFFER)
 
 //        mAuth.signInWithCredential(credential)

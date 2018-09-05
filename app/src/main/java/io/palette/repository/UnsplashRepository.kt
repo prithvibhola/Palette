@@ -7,13 +7,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UnsplashRepository @Inject constructor(private val api: Api) {
+class UnsplashRepository @Inject constructor(
+        private val api: Api
+) {
 
     companion object {
         const val PAGE_SIZE = 20
     }
 
-    fun getUnsplash(page: Int): Flowable<List<Unsplash>> {
-        return api.getUnsplash(PAGE_SIZE, page).toFlowable()
-    }
+    fun getUnsplash(page: Int): Flowable<List<Unsplash>> = api.getUnsplash(PAGE_SIZE, page).toFlowable()
 }
