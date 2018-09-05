@@ -10,8 +10,7 @@ import javax.inject.Inject
 @ActivityScoped
 class HomeActivity @Inject constructor() : BaseActivity() {
 
-    @Inject
-    lateinit var homeAdapter: HomeAdapter
+    @Inject lateinit var homeAdapter: HomeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
