@@ -19,7 +19,7 @@ class UnsplashDataSource(
 ) : ItemKeyedDataSource<Long, Unsplash>() {
 
     val networkState = MutableLiveData<Response<Unsplash>>()
-    val initialLoad = MutableLiveData<Response<Unsplash>>()
+    val initialLoad = MutableLiveData<Response<List<Unsplash>>>()
     var page = 0
 
     private var retryCompletable: Completable? = null
@@ -32,7 +32,7 @@ class UnsplashDataSource(
                         .subscribeBy(
                                 onNext = {
                                     networkState.postValue(Response.success(null))
-                                    initialLoad.postValue(Response.success(null))
+                                    initialLoad.postValue(Response.success(it))
                                     callback.onResult(it)
                                 },
                                 onError = {
@@ -45,7 +45,7 @@ class UnsplashDataSource(
     }
 
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Unsplash>) {
-        networkState.postValue(Response(Response.Status.LOADING, null, null))
+        networkState.postValue(Response.loading())
         compositeDisposable.add(
                 repository.unsplashRepository.getUnsplash(page++)
                         .subscribeBy(

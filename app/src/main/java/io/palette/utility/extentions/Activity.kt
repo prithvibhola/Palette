@@ -3,8 +3,10 @@ package io.palette.utility.extentions
 import android.app.Activity
 import android.arch.lifecycle.*
 import android.content.Context
+import android.os.Handler
 import android.support.annotation.StringRes
 import android.support.v4.app.FragmentActivity
+import android.view.View
 import android.widget.Toast
 
 
@@ -21,3 +23,5 @@ fun Activity?.toast(message: String) = Toast.makeText(this, message, Toast.LENGT
 fun Activity?.toast(@StringRes resId: Int) = Toast.makeText(this, this?.getString(resId), Toast.LENGTH_SHORT).show()
 fun Activity.longToast(message: String) = Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 fun Activity.longToast(@StringRes resId: Int) = Toast.makeText(this, getString(resId), Toast.LENGTH_LONG).show()
+
+fun Activity.withDelay(delay: Long = 100L, block: () -> Unit) = Handler().postDelayed(Runnable(block), delay)

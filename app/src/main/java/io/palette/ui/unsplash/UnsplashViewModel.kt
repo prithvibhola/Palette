@@ -36,8 +36,8 @@ class UnsplashViewModel @Inject constructor(
 
     fun retry() = sourceFactory.unsplashDataSource.value!!.retry()
     fun refresh() = sourceFactory.unsplashDataSource.value!!.invalidate()
-    fun getNetworkState(): LiveData<Response<Unsplash>> = Transformations.switchMap<UnsplashDataSource, Response<Unsplash>>(sourceFactory.unsplashDataSource, { it.networkState })
-    fun getRefreshState(): LiveData<Response<Unsplash>> = Transformations.switchMap<UnsplashDataSource, Response<Unsplash>>(sourceFactory.unsplashDataSource, { it.initialLoad })
+    fun getNetworkState(): LiveData<Response<Unsplash>> = Transformations.switchMap<UnsplashDataSource, Response<Unsplash>>(sourceFactory.unsplashDataSource) { it.networkState }
+    fun getRefreshState(): LiveData<Response<List<Unsplash>>> = Transformations.switchMap<UnsplashDataSource, Response<List<Unsplash>>>(sourceFactory.unsplashDataSource) { it.initialLoad }
 
     override fun onCleared() {
         compositeDisposable.dispose()

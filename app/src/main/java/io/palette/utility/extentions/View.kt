@@ -2,6 +2,7 @@ package io.palette.utility.extentions
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.os.Handler
 import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
