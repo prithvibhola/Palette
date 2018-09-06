@@ -2,6 +2,7 @@ package io.palette.ui.unsplash
 
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import io.palette.di.FragmentScoped
 import io.palette.ui.base.BaseFragment
 import io.palette.utility.extentions.getViewModel
 import io.palette.utility.extentions.observe
+import io.palette.utility.extentions.withDelay
 import kotlinx.android.synthetic.main.fragment_unsplash.*
 import javax.inject.Inject
 
@@ -46,13 +48,30 @@ class UnsplashFragment @Inject constructor() : BaseFragment() {
         observe(viewModel.getRefreshState()) {
             it ?: return@observe
             when (it.status) {
+                Response.Status.LOADING -> screenState.showLoading()
                 Response.Status.SUCCESS -> {
-                }
-                Response.Status.LOADING -> {
+                    withDelay(200) { swipeRefresh?.isRefreshing = false }
+                    it.data ?: return@observe
+                    when (it.data.isEmpty()) {
+                        true -> screenState.showEmpty(R.drawable.ic_hourglass_empty_black_24dp,
+                                "No data.",
+                                "No data from unsplash for now.")
+                        false -> screenState.showContent()
+                    }
                 }
                 Response.Status.ERROR -> {
+                    withDelay(200) { swipeRefresh?.isRefreshing = false }
+                    screenState.showError(R.drawable.ic_error_outline_black_24dp,
+                            "Couldn't get data!!",
+                            "Unable to get unsplash images. Please try again.",
+                            "Retry") { viewModel.retry() }
                 }
             }
+        }
+
+        swipeRefresh.setOnRefreshListener {
+            viewModel.refresh()
+            viewModel.retry()
         }
     }
 }
