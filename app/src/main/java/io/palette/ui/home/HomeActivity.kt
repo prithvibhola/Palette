@@ -17,6 +17,11 @@ class HomeActivity @Inject constructor() : BaseActivity() {
         setContentView(R.layout.activity_home)
         window.setBackgroundDrawableResource(R.color.colorPrimary)
 
+        ivPickImage.setOnClickListener {  }
+        ivUnsplash.setOnClickListener {  }
+        ivProfile.setOnClickListener {  }
+        ivSettings.setOnClickListener {  }
+
         viewPager.apply {
             adapter = homeAdapter
             offscreenPageLimit = 2
