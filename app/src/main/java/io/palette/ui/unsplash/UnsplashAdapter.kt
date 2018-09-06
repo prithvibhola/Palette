@@ -42,7 +42,6 @@ class UnsplashAdapter @Inject constructor(context: Context, retryCallback: () ->
                     .setDefaultRequestOptions(RequestOptions().apply {
                         placeholder(listOf(R.color.colorBlack, R.color.colorBlackTwo, R.color.colorBlackThree).getRandom())
                         error(R.color.colorBlackTwo)
-                        centerCrop()
                     })
                     .asBitmap()
                     .load(item.urls.regular)

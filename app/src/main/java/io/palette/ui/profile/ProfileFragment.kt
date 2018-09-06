@@ -1,6 +1,5 @@
 package io.palette.ui.profile
 
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Intent
 import android.os.Bundle
@@ -14,11 +13,11 @@ import com.google.firebase.auth.FirebaseAuth
 import io.palette.R
 import io.palette.data.models.Response
 import io.palette.di.FragmentScoped
+import io.palette.ui.base.BaseFragment
 import io.palette.utility.extentions.getViewModel
+import io.palette.utility.extentions.observe
 import io.palette.utility.extentions.toast
 import io.palette.utility.extentions.visible
-import io.palette.ui.base.BaseFragment
-import io.palette.utility.extentions.observe
 import kotlinx.android.synthetic.main.fragment_profile.*
 import timber.log.Timber
 import javax.inject.Inject
