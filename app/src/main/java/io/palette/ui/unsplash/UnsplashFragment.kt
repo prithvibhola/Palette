@@ -39,7 +39,7 @@ class UnsplashFragment @Inject constructor() : BaseFragment() {
 
         mAdapter = UnsplashAdapter(requireContext()) { viewModel.retry() }
         rvUnsplash.apply {
-            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = mAdapter
         }
 

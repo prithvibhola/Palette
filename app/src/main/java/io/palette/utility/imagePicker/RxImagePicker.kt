@@ -1,12 +1,12 @@
 package io.palette.utility.imagePicker
 
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import io.palette.data.models.Source
+
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
@@ -54,7 +54,6 @@ class RxImagePicker private constructor(private val context: Context) {
 
     companion object {
 
-        @SuppressLint("StaticFieldLeak")
         private var instance: RxImagePicker? = null
 
         @Synchronized
@@ -62,7 +61,7 @@ class RxImagePicker private constructor(private val context: Context) {
             if (instance == null) {
                 instance = RxImagePicker(context.applicationContext)
             }
-            return instance as RxImagePicker
+            return instance!!
         }
     }
 
