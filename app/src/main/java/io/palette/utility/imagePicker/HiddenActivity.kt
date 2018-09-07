@@ -52,7 +52,7 @@ class HiddenActivity : Activity() {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 SELECT_PHOTO -> handleGalleryResult(data)
-                TAKE_PHOTO -> RxImagePicker.with(this).onImagePicked(this.cameraPictureUrl!!)
+                TAKE_PHOTO -> RxImagePicker.with(this).onImagePicked(cameraPictureUrl!!)
             }
         }
         finish()

@@ -28,7 +28,7 @@ buildscript {
             'android_arch'         : '1.1.1',
             'paging_arch'          : '1.0.1',
             'glide'                : '4.7.1',
-            'permission_dispatcher': '2.4.0',
+            'permission_dispatcher': '3.3.1',
             'progress_activity'    : '2.0.5',
             'firebase'             : '1.1.5',
             'fabric'               : '1.25.4',

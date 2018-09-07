@@ -1,5 +1,6 @@
 package io.palette.ui.pick
 
+import android.Manifest
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,9 +15,12 @@ import io.palette.ui.detail.DetailActivity
 import io.palette.utility.extentions.getViewModel
 import io.palette.utility.extentions.observe
 import kotlinx.android.synthetic.main.fragment_pick.*
+import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.RuntimePermissions
 import javax.inject.Inject
 
 @FragmentScoped
+@RuntimePermissions
 class PickFragment @Inject constructor() : BaseFragment() {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -35,8 +39,8 @@ class PickFragment @Inject constructor() : BaseFragment() {
 
         viewModel = getViewModel(PickViewModel::class.java, viewModelFactory)
 
-        btnCamera.setOnClickListener { viewModel.openImagePicker(Source.CAMERA) }
-        btnGallery.setOnClickListener { viewModel.openImagePicker(Source.GALLERY) }
+        btnCamera.setOnClickListener { pickFromCameraWithPermissionCheck() }
+        btnGallery.setOnClickListener { pickFromGalleryWithPermissionCheck() }
 
         observe(viewModel.image) {
             it ?: return@observe
@@ -46,5 +50,20 @@ class PickFragment @Inject constructor() : BaseFragment() {
                 Response.Status.ERROR -> TODO()
             }
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        onRequestPermissionsResult(requestCode, grantResults)
+    }
+
+    @NeedsPermission(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun pickFromCamera() {
+        viewModel.openImagePicker(Source.CAMERA)
+    }
+
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun pickFromGallery() {
+        viewModel.openImagePicker(Source.GALLERY)
     }
 }
