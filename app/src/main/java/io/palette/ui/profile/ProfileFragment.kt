@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import io.palette.R
 import io.palette.data.models.Response
@@ -28,6 +30,7 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
 
     @Inject lateinit var mAuth: FirebaseAuth
     @Inject lateinit var mGoogleSignInClient: GoogleSignInClient
+    private var mGoogleApiClient: GoogleApiClient? = null
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var viewModel: ProfileViewModel
@@ -43,6 +46,9 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+//        Firebase.setAndroidContext(activity)
+
         viewModel = getViewModel(ProfileViewModel::class.java, viewModelFactory)
 
         observe(viewModel.user) {
@@ -54,44 +60,48 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
             }
         }
 
-        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        //GOOGLE
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
-                .build())
+                .build()
+        mGoogleApiClient = GoogleApiClient.Builder(context!!)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build()
 
         if (mAuth.currentUser == null) {
             btnLogin.visible = true
-            btnLogin.setOnClickListener { startActivityForResult(mGoogleSignInClient.signInIntent, RC_SIGN_IN) }
+            btnLogin.setOnClickListener {
+                val signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
+                startActivityForResult(signInIntent, RC_SIGN_IN)
+            }
         } else {
             btnLogin.visible = false
         }
     }
 
-    override fun startActivityForResult(intent: Intent?, requestCode: Int, options: Bundle?) {
-        super.startActivityForResult(intent, requestCode, options)
-    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-    override fun startActivityForResult(intent: Intent?, requestCode: Int) {
-        super.startActivityForResult(intent, requestCode)
         if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                viewModel.login(requireActivity(), account)
-            } catch (e: ApiException) {
-                Timber.e(e, "Google sign in failed")
+            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+            if (result.isSuccess) {
+                val account = result.signInAccount
+                viewModel.login(requireActivity(), account!!)
             }
         }
     }
 
-//    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-//        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-//        mAuth.signInWithCredential(credential)
-//                .addOnCompleteListener(requireActivity(), { task ->
-//                    if (task.isSuccessful) {
-//                        val user = mAuth.currentUser
-//                    } else {
-//                    }
-//                })
-//    }
+    override fun onStart() {
+        super.onStart()
+        if (mGoogleApiClient != null)
+            mGoogleApiClient?.connect()
+    }
+
+    override fun onStop() {
+        if (mGoogleApiClient != null && mGoogleApiClient?.isConnected!!) {
+            mGoogleApiClient?.disconnect()
+        }
+        super.onStop()
+    }
 }
