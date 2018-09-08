@@ -11,6 +11,7 @@ import io.palette.utility.extentions.fromWorkerToMain
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import prithvi.io.mvvmstarter.utility.rx.Scheduler
+import timber.log.Timber
 import javax.inject.Inject
 
 class ProfileViewModel @Inject constructor(
@@ -29,6 +30,7 @@ class ProfileViewModel @Inject constructor(
                             user.value = Response.success(it)
                         },
                         onError = {
+                            Timber.e(it, "Error in registration")
                             user.value = Response.error(it)
                         }
                 )
