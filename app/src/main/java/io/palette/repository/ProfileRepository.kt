@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import timber.log.Timber
 import java.sql.SQLException
 import javax.inject.Inject
 import javax.inject.Singleton

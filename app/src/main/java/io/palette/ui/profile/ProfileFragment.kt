@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import io.palette.R
@@ -53,10 +54,10 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
             }
         }
 
-//        val signIn = GoogleSignIn.getClient(requireActivity(), GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken("997316412435-ic3sug0ob2k3fuhjlstqp4qc4u6u9lf2.apps.googleusercontent.com")
-//                .requestEmail()
-//                .build())
+        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build())
 
         if (mAuth.currentUser == null) {
             btnLogin.visible = true
@@ -64,6 +65,10 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
         } else {
             btnLogin.visible = false
         }
+    }
+
+    override fun startActivityForResult(intent: Intent?, requestCode: Int, options: Bundle?) {
+        super.startActivityForResult(intent, requestCode, options)
     }
 
     override fun startActivityForResult(intent: Intent?, requestCode: Int) {
