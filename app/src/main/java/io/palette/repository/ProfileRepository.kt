@@ -17,7 +17,6 @@ import javax.inject.Singleton
 class ProfileRepository @Inject constructor() {
 
     @Inject lateinit var mAuth: FirebaseAuth
-//    @Inject lateinit var  activity: Activity
 
     fun firebaseAuthWithGoogle(activity: Activity, account: GoogleSignInAccount): Flowable<FirebaseUser> {
         var user: FirebaseUser? = null

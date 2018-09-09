@@ -143,6 +143,7 @@ dependencies {
     implementation deps.firebase.core
     implementation deps.firebase.auth
     implementation deps.firebase.firestore
+    implementation deps.firebase.uiAuth
 
     implementation(deps.fabric.crashlytics) {
         transitive = true;
