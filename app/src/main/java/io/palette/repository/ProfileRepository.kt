@@ -33,15 +33,5 @@ class ProfileRepository @Inject constructor() {
                         }
                     }
         }, BackpressureStrategy.BUFFER)
-
-//        mAuth.signInWithCredential(credential)
-//                .addOnCompleteListener(activity, {
-//                    user = if (it.isSuccessful) {
-//                        mAuth.currentUser
-//                    } else {
-//                        null
-//                    }
-//                })
-//        return user
     }
 }
