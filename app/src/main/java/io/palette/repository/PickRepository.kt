@@ -3,6 +3,7 @@ package io.palette.repository
 import android.content.Context
 import android.net.Uri
 import io.palette.data.models.Source
+import io.palette.utility.imagePicker.RxImageConverters
 import io.palette.utility.imagePicker.RxImagePicker
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -13,5 +14,5 @@ import javax.inject.Singleton
 class PickRepository @Inject constructor() {
 
     fun getImage(context: Context, source: Source): Flowable<Uri> =
-            RxImagePicker.with(context).requestImage(source).toFlowable(BackpressureStrategy.BUFFER)
+            RxImagePicker.with(context).requestImage(source).flatMap { RxImageConverters.clonedUri(context, it) }.toFlowable(BackpressureStrategy.BUFFER)
 }
