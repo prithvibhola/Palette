@@ -7,9 +7,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.google.firebase.auth.FirebaseAuth
 import io.palette.R
 import io.palette.data.models.Response
 import io.palette.di.FragmentScoped
@@ -19,14 +19,11 @@ import io.palette.utility.extentions.observe
 import io.palette.utility.extentions.toast
 import io.palette.utility.extentions.visible
 import kotlinx.android.synthetic.main.fragment_profile.*
-import timber.log.Timber
 import javax.inject.Inject
-
 
 @FragmentScoped
 class ProfileFragment @Inject constructor() : BaseFragment() {
 
-    @Inject lateinit var mAuth: FirebaseAuth
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var viewModel: ProfileViewModel
@@ -45,42 +42,55 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
 
         viewModel = getViewModel(ProfileViewModel::class.java, viewModelFactory)
 
+        btnLogin.setOnClickListener {
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(listOf(AuthUI.IdpConfig.GoogleBuilder().build()))
+                            .build(),
+                    RC_SIGN_IN)
+        }
+
+        viewModel.setUser(null)
         observe(viewModel.user) {
             it ?: return@observe
             when (it.status) {
                 Response.Status.LOADING -> toast("Login Loading ../")
-                Response.Status.SUCCESS -> toast("Login success")
-                Response.Status.ERROR -> toast("Login Error")
-            }
-        }
+                Response.Status.SUCCESS -> {
+                    when (it.data == null) {
+                        true -> {
+                            ivProfile.visible = false
+                            tvName.visible = false
+                            tvEmail.visible = false
+                            btnLogin.visible = true
+                        }
+                        false -> {
+                            it.data ?: return@observe
+                            Glide.with(this).load(it.data.photoUrl).into(ivProfile)
+                            tvName.text = it.data.displayName
+                            tvEmail.text = it.data.email
 
-        when (mAuth.currentUser == null) {
-            true -> {
-                btnLogin.visible = true
-                btnLogin.setOnClickListener {
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setAvailableProviders(listOf(AuthUI.IdpConfig.GoogleBuilder().build()))
-                                    .build(),
-                            RC_SIGN_IN)
+                            ivProfile.visible = true
+                            tvName.visible = true
+                            tvEmail.visible = true
+                            btnLogin.visible = false
+                        }
+                    }
+                }
+                Response.Status.ERROR -> {
+                    ivProfile.visible = false
+                    tvName.visible = false
+                    tvEmail.visible = false
+                    btnLogin.visible = true
+                    toast("Error occurred while signing. Please try again.")
                 }
             }
-            false -> btnLogin.visible = false
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == RC_SIGN_IN) {
-            val response = IdpResponse.fromResultIntent(data)
-            response ?: return
-            if (resultCode == RESULT_OK) {
-                val user = FirebaseAuth.getInstance().currentUser
-            } else {
-                Timber.e(response.error, "User could not sign in")
-            }
-        }
+        if (requestCode == RC_SIGN_IN)
+            viewModel.setUser(if (resultCode == RESULT_OK) null else IdpResponse.fromResultIntent(data))
     }
 }

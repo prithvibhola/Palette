@@ -42,4 +42,8 @@ class DetailViewModel @Inject constructor(
                 )
                 .addTo(getCompositeDisposable())
     }
+
+    fun likePalette(value: Boolean) {
+
+    }
 }
