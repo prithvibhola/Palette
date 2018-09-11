@@ -1,15 +1,12 @@
 package io.palette.ui.profile
 
-import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.firebase.ui.auth.IdpResponse
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import io.palette.data.models.Response
 import io.palette.repository.Repository
 import io.palette.ui.base.BaseViewModel
-import io.palette.utility.extentions.fromWorkerToMain
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.subscribeBy
 import prithvi.io.mvvmstarter.utility.rx.Scheduler
 import timber.log.Timber
 import javax.inject.Inject
@@ -19,21 +16,17 @@ class ProfileViewModel @Inject constructor(
         val scheduler: Scheduler
 ) : BaseViewModel() {
 
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
+
     val user: MutableLiveData<Response<FirebaseUser>> = MutableLiveData()
 
-    fun login(activity: Activity, account: GoogleSignInAccount) {
-        user.value = Response(Response.Status.LOADING, null, null)
-        repository.profileRepository.firebaseAuthWithGoogle(activity, account)
-                .fromWorkerToMain(scheduler)
-                .subscribeBy(
-                        onNext = {
-                            user.value = Response.success(it)
-                        },
-                        onError = {
-                            Timber.e(it, "Error in registration")
-                            user.value = Response.error(it)
-                        }
-                )
-                .addTo(getCompositeDisposable())
+    fun setUser(response: IdpResponse?) {
+        if (response == null)
+            user.value = Response.success(if (firebaseAuth.currentUser != null) firebaseAuth.currentUser else null)
+        else {
+            Timber.e(response.error, "User could not sign in")
+            user.value = Response.error(response.error!!.fillInStackTrace())
+        }
     }
 }
