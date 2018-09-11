@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import io.palette.R
@@ -24,7 +25,8 @@ import javax.inject.Inject
 @FragmentScoped
 class ProfileFragment @Inject constructor() : BaseFragment() {
 
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var viewModel: ProfileViewModel
 
@@ -66,7 +68,14 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
                         }
                         false -> {
                             it.data ?: return@observe
-                            Glide.with(this).load(it.data.photoUrl).into(ivProfile)
+                            Glide.with(this)
+                                    .setDefaultRequestOptions(RequestOptions().apply {
+                                        placeholder(R.color.colorBlackThree)
+                                        error(R.color.colorBlackThree)
+                                        circleCrop()
+                                    })
+                                    .load(it.data.photoUrl)
+                                    .into(ivProfile)
                             tvName.text = it.data.displayName
                             tvEmail.text = it.data.email
 

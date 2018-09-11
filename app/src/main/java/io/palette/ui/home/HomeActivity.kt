@@ -10,17 +10,18 @@ import javax.inject.Inject
 @ActivityScoped
 class HomeActivity @Inject constructor() : BaseActivity() {
 
-    @Inject lateinit var homeAdapter: HomeAdapter
+    @Inject
+    lateinit var homeAdapter: HomeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         window.setBackgroundDrawableResource(R.color.colorPrimary)
 
-        ivPickImage.setOnClickListener {  }
-        ivUnsplash.setOnClickListener {  }
-        ivProfile.setOnClickListener {  }
-        ivSettings.setOnClickListener {  }
+        ivPickImage.setOnClickListener { viewPager.currentItem = 0 }
+        ivUnsplash.setOnClickListener { viewPager.currentItem = 1 }
+        ivProfile.setOnClickListener { viewPager.currentItem = 2 }
+        ivSettings.setOnClickListener { }
 
         viewPager.apply {
             adapter = homeAdapter
