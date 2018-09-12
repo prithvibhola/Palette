@@ -112,7 +112,7 @@ buildscript {
                     'core'     : "com.google.firebase:firebase-core:${versions.firebase_core}",
                     'auth'     : "com.google.firebase:firebase-auth:${versions.firebase_auth}",
                     'firestore': "com.google.firebase:firebase-firestore:${versions.firebase_firestore}",
-                    'uiAuth'  : "com.firebaseui:firebase-ui-auth:${versions.firebase_ui_auth}"
+                    'uiAuth'   : "com.firebaseui:firebase-ui-auth:${versions.firebase_ui_auth}"
             ],
             fabric     : [
                     'gradle'     : "io.fabric.tools:gradle:${versions.fabric}",
