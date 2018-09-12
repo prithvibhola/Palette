@@ -8,12 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import io.palette.R
 import io.palette.data.models.Response
-import io.palette.data.models.Source
 import io.palette.di.FragmentScoped
 import io.palette.ui.base.BaseFragment
 import io.palette.ui.detail.DetailActivity
 import io.palette.utility.extentions.getViewModel
 import io.palette.utility.extentions.observe
+import io.palette.utility.imagePicker.Sources
 import kotlinx.android.synthetic.main.fragment_pick.*
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
@@ -23,7 +23,8 @@ import javax.inject.Inject
 @RuntimePermissions
 class PickFragment @Inject constructor() : BaseFragment() {
 
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var viewModel: PickViewModel
 
@@ -59,11 +60,11 @@ class PickFragment @Inject constructor() : BaseFragment() {
 
     @NeedsPermission(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun pickFromCamera() {
-        viewModel.openImagePicker(Source.CAMERA)
+        viewModel.openImagePicker(requireFragmentManager(), Sources.CAMERA)
     }
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun pickFromGallery() {
-        viewModel.openImagePicker(Source.GALLERY)
+        viewModel.openImagePicker(requireFragmentManager(), Sources.GALLERY)
     }
 }
