@@ -16,6 +16,8 @@ data class Response<out T>(
     }
 }
 
+enum class Source { CAMERA, GALLERY }
+
 data class Unsplash(
         @Json(name = "id") val id: String,
         @Json(name = "created_at") val createdAt: String,
