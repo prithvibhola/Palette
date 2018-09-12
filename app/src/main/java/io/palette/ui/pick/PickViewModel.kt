@@ -4,11 +4,11 @@ import android.app.Application
 import android.net.Uri
 import android.support.v4.app.FragmentManager
 import io.palette.data.models.Response
+import io.palette.data.models.Source
 import io.palette.repository.Repository
 import io.palette.ui.base.BaseAndroidViewModel
 import io.palette.utility.ActionLiveData
 import io.palette.utility.extentions.fromWorkerToMain
-import io.palette.utility.imagePicker.Sources
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import prithvi.io.mvvmstarter.utility.rx.Scheduler
@@ -22,7 +22,7 @@ class PickViewModel @Inject constructor(
 
     val image = ActionLiveData<Response<Uri>>()
 
-    fun openImagePicker(fragmentManager: FragmentManager, source: Sources) {
+    fun openImagePicker(fragmentManager: FragmentManager, source: Source) {
         repository.pickRepository.getImage(fragmentManager, source)
                 .fromWorkerToMain(scheduler)
                 .subscribeBy(
