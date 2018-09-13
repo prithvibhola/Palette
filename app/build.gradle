@@ -139,11 +139,11 @@ dependencies {
 
     //Firebase
     implementation deps.google.auth
-    implementation deps.firebase.messaging
     implementation deps.firebase.core
     implementation deps.firebase.auth
     implementation deps.firebase.firestore
     implementation deps.firebase.uiAuth
+    implementation deps.firebase.database
 
     implementation(deps.fabric.crashlytics) {
         transitive = true;

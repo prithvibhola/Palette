@@ -33,7 +33,7 @@ buildscript {
             'firebase'             : '1.1.5',
             'fabric'               : '1.25.4',
 
-            'firebase_messaging'   : '15.0.2',
+            'firebase_database'    : '16.0.1',
             'firebase_core'        : '15.0.2',
             'firebase_auth'        : '15.1.0',
             'firebase_firestore'   : '16.0.0',
@@ -108,11 +108,11 @@ buildscript {
             ],
             firebase   : [
                     'plugins'  : "com.google.firebase:firebase-plugins:${versions.firebase}",
-                    'messaging': "com.google.firebase:firebase-messaging:${versions.firebase_messaging}",
                     'core'     : "com.google.firebase:firebase-core:${versions.firebase_core}",
                     'auth'     : "com.google.firebase:firebase-auth:${versions.firebase_auth}",
                     'firestore': "com.google.firebase:firebase-firestore:${versions.firebase_firestore}",
-                    'uiAuth'   : "com.firebaseui:firebase-ui-auth:${versions.firebase_ui_auth}"
+                    'uiAuth'   : "com.firebaseui:firebase-ui-auth:${versions.firebase_ui_auth}",
+                    'database' : "com.google.firebase:firebase-database:${versions.firebase_database}"
             ],
             fabric     : [
                     'gradle'     : "io.fabric.tools:gradle:${versions.fabric}",

@@ -7,6 +7,7 @@ import android.os.Handler
 import android.support.annotation.StringRes
 import android.support.v4.app.FragmentActivity
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 
 

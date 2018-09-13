@@ -13,11 +13,9 @@ import javax.inject.Inject
 
 class ProfileViewModel @Inject constructor(
         val repository: Repository,
-        val scheduler: Scheduler
+        val scheduler: Scheduler,
+        val firebaseAuth: FirebaseAuth
 ) : BaseViewModel() {
-
-    @Inject
-    lateinit var firebaseAuth: FirebaseAuth
 
     val user: MutableLiveData<Response<FirebaseUser>> = MutableLiveData()
 

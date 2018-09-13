@@ -4,8 +4,12 @@ import android.arch.lifecycle.MutableLiveData
 import android.graphics.Bitmap
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import io.palette.data.models.GeneratedPalette
 import io.palette.data.models.Response
+import io.palette.data.models.Unsplash
 import io.palette.repository.Repository
 import io.palette.ui.base.BaseViewModel
 import io.palette.utility.extentions.fromWorkerToMain
@@ -16,7 +20,9 @@ import javax.inject.Inject
 
 class DetailViewModel @Inject constructor(
         private val repository: Repository,
-        private val scheduler: Scheduler
+        private val scheduler: Scheduler,
+        private val firebaseDatabase: DatabaseReference,
+        val firebaseAuth: FirebaseAuth
 ) : BaseViewModel() {
 
     var palette: MutableLiveData<Response<List<GeneratedPalette>>> = MutableLiveData()
@@ -43,7 +49,9 @@ class DetailViewModel @Inject constructor(
                 .addTo(getCompositeDisposable())
     }
 
-    fun likePalette(value: Boolean) {
-
+    fun likePalette(unsplash: Unsplash) {
+        firebaseDatabase.child("users").child(firebaseAuth.currentUser!!.uid).child("palettes").setValue(unsplash)
+                .addOnSuccessListener {}
+                .addOnFailureListener {}
     }
 }
