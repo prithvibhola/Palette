@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.vlonjatg.progressactivity.ProgressConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activityStatus"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/activityStatus">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/ivImage"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/ivLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/dimen_vertical_margin"
+        android:src="@drawable/ic_favorite_border_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivImage"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvPalette"
