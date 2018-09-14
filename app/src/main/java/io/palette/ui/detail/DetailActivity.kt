@@ -53,7 +53,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
 
         viewModel = getViewModel(DetailViewModel::class.java, viewModelFactory)
 
-        ivImage.setOnClickListener { viewModel.savePalette(rvPalette, false, bitmap!!) }
+        ivSave.setOnClickListener { viewModel.savePalette(rvPalette, false, bitmap!!) }
         ivLike.setOnClickListener { viewModel.likePalette(unsplash) }
 
         observe(viewModel.palette) {

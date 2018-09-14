@@ -21,6 +21,16 @@
         app:layout_constraintBottom_toBottomOf="@+id/ivImage"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <ImageView
+        android:id="@+id/ivSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/dimen_vertical_margin"
+        android:src="@drawable/ic_wallpaper_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivImage"
+        app:layout_constraintEnd_toStartOf="@+id/ivLike" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvPalette"
         android:layout_width="0dp"
