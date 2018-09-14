@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import io.palette.R
 import io.palette.data.models.Response
 import io.palette.data.models.Source
+import io.palette.data.models.Unsplash
+import io.palette.data.models.Urls
 import io.palette.di.FragmentScoped
 import io.palette.ui.base.BaseFragment
 import io.palette.ui.detail.DetailActivity
@@ -47,7 +49,23 @@ class PickFragment @Inject constructor() : BaseFragment() {
             it ?: return@observe
             when (it.status) {
                 Response.Status.LOADING -> TODO()
-                Response.Status.SUCCESS -> startActivity(DetailActivity.newInstance(requireContext(), it.data.toString()))
+                Response.Status.SUCCESS -> startActivity(DetailActivity.newInstance(requireContext(),
+                        Unsplash(
+                                id = "",
+                                createdAt = "",
+                                updatedAt = "",
+                                width = 0L,
+                                height = 0L,
+                                color = "",
+                                description = "",
+                                urls = Urls(it.data.toString(),
+                                        it.data.toString(),
+                                        it.data.toString(),
+                                        it.data.toString(),
+                                        it.data.toString()),
+                                links = null,
+                                user = null
+                        )))
                 Response.Status.ERROR -> TODO()
             }
         }

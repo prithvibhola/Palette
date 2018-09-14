@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import io.palette.data.models.GeneratedPalette
 import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
@@ -16,18 +17,20 @@ import io.palette.utility.extentions.fromWorkerToMain
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import prithvi.io.mvvmstarter.utility.rx.Scheduler
+import timber.log.Timber
 import javax.inject.Inject
 
 class DetailViewModel @Inject constructor(
         private val repository: Repository,
         private val scheduler: Scheduler,
-        private val firebaseDatabase: DatabaseReference,
-        val firebaseAuth: FirebaseAuth
+        private val firebaseAuth: FirebaseAuth,
+        private val firestore: FirebaseFirestore
 ) : BaseViewModel() {
 
     var palette: MutableLiveData<Response<List<GeneratedPalette>>> = MutableLiveData()
     var shareUri: MutableLiveData<Response<Uri>> = MutableLiveData()
     var savePalette: MutableLiveData<Response<Uri>> = MutableLiveData()
+    var likePalette: MutableLiveData<Response<Boolean>> = MutableLiveData()
 
     fun generatePalette(bitmap: Bitmap) {
         repository.detailRepository.getPalette(bitmap)
@@ -50,8 +53,16 @@ class DetailViewModel @Inject constructor(
     }
 
     fun likePalette(unsplash: Unsplash) {
-        firebaseDatabase.child("users").child(firebaseAuth.currentUser!!.uid).child("palettes").setValue(unsplash)
-                .addOnSuccessListener {}
-                .addOnFailureListener {}
+        if (firebaseAuth.currentUser == null) likePalette.value = Response.error(Exception("User is not registered"))
+
+        likePalette.value = Response.loading()
+        firestore.collection("users")
+                .document(firebaseAuth.currentUser!!.uid)
+                .collection("palettes").add(unsplash)
+                .addOnSuccessListener { likePalette.value = Response.success(true) }
+                .addOnFailureListener {
+                    likePalette.value = Response.error(it)
+                    Timber.e(it, "Error liking Palette")
+                }
     }
 }

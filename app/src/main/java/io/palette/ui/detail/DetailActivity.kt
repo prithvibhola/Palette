@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import io.palette.R
 import io.palette.data.models.Response
+import io.palette.data.models.Unsplash
 import io.palette.ui.base.BaseActivity
 import io.palette.utility.extentions.getViewModel
 import io.palette.utility.extentions.listen
@@ -21,23 +22,20 @@ import javax.inject.Inject
 
 class DetailActivity @Inject constructor() : BaseActivity() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var image: String
-    lateinit var userName: String
     lateinit var mAdapter: DetailAdapter
     lateinit var viewModel: DetailViewModel
 
     var bitmap: Bitmap? = null
 
-    companion object {
-        const val ARG_IMAGE = "ARG_IMAGE"
-        const val ARG_USER_NAME = "ARG_USER_NAME"
+    lateinit var unsplash: Unsplash
 
-        fun newInstance(context: Context, image: String, userName: String = "Palette") = Intent(context, DetailActivity::class.java).apply {
-            putExtra(ARG_IMAGE, image)
-            putExtra(ARG_USER_NAME, userName)
+    companion object {
+        const val ARG_UNSPLASH = "ARG_UNSPLASH"
+
+        fun newInstance(context: Context, unsplash: Unsplash) = Intent(context, DetailActivity::class.java).apply {
+            putExtra(ARG_UNSPLASH, unsplash)
         }
     }
 
@@ -45,19 +43,19 @@ class DetailActivity @Inject constructor() : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        image = intent.getStringExtra(ARG_IMAGE)
-        userName = intent.getStringExtra(ARG_USER_NAME)
+        unsplash = intent.getParcelableExtra(ARG_UNSPLASH)
 
-        mAdapter = DetailAdapter(userName)
+        mAdapter = DetailAdapter(unsplash.user?.userName ?: "Palette")
         rvPalette.apply {
             layoutManager = LinearLayoutManager(this@DetailActivity)
             adapter = mAdapter
         }
 
-        ivImage.setOnClickListener { viewModel.savePalette(rvPalette, false, bitmap!!) }
-        ivLike.setOnClickListener { }
-
         viewModel = getViewModel(DetailViewModel::class.java, viewModelFactory)
+
+        ivImage.setOnClickListener { viewModel.savePalette(rvPalette, false, bitmap!!) }
+        ivLike.setOnClickListener { viewModel.likePalette(unsplash) }
+
         observe(viewModel.palette) {
             it ?: return@observe
             when (it.status) {
@@ -87,18 +85,27 @@ class DetailActivity @Inject constructor() : BaseActivity() {
             }
         }
 
-        viewModel.savePalette.observe(this, Observer {
-            it ?: return@Observer
+        observe(viewModel.savePalette) {
+            it ?: return@observe
             when (it.status) {
                 Response.Status.LOADING -> TODO()
                 Response.Status.SUCCESS -> toast("Image saved successfully")
                 Response.Status.ERROR -> toast("Couldn't save image. Please try again.")
             }
-        })
+        }
+
+        observe(viewModel.likePalette) {
+            it ?: return@observe
+            when (it.status) {
+                Response.Status.LOADING -> toast("Loading")
+                Response.Status.SUCCESS -> toast("Palette liked")
+                Response.Status.ERROR -> toast("Error in liking palette")
+            }
+        }
 
         Glide.with(this)
                 .asBitmap()
-                .load(image)
+                .load(unsplash.urls.regular)
                 .listen(
                         resourceReady = { resource, _, _, _, _ ->
                             resource?.let {
