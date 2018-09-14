@@ -43,7 +43,7 @@ class UnsplashAdapter @Inject constructor(context: Context, retryCallback: () ->
                         error(R.color.colorBlackTwo)
                     })
                     .asBitmap()
-                    .load(item.urls.regular)
+                    .load(item.urls!!.regular)
                     .into(itemView.ivImage)
             itemView.ivImage.maintainAspectRatio(item.width, item.height)
         }
