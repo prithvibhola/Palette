@@ -6,6 +6,7 @@ import io.palette.ui.home.HomeActivity
 import io.palette.di.ActivityScoped
 import io.palette.ui.detail.DetailActivity
 import io.palette.ui.home.HomeModule
+import io.palette.ui.settings.SettingsActivity
 
 @Module
 abstract class ActivityModule {
@@ -17,4 +18,8 @@ abstract class ActivityModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = [])
     abstract fun detailActivity(): DetailActivity
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = [])
+    abstract fun settingsActivity(): SettingsActivity
 }

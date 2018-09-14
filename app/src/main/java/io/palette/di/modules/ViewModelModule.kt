@@ -9,6 +9,7 @@ import io.palette.di.ViewModelKey
 import io.palette.ui.detail.DetailViewModel
 import io.palette.ui.pick.PickViewModel
 import io.palette.ui.profile.ProfileViewModel
+import io.palette.ui.settings.SettingsViewModel
 import io.palette.ui.unsplash.UnsplashViewModel
 import io.palette.viewmodel.*
 
@@ -37,4 +38,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ProfileViewModel::class)
     internal abstract fun profileViewModel(profileViewModel: ProfileViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SettingsViewModel::class)
+    internal abstract fun settingsViewModel(settingsViewModel: SettingsViewModel): ViewModel
 }

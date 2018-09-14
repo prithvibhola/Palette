@@ -18,7 +18,7 @@ abstract class PaginatedAdapter<T>(
         @StringRes val loadingTitleRes: Int,
         @StringRes val errorTitleRes: Int,
         private val retryCallback: () -> Unit
-) : PagedListAdapter<T, PaginatedAdapter<T>.BaseViewHolder>(
+) : PagedListAdapter<T, PaginatedAdapter<T>.NetworkBaseViewHolder>(
         object : DiffUtil.ItemCallback<T>() {
             override fun areItemsTheSame(oldItem: T, newItem: T): Boolean {
                 return oldItem == newItem
@@ -34,15 +34,15 @@ abstract class PaginatedAdapter<T>(
 
     enum class Type { ITEM, NETWORK }
 
-    abstract fun onCreateItemViewHolder(parent: ViewGroup): PaginatedAdapter<T>.BaseViewHolder
+    abstract fun onCreateItemViewHolder(parent: ViewGroup): PaginatedAdapter<T>.NetworkBaseViewHolder
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder = when (viewType) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NetworkBaseViewHolder = when (viewType) {
         Type.ITEM.ordinal -> onCreateItemViewHolder(parent)
         Type.NETWORK.ordinal -> NetworkStateViewHolder(parent.inflate(R.layout.layout_network_state), retryCallback)
         else -> onCreateItemViewHolder(parent)
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: NetworkBaseViewHolder, position: Int) {
         when (getItemViewType(position)) {
             Type.ITEM.ordinal -> holder.bind(getItem(position)!!)
             Type.NETWORK.ordinal -> holder.bindNetwork(response)
@@ -78,7 +78,7 @@ abstract class PaginatedAdapter<T>(
         }
     }
 
-    inner class NetworkStateViewHolder(val view: View, private val retryCallback: () -> Unit) : BaseViewHolder(view) {
+    inner class NetworkStateViewHolder(val view: View, private val retryCallback: () -> Unit) : NetworkBaseViewHolder(view) {
 
         init {
             itemView.btnRetry.setOnClickListener { retryCallback() }
@@ -93,7 +93,7 @@ abstract class PaginatedAdapter<T>(
         }
     }
 
-    abstract inner class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    abstract inner class NetworkBaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         open fun bind(item: T) {}
         open fun bindNetwork(response: Response<T>?) {}
     }
