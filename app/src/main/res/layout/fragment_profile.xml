@@ -53,7 +53,7 @@
         tools:text="prithvi.leo08@gmail.com" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvProfileImages"
+        android:id="@+id/rvLikedPalettes"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/dimen_vertical_margin"

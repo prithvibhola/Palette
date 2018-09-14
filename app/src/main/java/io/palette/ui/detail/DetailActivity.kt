@@ -105,7 +105,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
 
         Glide.with(this)
                 .asBitmap()
-                .load(unsplash.urls.regular)
+                .load(unsplash.urls!!.regular)
                 .listen(
                         resourceReady = { resource, _, _, _, _ ->
                             resource?.let {

@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,10 +26,10 @@ import javax.inject.Inject
 @FragmentScoped
 class ProfileFragment @Inject constructor() : BaseFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var viewModel: ProfileViewModel
+    lateinit var profileAdapter: ProfileAdapter
 
     private val RC_SIGN_IN = 9001
 
@@ -53,7 +54,14 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
                     RC_SIGN_IN)
         }
 
+        profileAdapter = ProfileAdapter(requireContext())
+        rvLikedPalettes.apply {
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            adapter = profileAdapter
+        }
+
         viewModel.setUser(null)
+        viewModel.getPalettes()
         observe(viewModel.user) {
             it ?: return@observe
             when (it.status) {
@@ -93,6 +101,18 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
                     btnLogin.visible = true
                     toast("Error occurred while signing. Please try again.")
                 }
+            }
+        }
+
+        observe(viewModel.palettes) {
+            it ?: return@observe
+            when (it.status) {
+                Response.Status.LOADING -> toast("Loading")
+                Response.Status.SUCCESS -> {
+                    it.data ?: return@observe
+                    profileAdapter.palettes = it.data
+                }
+                Response.Status.ERROR -> toast("Error")
             }
         }
     }
