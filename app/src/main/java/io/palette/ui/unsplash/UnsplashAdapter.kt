@@ -1,6 +1,7 @@
 package io.palette.ui.unsplash
 
 import android.content.Context
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
@@ -28,11 +29,9 @@ class UnsplashAdapter @Inject constructor(context: Context, retryCallback: () ->
 
         init {
             itemView.ivImage.setOnClickListener {
-                context.startActivity(
-                        DetailActivity.newInstance(context,
-                                getItem(adapterPosition)?.urls?.regular ?: "",
-                                getItem(adapterPosition)?.user?.name ?: "Palette"
-                        ))
+                if (adapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
+                getItem(adapterPosition) ?: return@setOnClickListener
+                context.startActivity(DetailActivity.newInstance(context, getItem(adapterPosition)!!))
             }
         }
 

@@ -1,6 +1,9 @@
 package io.palette.data.models
 
+import android.annotation.SuppressLint
+import android.os.Parcelable
 import com.squareup.moshi.Json
+import kotlinx.android.parcel.Parcelize
 
 data class Response<out T>(
         val status: Status,
@@ -18,6 +21,8 @@ data class Response<out T>(
 
 enum class Source { CAMERA, GALLERY }
 
+@Parcelize
+@SuppressLint("ParcelCreator")
 data class Unsplash(
         @Json(name = "id") val id: String,
         @Json(name = "created_at") val createdAt: String,
@@ -27,30 +32,36 @@ data class Unsplash(
         @Json(name = "color") val color: String?,
         @Json(name = "description") val description: String?,
         @Json(name = "urls") val urls: Urls,
-        @Json(name = "links") val links: Links,
-        @Json(name = "user") val user: User
-)
+        @Json(name = "links") val links: Links?,
+        @Json(name = "user") val user: User?
+) : Parcelable
 
+@Parcelize
+@SuppressLint("ParcelCreator")
 data class Urls(
         @Json(name = "raw") val raw: String,
         @Json(name = "full") val full: String,
         @Json(name = "regular") val regular: String,
         @Json(name = "small") val small: String,
         @Json(name = "thumb") val thumb: String
-)
+) : Parcelable
 
+@Parcelize
+@SuppressLint("ParcelCreator")
 data class Links(
         @Json(name = "self") val self: String,
         @Json(name = "html") val html: String,
         @Json(name = "download") val download: String,
         @Json(name = "download_location") val downloadLocation: String
-)
+) : Parcelable
 
+@Parcelize
+@SuppressLint("ParcelCreator")
 data class User(
         @Json(name = "id") val id: String,
         @Json(name = "username") val userName: String,
         @Json(name = "name") val name: String
-)
+) : Parcelable
 
 data class GeneratedPalette(
         val hexCode: String,

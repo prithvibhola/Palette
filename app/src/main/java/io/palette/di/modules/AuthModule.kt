@@ -9,6 +9,9 @@ import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
+import com.google.firebase.firestore.FirebaseFirestore
+
+
 
 @Module
 class AuthModule {
@@ -35,4 +38,8 @@ class AuthModule {
     @Singleton
     @Provides
     fun providesFirebaseDatabase() = FirebaseDatabase.getInstance().reference
+
+    @Singleton
+    @Provides
+    fun providesFirebaseFirestore() = FirebaseFirestore.getInstance()
 }
