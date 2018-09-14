@@ -26,12 +26,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".utility.imagePicker.HiddenActivity"
-            android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!--<activity-->
+        <!--android:name=".utility.imagePicker.HiddenActivity"-->
+        <!--android:launchMode="singleTop"-->
+        <!--android:theme="@android:style/Theme.Translucent.NoTitleBar" />-->
 
         <activity android:name=".ui.detail.DetailActivity" />
+        <activity android:name=".ui.settings.SettingsActivity" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
