@@ -1,7 +1,8 @@
 package io.palette.ui.settings
 
 import io.palette.ui.base.BaseViewModel
+import javax.inject.Inject
 
-class SettingsViewModel : BaseViewModel() {
+class SettingsViewModel @Inject constructor() : BaseViewModel() {
 
 }

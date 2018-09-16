@@ -22,10 +22,9 @@ class UnsplashAdapter @Inject constructor(context: Context, retryCallback: () ->
         R.string.app_name,
         retryCallback
 ) {
-
     override fun onCreateItemViewHolder(parent: ViewGroup) = UnplashViewHolder(parent.inflate(R.layout.layout_unsplash))
 
-    inner class UnplashViewHolder(itemView: View) : BaseViewHolder(itemView) {
+    inner class UnplashViewHolder(itemView: View) : NetworkBaseViewHolder(itemView) {
 
         init {
             itemView.ivImage.setOnClickListener {
