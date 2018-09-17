@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_staggered"
         android:icon="@drawable/ic_view_agenda_black_24dp"
-        android:title="Staggered"
+        android:title="@string/menu_staggered"
         app:showAsAction="always" />
 
 </menu>

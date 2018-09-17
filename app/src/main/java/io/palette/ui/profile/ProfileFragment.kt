@@ -35,7 +35,7 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
         fun newInstance() = ProfileFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
@@ -65,7 +65,7 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
         observe(viewModel.user) {
             it ?: return@observe
             when (it.status) {
-                Response.Status.LOADING -> toast("Login Loading ../")
+                Response.Status.LOADING -> {}
                 Response.Status.SUCCESS -> {
                     when (it.data == null) {
                         true -> {

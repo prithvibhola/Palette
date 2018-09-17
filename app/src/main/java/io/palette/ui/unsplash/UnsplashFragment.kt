@@ -12,6 +12,7 @@ import io.palette.ui.base.BaseFragment
 import io.palette.utility.extentions.getViewModel
 import io.palette.utility.extentions.observe
 import io.palette.utility.extentions.withDelay
+import io.palette.utility.preference.PreferenceUtility
 import kotlinx.android.synthetic.main.fragment_unsplash.*
 import javax.inject.Inject
 
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class UnsplashFragment @Inject constructor() : BaseFragment() {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var preference: PreferenceUtility
 
     private lateinit var viewModel: UnsplashViewModel
     private lateinit var mAdapter: UnsplashAdapter
@@ -39,7 +41,7 @@ class UnsplashFragment @Inject constructor() : BaseFragment() {
 
         mAdapter = UnsplashAdapter(requireContext()) { viewModel.retry() }
         rvUnsplash.apply {
-            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager = StaggeredGridLayoutManager(preference.prefUnsplashStaggered, StaggeredGridLayoutManager.VERTICAL)
             adapter = mAdapter
         }
 
@@ -78,13 +80,19 @@ class UnsplashFragment @Inject constructor() : BaseFragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         if (menu == null || inflater == null) return
         inflater.inflate(R.menu.menu_unsplash, menu)
-        menu.findItem(R.id.action_staggered)?.let { it.isVisible = true }
+        menu.findItem(R.id.action_staggered)?.let {
+            it.isVisible = true
+            it.icon = ContextCompat.getDrawable(requireContext(), if (preference.prefUnsplashStaggered == 1) R.drawable.ic_view_agenda_black_24dp else R.drawable.ic_view_compact_black_24dp)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_staggered -> {
-                rvUnsplash.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+                val invert = preference.prefUnsplashStaggered == 1
+                preference.prefUnsplashStaggered = if (invert) 2 else 1
+                item.icon = ContextCompat.getDrawable(requireContext(), if (invert) R.drawable.ic_view_compact_black_24dp else R.drawable.ic_view_agenda_black_24dp)
+                rvUnsplash.layoutManager = StaggeredGridLayoutManager(preference.prefUnsplashStaggered, StaggeredGridLayoutManager.VERTICAL)
                 mAdapter.notifyDataSetChanged()
                 true
             }
