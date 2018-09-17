@@ -5,9 +5,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.StaggeredGridLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.auth.AuthUI
@@ -37,8 +35,10 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
         fun newInstance() = ProfileFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_profile, container, false)!!
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View {
+        setHasOptionsMenu(true)
+        return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -121,5 +121,20 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN)
             viewModel.setUser(if (resultCode == RESULT_OK) null else IdpResponse.fromResultIntent(data))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        if (menu == null || inflater == null) return
+        inflater.inflate(R.menu.menu_profile, menu)
+        menu.findItem(R.id.action_settings)?.let { it.isVisible = true }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_settings -> {
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 }

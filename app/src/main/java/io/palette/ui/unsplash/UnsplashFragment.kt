@@ -4,9 +4,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.StaggeredGridLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import io.palette.R
 import io.palette.data.models.Response
 import io.palette.di.FragmentScoped
@@ -29,8 +27,10 @@ class UnsplashFragment @Inject constructor() : BaseFragment() {
         fun newInstance() = UnsplashFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_unsplash, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        setHasOptionsMenu(true)
+        return inflater.inflate(R.layout.fragment_unsplash, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -72,6 +72,23 @@ class UnsplashFragment @Inject constructor() : BaseFragment() {
         swipeRefresh.setOnRefreshListener {
             viewModel.refresh()
             viewModel.retry()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        if (menu == null || inflater == null) return
+        inflater.inflate(R.menu.menu_unsplash, menu)
+        menu.findItem(R.id.action_staggered)?.let { it.isVisible = true }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_staggered -> {
+                rvUnsplash.layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+                mAdapter.notifyDataSetChanged()
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
     }
 }

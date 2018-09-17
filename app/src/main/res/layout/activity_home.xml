@@ -57,17 +57,6 @@
                     app:layout_constraintStart_toEndOf="@+id/ivUnsplash"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/ivSettings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="@dimen/dimen_vertical_margin"
-                    android:src="@drawable/ic_more_vert_black_24dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
             </android.support.constraint.ConstraintLayout>
 
         </android.support.v7.widget.Toolbar>
