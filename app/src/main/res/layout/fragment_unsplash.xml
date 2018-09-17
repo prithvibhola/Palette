@@ -11,10 +11,10 @@
         android:layout_height="match_parent"
         app:emptyContentTextColor="@color/colorWhite"
         app:emptyTitleTextColor="@color/colorWhite"
-        app:errorContentTextColor="@color/colorWhite"
-        app:errorTitleTextColor="@color/colorWhite"
         app:errorButtonBackgroundColor="@color/colorWhite"
         app:errorButtonTextColor="@color/colorBlack"
+        app:errorContentTextColor="@color/colorWhite"
+        app:errorTitleTextColor="@color/colorWhite"
         app:loadingProgressBarColor="@color/colorWhite">
 
         <android.support.v7.widget.RecyclerView
