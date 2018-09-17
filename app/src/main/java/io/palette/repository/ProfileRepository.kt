@@ -19,7 +19,6 @@ class ProfileRepository @Inject constructor() {
     @Inject lateinit var mAuth: FirebaseAuth
 
     fun firebaseAuthWithGoogle(activity: Activity, account: GoogleSignInAccount): Flowable<FirebaseUser> {
-        var user: FirebaseUser? = null
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         return Flowable.create({ emitter ->
             mAuth.signInWithCredential(credential)
