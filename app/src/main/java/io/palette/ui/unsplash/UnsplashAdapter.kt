@@ -1,6 +1,7 @@
 package io.palette.ui.unsplash
 
 import android.content.Context
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,7 @@ import io.palette.utility.extentions.getRandom
 import kotlinx.android.synthetic.main.layout_unsplash.view.*
 import javax.inject.Inject
 
-class UnsplashAdapter @Inject constructor(context: Context, retryCallback: () -> Unit) : PaginatedAdapter<Unsplash>(
+class UnsplashAdapter @Inject constructor(context: Context, val callBack: Callback, retryCallback: () -> Unit) : PaginatedAdapter<Unsplash>(
         context,
         R.string.app_name,
         R.string.app_name,
@@ -30,7 +31,7 @@ class UnsplashAdapter @Inject constructor(context: Context, retryCallback: () ->
             itemView.ivImage.setOnClickListener {
                 if (adapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
                 getItem(adapterPosition) ?: return@setOnClickListener
-                context.startActivity(DetailActivity.newInstance(context, getItem(adapterPosition)!!))
+                callBack.openDetail(itemView.ivImage, getItem(adapterPosition)!!)
             }
         }
 
@@ -46,5 +47,9 @@ class UnsplashAdapter @Inject constructor(context: Context, retryCallback: () ->
                     .into(itemView.ivImage)
             itemView.ivImage.maintainAspectRatio(item.width, item.height)
         }
+    }
+
+    interface Callback {
+        fun openDetail(view: View, unsplash: Unsplash)
     }
 }
