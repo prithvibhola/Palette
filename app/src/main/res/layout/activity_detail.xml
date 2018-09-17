@@ -9,7 +9,8 @@
         android:id="@+id/ivImage"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:transitionName="@string/transition_image_unsplash" />
 
     <ImageView
         android:id="@+id/ivLike"

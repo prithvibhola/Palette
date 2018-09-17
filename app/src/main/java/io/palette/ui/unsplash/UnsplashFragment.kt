@@ -2,13 +2,16 @@ package io.palette.ui.unsplash
 
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import io.palette.R
 import io.palette.data.models.Response
+import io.palette.data.models.Unsplash
 import io.palette.di.FragmentScoped
 import io.palette.ui.base.BaseFragment
+import io.palette.ui.detail.DetailActivity
 import io.palette.utility.extentions.getViewModel
 import io.palette.utility.extentions.observe
 import io.palette.utility.extentions.withDelay
@@ -17,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_unsplash.*
 import javax.inject.Inject
 
 @FragmentScoped
-class UnsplashFragment @Inject constructor() : BaseFragment() {
+class UnsplashFragment @Inject constructor() : BaseFragment(), UnsplashAdapter.Callback {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject lateinit var preference: PreferenceUtility
@@ -39,7 +42,7 @@ class UnsplashFragment @Inject constructor() : BaseFragment() {
 
         viewModel = getViewModel(UnsplashViewModel::class.java, viewModelFactory)
 
-        mAdapter = UnsplashAdapter(requireContext()) { viewModel.retry() }
+        mAdapter = UnsplashAdapter(requireContext(), this) { viewModel.retry() }
         rvUnsplash.apply {
             layoutManager = StaggeredGridLayoutManager(preference.prefUnsplashStaggered, StaggeredGridLayoutManager.VERTICAL)
             adapter = mAdapter
@@ -98,5 +101,14 @@ class UnsplashFragment @Inject constructor() : BaseFragment() {
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun openDetail(view: View, unsplash: Unsplash) {
+        startActivity(DetailActivity.newInstance(requireContext(), unsplash),
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        requireActivity(),
+                        view,
+                        getString(R.string.transition_image_unsplash)
+                ).toBundle())
     }
 }
