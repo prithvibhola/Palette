@@ -12,10 +12,7 @@ import io.palette.R
 import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
 import io.palette.ui.base.BaseActivity
-import io.palette.utility.extentions.getViewModel
-import io.palette.utility.extentions.listen
-import io.palette.utility.extentions.observe
-import io.palette.utility.extentions.toast
+import io.palette.utility.extentions.*
 import kotlinx.android.synthetic.main.activity_detail.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -119,5 +116,6 @@ class DetailActivity @Inject constructor() : BaseActivity() {
                         }
                 )
                 .into(ivImage)
+        ivImage.maintainAspectRatio(unsplash.width, unsplash.height)
     }
 }

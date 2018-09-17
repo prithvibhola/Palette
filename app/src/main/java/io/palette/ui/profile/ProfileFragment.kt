@@ -107,7 +107,7 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
         observe(viewModel.palettes) {
             it ?: return@observe
             when (it.status) {
-                Response.Status.LOADING -> toast("Loading")
+                Response.Status.LOADING -> {}
                 Response.Status.SUCCESS -> {
                     it.data ?: return@observe
                     profileAdapter.palettes = it.data
