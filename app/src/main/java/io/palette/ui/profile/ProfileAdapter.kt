@@ -16,7 +16,8 @@ import io.palette.utility.extentions.maintainAspectRatio
 import kotlinx.android.synthetic.main.layout_unsplash.view.*
 
 class ProfileAdapter(
-        val context: Context
+        val context: Context,
+        val callBack: Callback
 ) : RecyclerView.Adapter<BaseViewHolder>() {
 
     var palettes = listOf<Unsplash>()
@@ -36,7 +37,7 @@ class ProfileAdapter(
         init {
             itemView.ivImage.setOnClickListener {
                 if (adapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
-                context.startActivity(DetailActivity.newInstance(context, palettes[adapterPosition]))
+                callBack.openDetail(itemView.ivImage, palettes[adapterPosition])
             }
         }
 
@@ -52,5 +53,9 @@ class ProfileAdapter(
                     .into(itemView.ivImage)
             itemView.ivImage.maintainAspectRatio(palette.width, palette.height)
         }
+    }
+
+    interface Callback {
+        fun openDetail(view: View, unsplash: Unsplash)
     }
 }

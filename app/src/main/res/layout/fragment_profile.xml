@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorBlack">
 
     <ImageView
         android:id="@+id/ivProfile"
@@ -14,15 +15,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/btnLogin"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_vertical_margin"
         android:fontFamily="@font/roboto_regular"
-        android:text="Login"
         android:textColor="@color/colorWhite"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
@@ -52,6 +52,31 @@
         app:layout_constraintTop_toBottomOf="@+id/tvName"
         tools:text="prithvi.leo08@gmail.com" />
 
+    <TextView
+        android:id="@+id/tvLiked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_horizontal_margin"
+        android:layout_marginTop="@dimen/dimen_vertical_margin"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/liked"
+        android:textAllCaps="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
+
+    <ImageView
+        android:id="@+id/ivStaggered"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="@dimen/dimen_horizontal_margin"
+        android:layout_marginStart="@dimen/dimen_horizontal_margin"
+        android:layout_marginTop="@dimen/dimen_vertical_margin"
+        android:src="@drawable/ic_view_compact_black_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvLikedPalettes"
         android:layout_width="0dp"
@@ -60,5 +85,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLiked" />
 </android.support.constraint.ConstraintLayout>
