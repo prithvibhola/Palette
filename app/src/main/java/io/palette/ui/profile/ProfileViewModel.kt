@@ -34,16 +34,20 @@ class ProfileViewModel @Inject constructor(
 
     fun getPalettes() {
         palettes.value = Response.loading()
-        firestore.collection("users")
-                .document(firebaseAuth.currentUser!!.uid)
-                .collection("palettes")
-                .addSnapshotListener(EventListener<QuerySnapshot> { snapshot, exception ->
-                    if (exception != null) {
-                        palettes.value = Response.error(Throwable("Error getting user liked palettes"))
-                        Timber.e(exception, "Error getting user liked palettes")
-                        return@EventListener
-                    }
-                    palettes.value = Response.success(snapshot?.toObjects(Unsplash::class.java))
-                })
+        if (firebaseAuth.currentUser == null) {
+            palettes.value = Response.success(listOf())
+        } else {
+            firestore.collection("users")
+                    .document(firebaseAuth.currentUser!!.uid)
+                    .collection("palettes")
+                    .addSnapshotListener(EventListener<QuerySnapshot> { snapshot, exception ->
+                        if (exception != null) {
+                            palettes.value = Response.error(Throwable("Error getting user liked palettes"))
+                            Timber.e(exception, "Error getting user liked palettes")
+                            return@EventListener
+                        }
+                        palettes.value = Response.success(snapshot?.toObjects(Unsplash::class.java))
+                    })
+        }
     }
 }
