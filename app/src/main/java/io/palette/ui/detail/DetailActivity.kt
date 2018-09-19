@@ -50,17 +50,19 @@ class DetailActivity @Inject constructor() : BaseActivity() {
 
         viewModel = getViewModel(DetailViewModel::class.java, viewModelFactory)
 
-        ivSave.setOnClickListener { viewModel.savePalette(rvPalette, false, bitmap!!) }
-        ivLike.setOnClickListener { viewModel.likePalette(unsplash) }
+//        ivSave.setOnClickListener { viewModel.savePalette(rvPalette, false, bitmap!!) }
+//        ivLike.setOnClickListener { viewModel.likePalette(unsplash) }
 
         observe(viewModel.palette) {
             it ?: return@observe
             when (it.status) {
-                Response.Status.LOADING -> activityStatus.showLoading()
+                Response.Status.LOADING -> {
+//                    activityStatus.showLoading()
+                }
                 Response.Status.SUCCESS -> {
                     it.data ?: return@observe
                     mAdapter.palette = it.data
-                    activityStatus.showContent()
+//                    activityStatus.showContent()
                 }
                 Response.Status.ERROR -> TODO()
             }
