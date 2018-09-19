@@ -4,6 +4,8 @@ import android.app.Activity.RESULT_OK
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
 import com.bumptech.glide.Glide
@@ -12,19 +14,23 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import io.palette.R
 import io.palette.data.models.Response
+import io.palette.data.models.Unsplash
 import io.palette.di.FragmentScoped
 import io.palette.ui.base.BaseFragment
+import io.palette.ui.detail.DetailActivity
 import io.palette.utility.extentions.getViewModel
 import io.palette.utility.extentions.observe
 import io.palette.utility.extentions.toast
 import io.palette.utility.extentions.visible
+import io.palette.utility.preference.PreferenceUtility
 import kotlinx.android.synthetic.main.fragment_profile.*
 import javax.inject.Inject
 
 @FragmentScoped
-class ProfileFragment @Inject constructor() : BaseFragment() {
+class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Callback {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var preference: PreferenceUtility
 
     lateinit var viewModel: ProfileViewModel
     lateinit var profileAdapter: ProfileAdapter
@@ -54,9 +60,17 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
                     RC_SIGN_IN)
         }
 
-        profileAdapter = ProfileAdapter(requireContext())
+        ivStaggered.setOnClickListener {
+            val invert = preference.prefLikedStaggered == 1
+            preference.prefLikedStaggered = if (invert) 2 else 1
+            ivStaggered.setImageDrawable(ContextCompat.getDrawable(requireContext(), if (invert) R.drawable.ic_view_compact_black_24dp else R.drawable.ic_view_agenda_black_24dp))
+            rvLikedPalettes.layoutManager = StaggeredGridLayoutManager(preference.prefLikedStaggered, StaggeredGridLayoutManager.VERTICAL)
+            profileAdapter.notifyDataSetChanged()
+        }
+
+        profileAdapter = ProfileAdapter(requireContext(), this)
         rvLikedPalettes.apply {
-            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager = StaggeredGridLayoutManager(preference.prefLikedStaggered, StaggeredGridLayoutManager.VERTICAL)
             adapter = profileAdapter
         }
 
@@ -65,7 +79,8 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
         observe(viewModel.user) {
             it ?: return@observe
             when (it.status) {
-                Response.Status.LOADING -> {}
+                Response.Status.LOADING -> {
+                }
                 Response.Status.SUCCESS -> {
                     when (it.data == null) {
                         true -> {
@@ -76,6 +91,7 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
                         }
                         false -> {
                             it.data ?: return@observe
+                            ivStaggered.setImageDrawable(ContextCompat.getDrawable(requireContext(), if (preference.prefUnsplashStaggered == 1) R.drawable.ic_view_agenda_black_24dp else R.drawable.ic_view_compact_black_24dp))
                             Glide.with(this)
                                     .setDefaultRequestOptions(RequestOptions().apply {
                                         placeholder(R.color.colorBlackThree)
@@ -107,7 +123,8 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
         observe(viewModel.palettes) {
             it ?: return@observe
             when (it.status) {
-                Response.Status.LOADING -> {}
+                Response.Status.LOADING -> {
+                }
                 Response.Status.SUCCESS -> {
                     it.data ?: return@observe
                     profileAdapter.palettes = it.data
@@ -136,5 +153,14 @@ class ProfileFragment @Inject constructor() : BaseFragment() {
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun openDetail(view: View, unsplash: Unsplash) {
+        startActivity(DetailActivity.newInstance(requireContext(), unsplash),
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        requireActivity(),
+                        view,
+                        getString(R.string.transition_image_unsplash)
+                ).toBundle())
     }
 }
