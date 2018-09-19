@@ -5,5 +5,7 @@
 
     <string name="transition_image_unsplash" translatable="false">transition_image_unsplash</string>
     <string name="liked">Liked</string>
+    <string name="empty_liked_palette">Your liked palettes will appear here.</string>
+    <string name="sign_in_text">Sign in to save your liked images</string>
 
 </resources>

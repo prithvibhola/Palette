@@ -84,13 +84,12 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
                 Response.Status.SUCCESS -> {
                     when (it.data == null) {
                         true -> {
-                            ivProfile.visible = false
-                            tvName.visible = false
-                            tvEmail.visible = false
-                            btnLogin.visible = true
+                            grpUserInfo.visible = false
+                            grpSignIn.visible = true
                         }
                         false -> {
                             it.data ?: return@observe
+                            viewModel.getPalettes()
                             ivStaggered.setImageDrawable(ContextCompat.getDrawable(requireContext(), if (preference.prefUnsplashStaggered == 1) R.drawable.ic_view_agenda_black_24dp else R.drawable.ic_view_compact_black_24dp))
                             Glide.with(this)
                                     .setDefaultRequestOptions(RequestOptions().apply {
@@ -103,18 +102,14 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
                             tvName.text = it.data.displayName
                             tvEmail.text = it.data.email
 
-                            ivProfile.visible = true
-                            tvName.visible = true
-                            tvEmail.visible = true
-                            btnLogin.visible = false
+                            grpUserInfo.visible = true
+                            grpSignIn.visible = false
                         }
                     }
                 }
                 Response.Status.ERROR -> {
-                    ivProfile.visible = false
-                    tvName.visible = false
-                    tvEmail.visible = false
-                    btnLogin.visible = true
+                    grpUserInfo.visible = false
+                    grpSignIn.visible = true
                     toast("Error occurred while signing. Please try again.")
                 }
             }
@@ -127,7 +122,12 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
                 }
                 Response.Status.SUCCESS -> {
                     it.data ?: return@observe
-                    profileAdapter.palettes = it.data
+                    if (it.data.isNotEmpty()) {
+                        profileAdapter.palettes = it.data
+                        tvEmptyList.visible = false
+                    } else {
+                        tvEmptyList.visible = true
+                    }
                 }
                 Response.Status.ERROR -> toast("Error")
             }
