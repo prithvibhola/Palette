@@ -23,8 +23,7 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
         private val repository: Repository,
         private val scheduler: Scheduler,
-        private val firebaseAuth: FirebaseAuth,
-        private val firestore: FirebaseFirestore
+        private val firebaseAuth: FirebaseAuth
 ) : BaseViewModel() {
 
     var palette: MutableLiveData<Response<List<GeneratedPalette>>> = MutableLiveData()
@@ -56,14 +55,17 @@ class DetailViewModel @Inject constructor(
         if (firebaseAuth.currentUser == null) likePalette.value = Response.error(Exception("User is not registered"))
 
         likePalette.value = Response.loading()
-        firestore.collection("users")
-                .document(firebaseAuth.currentUser!!.uid)
-                .collection("palettes")
-                .add(unsplash)
-                .addOnSuccessListener { likePalette.value = Response.success(true) }
-                .addOnFailureListener {
-                    likePalette.value = Response.error(it)
-                    Timber.e(it, "Error liking Palette")
-                }
+        repository.detailRepository.likePalette(unsplash)
+                .fromWorkerToMain(scheduler)
+                .subscribeBy(
+                        onNext = {
+                            likePalette.value = Response.success(it)
+                        },
+                        onError = {
+                            likePalette.value = Response.error(it)
+                            Timber.e(it, "Error liking Palette")
+                        }
+                )
+                .addTo(getCompositeDisposable())
     }
 }

@@ -11,13 +11,17 @@ import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
 import io.palette.repository.Repository
 import io.palette.ui.base.BaseViewModel
+import io.palette.utility.extentions.fromWorkerToMain
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import prithvi.io.mvvmstarter.utility.rx.Scheduler
 import timber.log.Timber
 import javax.inject.Inject
 
 class UnsplashViewModel @Inject constructor(
         private val repository: Repository,
-        private val firebaseAuth: FirebaseAuth
+        private val firebaseAuth: FirebaseAuth,
+        private val scheduler: Scheduler
 ) : BaseViewModel() {
 
     var unsplash: LiveData<PagedList<Unsplash>>
@@ -48,6 +52,7 @@ class UnsplashViewModel @Inject constructor(
             likedPalettes.value = Response.success(listOf())
         } else {
             repository.profileRepository.getLikedPalettes()
+                    .fromWorkerToMain(scheduler)
                     .subscribeBy(
                             onNext = {
                                 likedPalettes.value = Response.success(it)
@@ -57,6 +62,7 @@ class UnsplashViewModel @Inject constructor(
                                 Timber.e(it, "Error getting user liked palettes")
                             }
                     )
+                    .addTo(getCompositeDisposable())
         }
     }
 
