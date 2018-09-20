@@ -19,6 +19,11 @@ data class Response<out T>(
     }
 }
 
+data class Optional<out T>(val value: T? = null) {
+    fun isEmpty() = value == null
+    fun isNotEmpty() = value != null
+}
+
 enum class Source { CAMERA, GALLERY }
 
 @Parcelize
