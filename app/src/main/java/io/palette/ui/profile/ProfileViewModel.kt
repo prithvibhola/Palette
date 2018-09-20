@@ -9,6 +9,7 @@ import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
 import io.palette.repository.Repository
 import io.palette.ui.base.BaseViewModel
+import io.palette.utility.extentions.addTo
 import io.palette.utility.extentions.fromWorkerToMain
 import io.palette.utility.extentions.snapshotAsFlowable
 import io.reactivex.rxkotlin.subscribeBy
@@ -37,7 +38,7 @@ class ProfileViewModel @Inject constructor(
     fun getPalettes() {
         palettes.value = Response.loading()
         if (firebaseAuth.currentUser == null) {
-            palettes.value = Response.success(listOf())
+            palettes.value = Response.error(Exception("User is not registered"))
         } else {
             repository.profileRepository.getLikedPalettes()
                     .fromWorkerToMain(scheduler)
@@ -50,6 +51,7 @@ class ProfileViewModel @Inject constructor(
                                 Timber.e(it, "Error getting user liked palettes")
                             }
                     )
+                    .addTo(getCompositeDisposable())
         }
     }
 }

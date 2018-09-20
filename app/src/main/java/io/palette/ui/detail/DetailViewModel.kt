@@ -29,7 +29,7 @@ class DetailViewModel @Inject constructor(
     var palette: MutableLiveData<Response<List<GeneratedPalette>>> = MutableLiveData()
     var shareUri: MutableLiveData<Response<Uri>> = MutableLiveData()
     var savePalette: MutableLiveData<Response<Uri>> = MutableLiveData()
-    var likePalette: MutableLiveData<Response<Boolean>> = MutableLiveData()
+    var likeUnlikePalette: MutableLiveData<Response<Boolean>> = MutableLiveData()
 
     fun generatePalette(bitmap: Bitmap) {
         repository.detailRepository.getPalette(bitmap)
@@ -51,18 +51,21 @@ class DetailViewModel @Inject constructor(
                 .addTo(getCompositeDisposable())
     }
 
-    fun likePalette(unsplash: Unsplash) {
-        if (firebaseAuth.currentUser == null) likePalette.value = Response.error(Exception("User is not registered"))
+    fun likeUnlikePalette(unsplash: Unsplash, isLiked: Boolean) {
+        if (firebaseAuth.currentUser == null) {
+            likeUnlikePalette.value = Response.error(Exception("User is not registered"))
+            return
+        }
 
-        likePalette.value = Response.loading()
-        repository.detailRepository.likePalette(unsplash)
+        likeUnlikePalette.value = Response.loading()
+        (if (isLiked) repository.detailRepository.unlikePalette(unsplash) else repository.detailRepository.likePalette(unsplash))
                 .fromWorkerToMain(scheduler)
                 .subscribeBy(
                         onNext = {
-                            likePalette.value = Response.success(it)
+                            likeUnlikePalette.value = Response.success(it)
                         },
                         onError = {
-                            likePalette.value = Response.error(it)
+                            likeUnlikePalette.value = Response.error(it)
                             Timber.e(it, "Error liking Palette")
                         }
                 )
