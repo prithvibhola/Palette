@@ -46,7 +46,7 @@ fun DocumentReference.getAsFlowable(): Flowable<DocumentSnapshot> = Flowable.cre
 }, BackpressureStrategy.BUFFER)
 
 fun DocumentReference.snapshotAsFlowable(): Flowable<DocumentSnapshot> = Flowable.create({ emitter ->
-    val registration = this.addSnapshotListener() { snapshot, exception ->
+    val registration = this.addSnapshotListener { snapshot, exception ->
         if (exception != null) {
             emitter.onError(exception)
             return@addSnapshotListener

@@ -6,6 +6,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
+import io.palette.data.models.Unsplash
+import io.palette.utility.extentions.snapshotAsFlowable
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import timber.log.Timber
@@ -14,7 +17,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ProfileRepository @Inject constructor() {
+class ProfileRepository @Inject constructor(
+        private val firebaseAuth: FirebaseAuth,
+        private val fireStore: FirebaseFirestore
+) {
 
     @Inject lateinit var mAuth: FirebaseAuth
 
@@ -32,4 +38,11 @@ class ProfileRepository @Inject constructor() {
                     }
         }, BackpressureStrategy.BUFFER)
     }
+
+    fun getLikedPalettes(): Flowable<List<Unsplash>> =
+            fireStore.collection("users")
+                    .document(firebaseAuth.currentUser!!.uid)
+                    .collection("palettes")
+                    .snapshotAsFlowable()
+                    .map { it.toObjects(Unsplash::class.java) }
 }

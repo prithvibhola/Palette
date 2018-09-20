@@ -9,6 +9,8 @@ import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
 import io.palette.repository.Repository
 import io.palette.ui.base.BaseViewModel
+import io.palette.utility.extentions.snapshotAsFlowable
+import io.reactivex.rxkotlin.subscribeBy
 import prithvi.io.mvvmstarter.utility.rx.Scheduler
 import timber.log.Timber
 import javax.inject.Inject
@@ -16,8 +18,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
         val repository: Repository,
         val scheduler: Scheduler,
-        val firebaseAuth: FirebaseAuth,
-        private val firestore: FirebaseFirestore
+        val firebaseAuth: FirebaseAuth
 ) : BaseViewModel() {
 
     val user: MutableLiveData<Response<FirebaseUser>> = MutableLiveData()
@@ -37,17 +38,16 @@ class ProfileViewModel @Inject constructor(
         if (firebaseAuth.currentUser == null) {
             palettes.value = Response.success(listOf())
         } else {
-            firestore.collection("users")
-                    .document(firebaseAuth.currentUser!!.uid)
-                    .collection("palettes")
-                    .addSnapshotListener(EventListener<QuerySnapshot> { snapshot, exception ->
-                        if (exception != null) {
-                            palettes.value = Response.error(Throwable("Error getting user liked palettes"))
-                            Timber.e(exception, "Error getting user liked palettes")
-                            return@EventListener
-                        }
-                        palettes.value = Response.success(snapshot?.toObjects(Unsplash::class.java))
-                    })
+            repository.profileRepository.getLikedPalettes()
+                    .subscribeBy(
+                            onNext = {
+                                palettes.value = Response.success(it)
+                            },
+                            onError = {
+                                palettes.value = Response.error(Throwable("Error getting user liked palettes"))
+                                Timber.e(it, "Error getting user liked palettes")
+                            }
+                    )
         }
     }
 }
