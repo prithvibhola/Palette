@@ -156,7 +156,7 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
     }
 
     override fun openDetail(view: View, unsplash: Unsplash) {
-        startActivity(DetailActivity.newInstance(requireContext(), unsplash),
+        startActivity(DetailActivity.newInstance(requireContext(), unsplash, true),
                 ActivityOptionsCompat.makeSceneTransitionAnimation(
                         requireActivity(),
                         view,

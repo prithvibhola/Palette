@@ -23,6 +23,9 @@ class UnsplashAdapter @Inject constructor(context: Context, val callBack: Callba
         R.string.app_name,
         retryCallback
 ) {
+
+    var likedPalettes: List<Unsplash> = listOf()
+
     override fun onCreateItemViewHolder(parent: ViewGroup) = UnplashViewHolder(parent.inflate(R.layout.layout_unsplash))
 
     inner class UnplashViewHolder(itemView: View) : NetworkBaseViewHolder(itemView) {
@@ -31,7 +34,7 @@ class UnsplashAdapter @Inject constructor(context: Context, val callBack: Callba
             itemView.ivImage.setOnClickListener {
                 if (adapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
                 getItem(adapterPosition) ?: return@setOnClickListener
-                callBack.openDetail(itemView.ivImage, getItem(adapterPosition)!!)
+                callBack.openDetail(itemView.ivImage, getItem(adapterPosition)!!, likedPalettes.contains(getItem(adapterPosition)))
             }
         }
 
@@ -50,6 +53,6 @@ class UnsplashAdapter @Inject constructor(context: Context, val callBack: Callba
     }
 
     interface Callback {
-        fun openDetail(view: View, unsplash: Unsplash)
+        fun openDetail(view: View, unsplash: Unsplash, isLiked: Boolean)
     }
 }

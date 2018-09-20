@@ -58,7 +58,8 @@ class DetailViewModel @Inject constructor(
         likePalette.value = Response.loading()
         firestore.collection("users")
                 .document(firebaseAuth.currentUser!!.uid)
-                .collection("palettes").add(unsplash)
+                .collection("palettes")
+                .add(unsplash)
                 .addOnSuccessListener { likePalette.value = Response.success(true) }
                 .addOnFailureListener {
                     likePalette.value = Response.error(it)

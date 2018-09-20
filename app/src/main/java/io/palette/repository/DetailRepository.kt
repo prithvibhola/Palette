@@ -94,25 +94,24 @@ class DetailRepository @Inject constructor() {
         return cs
     }
 
-    fun saveBitmap(bitmap: Bitmap): Flowable<Uri> =
-            Flowable.create<Uri>({ emitter ->
-                if (!PALETTE_FOLDER.exists())
-                    PALETTE_FOLDER.mkdirs()
-                val newsFile = File(PALETTE_FOLDER, "palette_${System.currentTimeMillis()}.jpg")
-                if (newsFile.exists()) newsFile.delete()
-                newsFile.createNewFile()
-                try {
-                    val out = FileOutputStream(newsFile)
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-                    val uri = FileProvider.getUriForFile(
-                            context,
-                            context.packageName + ".fileprovider", newsFile)
-                    emitter.onNext(uri)
-                    out.flush()
-                    out.close()
-                    emitter.onComplete()
-                } catch (exception: Exception) {
-                    emitter.onError(exception)
-                }
-            }, BackpressureStrategy.BUFFER)
+    fun saveBitmap(bitmap: Bitmap): Flowable<Uri> = Flowable.create<Uri>({ emitter ->
+        if (!PALETTE_FOLDER.exists())
+            PALETTE_FOLDER.mkdirs()
+        val newsFile = File(PALETTE_FOLDER, "palette_${System.currentTimeMillis()}.jpg")
+        if (newsFile.exists()) newsFile.delete()
+        newsFile.createNewFile()
+        try {
+            val out = FileOutputStream(newsFile)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+            val uri = FileProvider.getUriForFile(
+                    context,
+                    context.packageName + ".fileprovider", newsFile)
+            emitter.onNext(uri)
+            out.flush()
+            out.close()
+            emitter.onComplete()
+        } catch (exception: Exception) {
+            emitter.onError(exception)
+        }
+    }, BackpressureStrategy.BUFFER)
 }
