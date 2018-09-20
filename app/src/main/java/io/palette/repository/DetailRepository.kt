@@ -126,8 +126,17 @@ class DetailRepository @Inject constructor(
             fireStore.collection("users")
                     .document(firebaseAuth.currentUser!!.uid)
                     .collection("palettes")
-                    .add(unsplash)
+                    .document(unsplash.id)
+                    .set(unsplash)
                     .toFlowable()
                     .map { true }
 
+    fun unlikePalette(unsplash: Unsplash): Flowable<Boolean> =
+            fireStore.collection("users")
+                    .document(firebaseAuth.currentUser!!.uid)
+                    .collection("palettes")
+                    .document(unsplash.id)
+                    .delete()
+                    .toFlowable()
+                    .map { false }
 }

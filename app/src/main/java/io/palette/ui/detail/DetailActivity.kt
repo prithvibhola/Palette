@@ -58,7 +58,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
         ivLike.setImageDrawable(ContextCompat.getDrawable(this, if (isLiked) R.drawable.ic_favorite_black_24dp else R.drawable.ic_favorite_border_black_24dp))
 
         ivSave.setOnClickListener { viewModel.savePalette(rvPalette, false, bitmap!!) }
-        ivLike.setOnClickListener { viewModel.likePalette(unsplash) }
+        ivLike.setOnClickListener { viewModel.likeUnlikePalette(unsplash, isLiked) }
 
         observe(viewModel.palette) {
             it ?: return@observe
@@ -100,15 +100,16 @@ class DetailActivity @Inject constructor() : BaseActivity() {
             }
         }
 
-        observe(viewModel.likePalette) {
+        observe(viewModel.likeUnlikePalette) {
             it ?: return@observe
             when (it.status) {
                 Response.Status.LOADING -> {
                     toast("Loading")
                 }
                 Response.Status.SUCCESS -> {
-                    ivLike.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_black_24dp))
-                    toast("Palette liked")
+                    it.data ?: return@observe
+                    isLiked = it.data
+                    ivLike.setImageDrawable(ContextCompat.getDrawable(this, if (isLiked) R.drawable.ic_favorite_black_24dp else R.drawable.ic_favorite_border_black_24dp))
                 }
                 Response.Status.ERROR -> {
                     toast("Error in liking palette")
