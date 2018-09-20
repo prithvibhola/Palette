@@ -9,6 +9,7 @@ import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
 import io.palette.repository.Repository
 import io.palette.ui.base.BaseViewModel
+import io.palette.utility.extentions.fromWorkerToMain
 import io.palette.utility.extentions.snapshotAsFlowable
 import io.reactivex.rxkotlin.subscribeBy
 import prithvi.io.mvvmstarter.utility.rx.Scheduler
@@ -39,6 +40,7 @@ class ProfileViewModel @Inject constructor(
             palettes.value = Response.success(listOf())
         } else {
             repository.profileRepository.getLikedPalettes()
+                    .fromWorkerToMain(scheduler)
                     .subscribeBy(
                             onNext = {
                                 palettes.value = Response.success(it)

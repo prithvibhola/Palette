@@ -12,7 +12,11 @@ import android.support.v4.util.LruCache
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import io.palette.data.models.GeneratedPalette
+import io.palette.data.models.Unsplash
+import io.palette.utility.extentions.toFlowable
 import io.palette.utility.extentions.toHex
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -22,7 +26,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DetailRepository @Inject constructor() {
+class DetailRepository @Inject constructor(
+        private val firebaseAuth: FirebaseAuth,
+        private val fireStore: FirebaseFirestore
+) {
 
     @Inject lateinit var context: Context
 
@@ -114,4 +121,13 @@ class DetailRepository @Inject constructor() {
             emitter.onError(exception)
         }
     }, BackpressureStrategy.BUFFER)
+
+    fun likePalette(unsplash: Unsplash): Flowable<Boolean> =
+            fireStore.collection("users")
+                    .document(firebaseAuth.currentUser!!.uid)
+                    .collection("palettes")
+                    .add(unsplash)
+                    .toFlowable()
+                    .map { true }
+
 }
