@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import io.palette.R
@@ -27,12 +28,15 @@ class DetailActivity @Inject constructor() : BaseActivity() {
     var bitmap: Bitmap? = null
 
     lateinit var unsplash: Unsplash
+    var isLiked: Boolean = false
 
     companion object {
         const val ARG_UNSPLASH = "ARG_UNSPLASH"
+        const val ARG_IS_LIKED = "ARG_IS_LIKED"
 
-        fun newInstance(context: Context, unsplash: Unsplash) = Intent(context, DetailActivity::class.java).apply {
+        fun newInstance(context: Context, unsplash: Unsplash, isLiked: Boolean) = Intent(context, DetailActivity::class.java).apply {
             putExtra(ARG_UNSPLASH, unsplash)
+            putExtra(ARG_IS_LIKED, isLiked)
         }
     }
 
@@ -41,6 +45,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
         setContentView(R.layout.activity_detail)
 
         unsplash = intent.getParcelableExtra(ARG_UNSPLASH)
+        isLiked = intent.getBooleanExtra(ARG_IS_LIKED, false)
 
         mAdapter = DetailAdapter(unsplash.user?.userName ?: "Palette")
         rvPalette.apply {
@@ -50,8 +55,10 @@ class DetailActivity @Inject constructor() : BaseActivity() {
 
         viewModel = getViewModel(DetailViewModel::class.java, viewModelFactory)
 
-//        ivSave.setOnClickListener { viewModel.savePalette(rvPalette, false, bitmap!!) }
-//        ivLike.setOnClickListener { viewModel.likePalette(unsplash) }
+        ivLike.setImageDrawable(ContextCompat.getDrawable(this, if (isLiked) R.drawable.ic_favorite_black_24dp else R.drawable.ic_favorite_border_black_24dp))
+
+        ivSave.setOnClickListener { viewModel.savePalette(rvPalette, false, bitmap!!) }
+        ivLike.setOnClickListener { viewModel.likePalette(unsplash) }
 
         observe(viewModel.palette) {
             it ?: return@observe
@@ -96,9 +103,16 @@ class DetailActivity @Inject constructor() : BaseActivity() {
         observe(viewModel.likePalette) {
             it ?: return@observe
             when (it.status) {
-                Response.Status.LOADING -> toast("Loading")
-                Response.Status.SUCCESS -> toast("Palette liked")
-                Response.Status.ERROR -> toast("Error in liking palette")
+                Response.Status.LOADING -> {
+                    toast("Loading")
+                }
+                Response.Status.SUCCESS -> {
+                    ivLike.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_favorite_black_24dp))
+                    toast("Palette liked")
+                }
+                Response.Status.ERROR -> {
+                    toast("Error in liking palette")
+                }
             }
         }
 

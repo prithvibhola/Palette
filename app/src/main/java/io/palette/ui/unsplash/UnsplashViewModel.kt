@@ -3,25 +3,28 @@ package io.palette.ui.unsplash
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
-import android.arch.lifecycle.ViewModel
 import android.arch.paging.DataSource
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
+import com.google.firebase.auth.FirebaseAuth
 import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
 import io.palette.repository.Repository
-import io.reactivex.disposables.CompositeDisposable
+import io.palette.ui.base.BaseViewModel
+import io.reactivex.rxkotlin.subscribeBy
+import timber.log.Timber
 import javax.inject.Inject
 
 class UnsplashViewModel @Inject constructor(
-        val repository: Repository
-) : ViewModel() {
-
-    private val compositeDisposable = CompositeDisposable()
+        private val repository: Repository,
+        private val firebaseAuth: FirebaseAuth
+) : BaseViewModel() {
 
     var unsplash: LiveData<PagedList<Unsplash>>
     private var sourceFactory: UnsplashSourceFactory
     private var pageSize = 10
+
+    val likedPalettes: MutableLiveData<Response<List<Unsplash>>> = MutableLiveData()
 
     init {
         sourceFactory = UnsplashSourceFactory()
@@ -39,9 +42,22 @@ class UnsplashViewModel @Inject constructor(
     fun getNetworkState(): LiveData<Response<Unsplash>> = Transformations.switchMap<UnsplashDataSource, Response<Unsplash>>(sourceFactory.unsplashDataSource) { it.networkState }
     fun getRefreshState(): LiveData<Response<List<Unsplash>>> = Transformations.switchMap<UnsplashDataSource, Response<List<Unsplash>>>(sourceFactory.unsplashDataSource) { it.initialLoad }
 
-    override fun onCleared() {
-        compositeDisposable.dispose()
-        super.onCleared()
+    fun getLikedPalettes() {
+        likedPalettes.value = Response.loading()
+        if (firebaseAuth.currentUser == null) {
+            likedPalettes.value = Response.success(listOf())
+        } else {
+            repository.profileRepository.getLikedPalettes()
+                    .subscribeBy(
+                            onNext = {
+                                likedPalettes.value = Response.success(it)
+                            },
+                            onError = {
+                                likedPalettes.value = Response.error(Throwable("Error getting user liked palettes"))
+                                Timber.e(it, "Error getting user liked palettes")
+                            }
+                    )
+        }
     }
 
     open inner class UnsplashSourceFactory : DataSource.Factory<Long, Unsplash>() {
@@ -49,7 +65,7 @@ class UnsplashViewModel @Inject constructor(
         val unsplashDataSource = MutableLiveData<UnsplashDataSource>()
 
         override fun create(): DataSource<Long, Unsplash> {
-            val dataSource = UnsplashDataSource(repository, compositeDisposable)
+            val dataSource = UnsplashDataSource(repository, getCompositeDisposable())
             unsplashDataSource.postValue(dataSource)
             return dataSource
         }

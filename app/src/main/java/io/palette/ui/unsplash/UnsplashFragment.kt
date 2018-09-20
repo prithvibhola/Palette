@@ -14,6 +14,7 @@ import io.palette.ui.base.BaseFragment
 import io.palette.ui.detail.DetailActivity
 import io.palette.utility.extentions.getViewModel
 import io.palette.utility.extentions.observe
+import io.palette.utility.extentions.toast
 import io.palette.utility.extentions.withDelay
 import io.palette.utility.preference.PreferenceUtility
 import kotlinx.android.synthetic.main.fragment_unsplash.*
@@ -41,6 +42,7 @@ class UnsplashFragment @Inject constructor() : BaseFragment(), UnsplashAdapter.C
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = getViewModel(UnsplashViewModel::class.java, viewModelFactory)
+        viewModel.getLikedPalettes()
 
         mAdapter = UnsplashAdapter(requireContext(), this) { viewModel.retry() }
         rvUnsplash.apply {
@@ -70,6 +72,19 @@ class UnsplashFragment @Inject constructor() : BaseFragment(), UnsplashAdapter.C
                             "Couldn't get data!!",
                             "Unable to get unsplash images. Please try again.",
                             "Retry") { viewModel.retry() }
+                }
+            }
+        }
+        observe(viewModel.likedPalettes) {
+            it ?: return@observe
+            when (it.status) {
+                Response.Status.LOADING -> {
+                }
+                Response.Status.SUCCESS -> {
+                    it.data ?: return@observe
+                    mAdapter.likedPalettes = it.data
+                }
+                Response.Status.ERROR -> {
                 }
             }
         }
@@ -103,8 +118,8 @@ class UnsplashFragment @Inject constructor() : BaseFragment(), UnsplashAdapter.C
         }
     }
 
-    override fun openDetail(view: View, unsplash: Unsplash) {
-        startActivity(DetailActivity.newInstance(requireContext(), unsplash),
+    override fun openDetail(view: View, unsplash: Unsplash, isLiked: Boolean) {
+        startActivity(DetailActivity.newInstance(requireContext(), unsplash, isLiked),
                 ActivityOptionsCompat.makeSceneTransitionAnimation(
                         requireActivity(),
                         view,
