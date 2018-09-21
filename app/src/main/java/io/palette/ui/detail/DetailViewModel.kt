@@ -46,7 +46,10 @@ class DetailViewModel @Inject constructor(
                 .fromWorkerToMain(scheduler)
                 .subscribeBy(
                         onNext = { (if (sharePalette) shareUri else savePalette).value = Response.success(it) },
-                        onError = { (if (sharePalette) shareUri else savePalette).value = Response.error(it) }
+                        onError = {
+                            Timber.e(it, "Error in saving image")
+                            (if (sharePalette) shareUri else savePalette).value = Response.error(it)
+                        }
                 )
                 .addTo(getCompositeDisposable())
     }
