@@ -2,23 +2,44 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:id="@+id/infoRootLayout"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorBlackThree">
+
+    <ImageView
+        android:id="@+id/ivSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/dimen_vertical_margin"
+        android:src="@drawable/ic_wallpaper_black_24dp"
+        app:layout_constraintEnd_toStartOf="@+id/ivLike"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/dimen_vertical_margin"
+        android:src="@drawable/ic_favorite_border_black_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivSave" />
 
     <TextView
         android:id="@+id/tvPhotographerName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_horizontal_margin"
-        android:layout_marginTop="@dimen/dimen_horizontal_margin"
         android:layout_marginRight="@dimen/dimen_horizontal_margin"
         android:fontFamily="@font/roboto_medium"
-        android:textSize="20sp"
+        android:paddingBottom="@dimen/dimen_vertical_margin"
         android:textColor="@color/colorWhite"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivSave"
         tools:text="Justin Groep" />
 
 </android.support.constraint.ConstraintLayout>

@@ -18,7 +18,15 @@ import kotlinx.android.synthetic.main.activity_detail.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class DetailActivity @Inject constructor() : BaseActivity() {
+class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callback {
+
+    override fun likePalette() {
+        viewModel.likeUnlikePalette(unsplash, isLiked)
+    }
+
+    override fun savePalette() {
+        viewModel.savePalette(rvPalette, false, bitmap!!)
+    }
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -47,18 +55,13 @@ class DetailActivity @Inject constructor() : BaseActivity() {
         unsplash = intent.getParcelableExtra(ARG_UNSPLASH)
         isLiked = intent.getBooleanExtra(ARG_IS_LIKED, false)
 
-        mAdapter = DetailAdapter(unsplash.user?.userName ?: "Palette")
+        mAdapter = DetailAdapter(this, unsplash.user?.userName ?: "Palette", this, isLiked)
         rvPalette.apply {
             layoutManager = LinearLayoutManager(this@DetailActivity)
             adapter = mAdapter
         }
 
         viewModel = getViewModel(DetailViewModel::class.java, viewModelFactory)
-
-        ivLike.setImageDrawable(ContextCompat.getDrawable(this, if (isLiked) R.drawable.ic_favorite_black_24dp else R.drawable.ic_favorite_border_black_24dp))
-
-        ivSave.setOnClickListener { viewModel.savePalette(rvPalette, false, bitmap!!) }
-        ivLike.setOnClickListener { viewModel.likeUnlikePalette(unsplash, isLiked) }
 
         observe(viewModel.palette) {
             it ?: return@observe
@@ -108,8 +111,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
                 }
                 Response.Status.SUCCESS -> {
                     it.data ?: return@observe
-                    isLiked = it.data
-                    ivLike.setImageDrawable(ContextCompat.getDrawable(this, if (isLiked) R.drawable.ic_favorite_black_24dp else R.drawable.ic_favorite_border_black_24dp))
+                    mAdapter.isLiked = it.data
                 }
                 Response.Status.ERROR -> {
                     toast("Error in liking palette")
