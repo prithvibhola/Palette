@@ -3,9 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/infoRootLayout"
+    android:clipToPadding="false"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorBlackThree">
+
+    <TextView
+        android:id="@+id/tvPhotographerName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_horizontal_margin"
+        android:layout_marginRight="@dimen/dimen_horizontal_margin"
+        android:layout_marginTop="@dimen/dimen_vertical_margin"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Justin Groep" />
+
+    <ImageView
+        android:id="@+id/ivShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/dimen_vertical_margin"
+        android:src="@drawable/ic_share_black_24dp"
+        app:layout_constraintEnd_toStartOf="@+id/ivSave"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPhotographerName" />
 
     <ImageView
         android:id="@+id/ivSave"
@@ -14,8 +41,10 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="@dimen/dimen_vertical_margin"
         android:src="@drawable/ic_wallpaper_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivShare"
         app:layout_constraintEnd_toStartOf="@+id/ivLike"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/ivShare"
+        app:layout_constraintTop_toTopOf="@+id/ivShare" />
 
     <ImageView
         android:id="@+id/ivLike"
@@ -24,22 +53,9 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="@dimen/dimen_vertical_margin"
         android:src="@drawable/ic_favorite_border_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivShare"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ivSave" />
-
-    <TextView
-        android:id="@+id/tvPhotographerName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimen_horizontal_margin"
-        android:layout_marginRight="@dimen/dimen_horizontal_margin"
-        android:fontFamily="@font/roboto_medium"
-        android:paddingBottom="@dimen/dimen_vertical_margin"
-        android:textColor="@color/colorWhite"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivSave"
-        tools:text="Justin Groep" />
+        app:layout_constraintStart_toEndOf="@+id/ivSave"
+        app:layout_constraintTop_toTopOf="@+id/ivShare" />
 
 </android.support.constraint.ConstraintLayout>

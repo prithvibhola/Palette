@@ -39,6 +39,15 @@
                 android:transitionName="@string/transition_image_unsplash"
                 app:layout_collapseMode="parallax" />
 
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="@dimen/dimen_horizontal_margin"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                app:layout_collapseMode="pin" />
+
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 

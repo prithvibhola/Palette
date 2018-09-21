@@ -1,12 +1,10 @@
 package io.palette.ui.detail
 
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import io.palette.R
@@ -19,14 +17,6 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callback {
-
-    override fun likePalette() {
-        viewModel.likeUnlikePalette(unsplash, isLiked)
-    }
-
-    override fun savePalette() {
-        viewModel.savePalette(rvPalette, false, bitmap!!)
-    }
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -67,7 +57,6 @@ class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callb
             it ?: return@observe
             when (it.status) {
                 Response.Status.LOADING -> {
-//                    activityStatus.showLoading()
                 }
                 Response.Status.SUCCESS -> {
                     it.data ?: return@observe
@@ -136,5 +125,19 @@ class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callb
                 )
                 .into(ivImage)
         ivImage.maintainAspectRatio(unsplash.width, unsplash.height)
+
+        ivBack.setOnClickListener { onBackPressed() }
+    }
+
+    override fun sharePalette() {
+
+    }
+
+    override fun likePalette() {
+        viewModel.likeUnlikePalette(unsplash, isLiked)
+    }
+
+    override fun savePalette() {
+        viewModel.savePalette(rvPalette, false, bitmap!!)
     }
 }
