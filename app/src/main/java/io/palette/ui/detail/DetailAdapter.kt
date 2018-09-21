@@ -57,6 +57,7 @@ class DetailAdapter(
         init {
             itemView.ivSave.setOnClickListener { callback.savePalette() }
             itemView.ivLike.setOnClickListener { callback.likePalette() }
+            itemView.ivShare.setOnClickListener { callback.sharePalette() }
         }
 
         fun bind(palette: GeneratedPalette) {
@@ -90,5 +91,6 @@ class DetailAdapter(
     interface Callback {
         fun likePalette()
         fun savePalette()
+        fun sharePalette()
     }
 }
