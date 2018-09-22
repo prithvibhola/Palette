@@ -58,7 +58,7 @@ class DetailAdapter(
             itemView.ivSave.setOnClickListener { callback.savePalette() }
             itemView.ivLike.setOnClickListener { callback.likePalette() }
             itemView.ivShare.setOnClickListener { callback.sharePalette() }
-            itemView.ivWallpaper.setOnClickListener { callback.setWallpaper() }
+            itemView.ivWallpaper.setOnClickListener { callback.setWallpaper(true) }
         }
 
         fun bind(palette: GeneratedPalette) {
@@ -93,6 +93,6 @@ class DetailAdapter(
         fun likePalette()
         fun savePalette()
         fun sharePalette()
-        fun setWallpaper()
+        fun setWallpaper(setHighQuality: Boolean)
     }
 }

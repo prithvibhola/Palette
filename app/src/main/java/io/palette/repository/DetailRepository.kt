@@ -102,7 +102,7 @@ class DetailRepository @Inject constructor(
     fun saveBitmap(bitmap: Bitmap, folder: File): Flowable<Uri> = Flowable.create<Uri>({ emitter ->
         if (!folder.exists())
             folder.mkdirs()
-        val newsFile = File(folder, "palette_${System.currentTimeMillis()}.jpg")
+        val newsFile = File(folder, "${folder.name}_${System.currentTimeMillis()}.jpg")
         if (newsFile.exists()) newsFile.delete()
         newsFile.createNewFile()
         try {
