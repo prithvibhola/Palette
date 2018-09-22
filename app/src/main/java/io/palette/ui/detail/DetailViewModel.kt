@@ -3,11 +3,9 @@ package io.palette.ui.detail
 import android.arch.lifecycle.MutableLiveData
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Environment
 import android.support.v7.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FirebaseFirestore
 import io.palette.data.models.GeneratedPalette
 import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
@@ -18,7 +16,9 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import prithvi.io.mvvmstarter.utility.rx.Scheduler
 import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
+
 
 class DetailViewModel @Inject constructor(
         private val repository: Repository,
@@ -26,10 +26,14 @@ class DetailViewModel @Inject constructor(
         private val firebaseAuth: FirebaseAuth
 ) : BaseViewModel() {
 
+    private val PALETTE_WALL_FOLDER = File(Environment.getExternalStorageDirectory(), "Palette_Wall")
+    private val PALETTE_FOLDER = File(Environment.getExternalStorageDirectory(), "Palette")
+
     var palette: MutableLiveData<Response<List<GeneratedPalette>>> = MutableLiveData()
     var shareUri: MutableLiveData<Response<Uri>> = MutableLiveData()
     var savePalette: MutableLiveData<Response<Uri>> = MutableLiveData()
     var likeUnlikePalette: MutableLiveData<Response<Boolean>> = MutableLiveData()
+    var saveWallpaper: MutableLiveData<Response<Uri>> = MutableLiveData()
 
     fun generatePalette(bitmap: Bitmap) {
         repository.detailRepository.getPalette(bitmap)
@@ -42,7 +46,7 @@ class DetailViewModel @Inject constructor(
     }
 
     fun savePalette(view: RecyclerView, sharePalette: Boolean, bitmap: Bitmap) {
-        repository.detailRepository.saveBitmap(repository.detailRepository.generateBitmap(view, bitmap)!!)
+        repository.detailRepository.saveBitmap(repository.detailRepository.generateBitmap(view, bitmap)!!, PALETTE_FOLDER)
                 .fromWorkerToMain(scheduler)
                 .subscribeBy(
                         onNext = { (if (sharePalette) shareUri else savePalette).value = Response.success(it) },
@@ -73,5 +77,20 @@ class DetailViewModel @Inject constructor(
                         }
                 )
                 .addTo(getCompositeDisposable())
+    }
+
+    fun saveWallpaper(bitmap: Bitmap) {
+        saveWallpaper.value = Response.loading()
+        repository.detailRepository.saveBitmap(bitmap, PALETTE_WALL_FOLDER)
+                .fromWorkerToMain(scheduler)
+                .subscribeBy(
+                        onNext = {
+                            saveWallpaper.value = Response.success(it)
+                        },
+                        onError = {
+                            saveWallpaper.value = Response.error(it)
+                            Timber.e(it, "Error in saving wallpaper")
+                        }
+                )
     }
 }

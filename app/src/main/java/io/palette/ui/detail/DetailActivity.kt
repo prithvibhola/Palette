@@ -108,6 +108,26 @@ class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callb
             }
         }
 
+        observe(viewModel.saveWallpaper) {
+            it ?: return@observe
+            when (it.status) {
+                Response.Status.LOADING -> {
+                }
+                Response.Status.SUCCESS -> {
+                    it.data ?: return@observe
+                    startActivity(Intent.createChooser(Intent(Intent.ACTION_ATTACH_DATA).apply {
+                        addCategory(Intent.CATEGORY_DEFAULT)
+                        setDataAndType(it.data, "image/*")
+                        putExtra("mimeType", "image/*")
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }, "Set wallpaper"))
+                }
+                Response.Status.ERROR -> {
+                    toast("Error saving wallpaper. Please try again")
+                }
+            }
+        }
+
         Glide.with(this)
                 .asBitmap()
                 .load(unsplash.urls!!.regular)
@@ -131,6 +151,22 @@ class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callb
 
     override fun sharePalette() {
 
+    }
+
+    override fun setWallpaper() {
+
+//        Glide.with(this)
+//                .asBitmap()
+//                .load("https://www.google.es/images/srpr/logo11w.png")
+//                .into(object : SimpleTarget<Bitmap>() {
+//                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+//
+//                    }
+//                })
+
+
+        if (bitmap != null)
+            viewModel.saveWallpaper(bitmap!!)
     }
 
     override fun likePalette() {

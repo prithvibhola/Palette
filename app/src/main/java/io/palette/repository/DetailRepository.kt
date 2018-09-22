@@ -33,8 +33,6 @@ class DetailRepository @Inject constructor(
 
     @Inject lateinit var context: Context
 
-    private val PALETTE_FOLDER = File(Environment.getExternalStorageDirectory(), "Palette")
-
     fun getPalette(bitmap: Bitmap): Flowable<List<GeneratedPalette>> =
             Flowable.just(bitmap)
                     .map { Palette.from(bitmap).generate().swatches }
@@ -101,10 +99,10 @@ class DetailRepository @Inject constructor(
         return cs
     }
 
-    fun saveBitmap(bitmap: Bitmap): Flowable<Uri> = Flowable.create<Uri>({ emitter ->
-        if (!PALETTE_FOLDER.exists())
-            PALETTE_FOLDER.mkdirs()
-        val newsFile = File(PALETTE_FOLDER, "palette_${System.currentTimeMillis()}.jpg")
+    fun saveBitmap(bitmap: Bitmap, folder: File): Flowable<Uri> = Flowable.create<Uri>({ emitter ->
+        if (!folder.exists())
+            folder.mkdirs()
+        val newsFile = File(folder, "palette_${System.currentTimeMillis()}.jpg")
         if (newsFile.exists()) newsFile.delete()
         newsFile.createNewFile()
         try {

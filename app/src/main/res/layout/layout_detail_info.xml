@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/infoRootLayout"
-    android:clipToPadding="false"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorBlackThree">
+    android:background="@color/colorBlackThree"
+    android:clipToPadding="false">
 
     <TextView
         android:id="@+id/tvPhotographerName"
@@ -30,9 +30,21 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="@dimen/dimen_vertical_margin"
         android:src="@drawable/ic_share_black_24dp"
-        app:layout_constraintEnd_toStartOf="@+id/ivSave"
+        app:layout_constraintEnd_toStartOf="@+id/ivWallpaper"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPhotographerName" />
+
+    <ImageView
+        android:id="@+id/ivWallpaper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="@dimen/dimen_vertical_margin"
+        android:src="@drawable/ic_wallpaper_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ivShare"
+        app:layout_constraintEnd_toStartOf="@+id/ivSave"
+        app:layout_constraintStart_toEndOf="@+id/ivShare"
+        app:layout_constraintTop_toTopOf="@+id/ivShare" />
 
     <ImageView
         android:id="@+id/ivSave"
@@ -40,10 +52,10 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="@dimen/dimen_vertical_margin"
-        android:src="@drawable/ic_wallpaper_black_24dp"
+        android:src="@drawable/ic_style_black_24dp"
         app:layout_constraintBottom_toBottomOf="@+id/ivShare"
         app:layout_constraintEnd_toStartOf="@+id/ivLike"
-        app:layout_constraintStart_toEndOf="@+id/ivShare"
+        app:layout_constraintStart_toEndOf="@+id/ivWallpaper"
         app:layout_constraintTop_toTopOf="@+id/ivShare" />
 
     <ImageView
