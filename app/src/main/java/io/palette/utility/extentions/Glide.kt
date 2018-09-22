@@ -5,7 +5,9 @@ import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.transition.Transition
 
 private val onResourceReadyStub = { _: Bitmap?, _: Any?, _: Target<Bitmap>?, _: DataSource?, _: Boolean -> Unit }
 private val onLoadFailedStub = { _: GlideException?, _: Any?, _: Target<Bitmap>?, _: Boolean -> Unit }
@@ -24,6 +26,18 @@ fun RequestBuilder<Bitmap>.listen(
         override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap>?, isFirstResource: Boolean): Boolean {
             loadFailed(e, model, target, isFirstResource)
             return true
+        }
+    })
+}
+
+private val onResourceReadyLoadStub = { _: Bitmap, _: Transition<in Bitmap>? -> Unit }
+
+fun RequestBuilder<Bitmap>.loadInto(
+        resourceReady: (resource: Bitmap, transition: Transition<in Bitmap>?) -> Unit = onResourceReadyLoadStub
+) {
+    into(object : SimpleTarget<Bitmap>() {
+        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+            resourceReady(resource, transition)
         }
     })
 }

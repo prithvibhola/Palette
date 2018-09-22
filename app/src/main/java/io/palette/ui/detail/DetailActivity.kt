@@ -4,9 +4,11 @@ import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
 import io.palette.R
 import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
@@ -112,6 +114,7 @@ class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callb
             it ?: return@observe
             when (it.status) {
                 Response.Status.LOADING -> {
+                    toast("Loading")
                 }
                 Response.Status.SUCCESS -> {
                     it.data ?: return@observe
@@ -153,20 +156,21 @@ class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callb
 
     }
 
-    override fun setWallpaper() {
+    override fun setWallpaper(setHighQuality: Boolean) {
+        if (setHighQuality) {
+            Glide.with(this)
+                    .asBitmap()
+                    .load(unsplash.urls?.full)
+                    .loadInto(
+                            resourceReady = { resource, _ ->
+                                viewModel.saveWallpaper(resource)
 
-//        Glide.with(this)
-//                .asBitmap()
-//                .load("https://www.google.es/images/srpr/logo11w.png")
-//                .into(object : SimpleTarget<Bitmap>() {
-//                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-//
-//                    }
-//                })
-
-
-        if (bitmap != null)
-            viewModel.saveWallpaper(bitmap!!)
+                            }
+                    )
+        } else {
+            if (bitmap != null)
+                viewModel.saveWallpaper(bitmap!!)
+        }
     }
 
     override fun likePalette() {
