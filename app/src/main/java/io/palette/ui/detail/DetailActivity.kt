@@ -4,11 +4,9 @@ import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.SimpleTarget
 import io.palette.R
 import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
@@ -22,13 +20,13 @@ class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callb
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var mAdapter: DetailAdapter
-    lateinit var viewModel: DetailViewModel
+    private lateinit var mAdapter: DetailAdapter
+    private lateinit var viewModel: DetailViewModel
 
-    var bitmap: Bitmap? = null
+    private var bitmap: Bitmap? = null
+    private var isLiked: Boolean = false
 
-    lateinit var unsplash: Unsplash
-    var isLiked: Boolean = false
+    private lateinit var unsplash: Unsplash
 
     companion object {
         const val ARG_UNSPLASH = "ARG_UNSPLASH"
@@ -79,7 +77,7 @@ class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callb
                         type = "image/*"
                         putExtra(Intent.EXTRA_STREAM, it.data)
                         putExtra(Intent.EXTRA_SUBJECT, "Palette")
-                    }, "Share news using"))
+                    }, "Share palette using"))
                 }
                 Response.Status.ERROR -> toast("Error sharing palette. Please try again.")
             }
@@ -152,32 +150,17 @@ class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callb
         ivBack.setOnClickListener { onBackPressed() }
     }
 
-    override fun sharePalette() {
+    override fun sharePalette() = viewModel.savePalette(rvPalette, true, bitmap!!)
 
-    }
+    override fun likePalette() = viewModel.likeUnlikePalette(unsplash, isLiked)
 
-    override fun setWallpaper(setHighQuality: Boolean) {
-        if (setHighQuality) {
+    override fun savePalette() = viewModel.savePalette(rvPalette, false, bitmap!!)
+
+    override fun setWallpaper() =
             Glide.with(this)
                     .asBitmap()
                     .load(unsplash.urls?.full)
                     .loadInto(
-                            resourceReady = { resource, _ ->
-                                viewModel.saveWallpaper(resource)
-
-                            }
+                            resourceReady = { resource, _ -> viewModel.saveWallpaper(resource) }
                     )
-        } else {
-            if (bitmap != null)
-                viewModel.saveWallpaper(bitmap!!)
-        }
-    }
-
-    override fun likePalette() {
-        viewModel.likeUnlikePalette(unsplash, isLiked)
-    }
-
-    override fun savePalette() {
-        viewModel.savePalette(rvPalette, false, bitmap!!)
-    }
 }
