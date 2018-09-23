@@ -55,7 +55,7 @@ class DetailRepository @Inject constructor(
                 val holder = adapter.createViewHolder(view, adapter.getItemViewType(i))
                 adapter.onBindViewHolder(holder, i)
                 holder.itemView.apply {
-                    measure(View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(150, View.MeasureSpec.EXACTLY))
+                    measure(View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(200, View.MeasureSpec.EXACTLY))
                     layout(0, 0, measuredWidth, measuredHeight)
                     isDrawingCacheEnabled = true
                     buildDrawingCache()

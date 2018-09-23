@@ -1,5 +1,6 @@
 package io.palette.ui.detail
 
+import android.Manifest
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.content.Intent
@@ -13,10 +14,13 @@ import io.palette.data.models.Unsplash
 import io.palette.ui.base.BaseActivity
 import io.palette.utility.extentions.*
 import kotlinx.android.synthetic.main.activity_detail.*
+import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.RuntimePermissions
 import timber.log.Timber
 import javax.inject.Inject
 
-class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callback {
+@RuntimePermissions
+class DetailActivity @Inject constructor() : BaseActivity() {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -45,13 +49,18 @@ class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callb
         unsplash = intent.getParcelableExtra(ARG_UNSPLASH)
         isLiked = intent.getBooleanExtra(ARG_IS_LIKED, false)
 
-        mAdapter = DetailAdapter(this, unsplash.user?.name ?: "Palette", unsplash.updatedAt, this, isLiked)
+        viewModel = getViewModel(DetailViewModel::class.java, viewModelFactory)
+
+        mAdapter = DetailAdapter(this, unsplash.user?.name ?: "Palette", unsplash.updatedAt, isLiked).apply {
+            likePalette = { viewModel.likeUnlikePalette(unsplash, isLiked) }
+            savePalette = { savePaletteWithPermissionCheck() }
+            sharePalette = { sharePaletteWithPermissionCheck() }
+            setWallpaper = { setWallpaperWithPermissionCheck() }
+        }
         rvPalette.apply {
             layoutManager = LinearLayoutManager(this@DetailActivity)
             adapter = mAdapter
         }
-
-        viewModel = getViewModel(DetailViewModel::class.java, viewModelFactory)
 
         observe(viewModel.palette) {
             it ?: return@observe
@@ -150,13 +159,19 @@ class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callb
         ivBack.setOnClickListener { onBackPressed() }
     }
 
-    override fun sharePalette() = viewModel.savePalette(rvPalette, true, bitmap!!)
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        onRequestPermissionsResult(requestCode, grantResults)
+    }
 
-    override fun likePalette() = viewModel.likeUnlikePalette(unsplash, isLiked)
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun sharePalette() = viewModel.savePalette(rvPalette, true, bitmap!!)
 
-    override fun savePalette() = viewModel.savePalette(rvPalette, false, bitmap!!)
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun savePalette() = viewModel.savePalette(rvPalette, false, bitmap!!)
 
-    override fun setWallpaper() =
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun setWallpaper() =
             Glide.with(this)
                     .asBitmap()
                     .load(unsplash.urls?.full)
