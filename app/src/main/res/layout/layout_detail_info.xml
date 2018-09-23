@@ -37,7 +37,7 @@
         android:id="@+id/ivShare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_vertical_half_margin"
+        android:layout_marginTop="@dimen/dimen_vertical_margin"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="@dimen/dimen_vertical_margin"
         android:src="@drawable/ic_share_black_24dp"

@@ -20,7 +20,6 @@ class DetailAdapter(
         val context: Context,
         val name: String,
         val date: String,
-        val callback: Callback,
         isLiked: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -30,13 +29,16 @@ class DetailAdapter(
             notifyDataSetChanged()
         }
 
-    var sharePalette: ((itemView: View) -> Unit)? = null
-
     var isLiked = isLiked
         set(value) {
             field = value
             notifyItemChanged(0)
         }
+
+    var likePalette: (() -> Unit)? = null
+    var savePalette: (() -> Unit)? = null
+    var sharePalette: (() -> Unit)? = null
+    var setWallpaper: (() -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
         R.layout.layout_detail_info -> ViewHolderDetailInfo(parent.inflate(R.layout.layout_detail_info))
@@ -58,10 +60,10 @@ class DetailAdapter(
     inner class ViewHolderDetailInfo(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         init {
-            itemView.ivSave.setOnClickListener { callback.savePalette() }
-            itemView.ivLike.setOnClickListener { callback.likePalette() }
-            itemView.ivShare.setOnClickListener { callback.sharePalette() }
-            itemView.ivWallpaper.setOnClickListener { callback.setWallpaper() }
+            itemView.ivSave.setOnClickListener { savePalette?.invoke() }
+            itemView.ivLike.setOnClickListener { likePalette?.invoke() }
+            itemView.ivShare.setOnClickListener { sharePalette?.invoke() }
+            itemView.ivWallpaper.setOnClickListener { setWallpaper?.invoke() }
         }
 
         fun bind(palette: GeneratedPalette) {
@@ -78,12 +80,6 @@ class DetailAdapter(
 
     inner class ViewHolderDetail(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        init {
-            itemView.tvHexCode.setOnClickListener {
-                sharePalette?.invoke(itemView.rootLayout)
-            }
-        }
-
         fun bind(palette: GeneratedPalette) {
             itemView.apply {
                 rootLayout.setBackgroundColor(Color.parseColor("#${palette.hexCode}"))
@@ -92,12 +88,5 @@ class DetailAdapter(
                 tvPopulation.text = palette.population.toString()
             }
         }
-    }
-
-    interface Callback {
-        fun likePalette()
-        fun savePalette()
-        fun sharePalette()
-        fun setWallpaper()
     }
 }
