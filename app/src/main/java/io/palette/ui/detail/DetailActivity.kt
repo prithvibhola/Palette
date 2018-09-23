@@ -45,7 +45,7 @@ class DetailActivity @Inject constructor() : BaseActivity(), DetailAdapter.Callb
         unsplash = intent.getParcelableExtra(ARG_UNSPLASH)
         isLiked = intent.getBooleanExtra(ARG_IS_LIKED, false)
 
-        mAdapter = DetailAdapter(this, unsplash.user?.userName ?: "Palette", this, isLiked)
+        mAdapter = DetailAdapter(this, unsplash.user?.name ?: "Palette", unsplash.updatedAt, this, isLiked)
         rvPalette.apply {
             layoutManager = LinearLayoutManager(this@DetailActivity)
             adapter = mAdapter

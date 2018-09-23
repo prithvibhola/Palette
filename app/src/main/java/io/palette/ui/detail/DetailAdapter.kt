@@ -9,14 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import io.palette.R
 import io.palette.data.models.GeneratedPalette
+import io.palette.utility.extentions.dateConvert
 import io.palette.utility.extentions.inflate
+import io.palette.utility.extentions.titleCase
 import kotlinx.android.synthetic.main.layout_detail.view.*
 import kotlinx.android.synthetic.main.layout_detail_info.view.*
 
 @SuppressLint("SetTextI18n")
 class DetailAdapter(
         val context: Context,
-        val userName: String,
+        val name: String,
+        val date: String,
         val callback: Callback,
         isLiked: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -67,7 +70,8 @@ class DetailAdapter(
 
             itemView.apply {
                 infoRootLayout.setBackgroundColor(Color.parseColor("#${palette.hexCode}"))
-                tvPhotographerName.text = userName
+                tvPhotographerName.text = name
+                tvDate.text = date.dateConvert()
             }
         }
     }

@@ -6,15 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorBlackThree"
-    android:clipToPadding="false">
+    android:clipToPadding="false"
+    android:padding="@dimen/dimen_horizontal_margin">
 
     <TextView
         android:id="@+id/tvPhotographerName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimen_horizontal_margin"
-        android:layout_marginRight="@dimen/dimen_horizontal_margin"
-        android:layout_marginTop="@dimen/dimen_vertical_margin"
         android:fontFamily="@font/roboto_medium"
         android:textColor="@color/colorWhite"
         android:textSize="20sp"
@@ -23,16 +21,29 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Justin Groep" />
 
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPhotographerName"
+        tools:text="12 September 2018" />
+
     <ImageView
         android:id="@+id/ivShare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_vertical_half_margin"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="@dimen/dimen_vertical_margin"
         android:src="@drawable/ic_share_black_24dp"
         app:layout_constraintEnd_toStartOf="@+id/ivWallpaper"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPhotographerName" />
+        app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
     <ImageView
         android:id="@+id/ivWallpaper"
