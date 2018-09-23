@@ -84,6 +84,7 @@ class DetailAdapter(
             itemView.apply {
                 rootLayout.setBackgroundColor(Color.parseColor("#${palette.hexCode}"))
                 tvHexCode.text = "#${palette.hexCode.substring(2)}"
+                tvRgb.text = "rgb${palette.rgb}"
                 tvPopulation.text = palette.population.toString()
             }
         }

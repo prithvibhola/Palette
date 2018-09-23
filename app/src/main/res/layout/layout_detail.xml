@@ -4,29 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
-    android:layout_height="70dp">
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dimen_horizontal_margin">
 
     <TextView
         android:id="@+id/tvHexCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dimen_horizontal_margin"
-        android:layout_marginLeft="@dimen/dimen_horizontal_margin"
         android:fontFamily="@font/roboto_bold"
         android:textAllCaps="true"
         android:textColor="@color/colorWhite"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tvRgb"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="#FF00FF" />
+
+    <TextView
+        android:id="@+id/tvRgb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_bold"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHexCode"
+        tools:text="rgb(255, 255, 255)" />
 
     <TextView
         android:id="@+id/tvPopulation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dimen_horizontal_margin"
-        android:layout_marginRight="@dimen/dimen_horizontal_margin"
         android:fontFamily="@font/roboto_bold"
         android:textColor="@color/colorWhite"
         android:textSize="16sp"
