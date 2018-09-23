@@ -19,7 +19,6 @@ import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
-
 class DetailViewModel @Inject constructor(
         private val repository: Repository,
         private val scheduler: Scheduler,
