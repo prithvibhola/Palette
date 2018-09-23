@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import io.palette.data.models.GeneratedPalette
 import io.palette.data.models.Unsplash
+import io.palette.utility.extentions.rgbString
 import io.palette.utility.extentions.toFlowable
 import io.palette.utility.extentions.toHex
 import io.reactivex.BackpressureStrategy
@@ -37,7 +38,7 @@ class DetailRepository @Inject constructor(
             Flowable.just(bitmap)
                     .map { Palette.from(bitmap).generate().swatches }
                     .flatMap { Flowable.fromIterable(it) }
-                    .map { GeneratedPalette(hexCode = it.rgb.toHex(), population = it.population) }
+                    .map { GeneratedPalette(hexCode = it.rgb.toHex(), rgb = it.rgb.rgbString(), population = it.population) }
                     .toList()
                     .map { it.sortedByDescending { it.population } }
                     .toFlowable()

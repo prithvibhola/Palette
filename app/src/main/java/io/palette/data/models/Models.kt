@@ -70,5 +70,6 @@ data class User(
 
 data class GeneratedPalette(
         val hexCode: String,
+        val rgb: String,
         val population: Int
 )
