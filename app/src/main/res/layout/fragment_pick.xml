@@ -2,13 +2,33 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorBlack">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_regular"
+        android:text="Select image to see the color palette."
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/btnCamera"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnCamera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Take photo"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/button_rounded"
+        android:drawableLeft="@drawable/ic_camera_black_24dp"
+        android:paddingLeft="@dimen/dimen_vertical_margin"
+        android:paddingRight="@dimen/dimen_vertical_margin"
+        android:text="Take Photo"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toTopOf="@+id/btnGallery"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,11 +37,19 @@
 
     <Button
         android:id="@+id/btnGallery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Choose from gallery"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="@dimen/dimen_vertical_margin"
+        android:background="@drawable/button_rounded"
+        android:drawableLeft="@drawable/ic_photo_black_24dp"
+        android:paddingLeft="@dimen/dimen_vertical_margin"
+        android:paddingRight="@dimen/dimen_vertical_margin"
+        android:text="Choose from Gallery"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnCamera" />
+
 </android.support.constraint.ConstraintLayout>

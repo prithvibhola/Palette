@@ -74,6 +74,8 @@ class DetailAdapter(
                 infoRootLayout.setBackgroundColor(Color.parseColor("#${palette.hexCode}"))
                 tvPhotographerName.text = name
                 tvDate.text = date.dateConvert()
+
+                listOf(ivSave, ivLike, ivShare, ivWallpaper).forEach { it.setColorFilter(Color.parseColor("#${palette.hexCode}")) }
             }
         }
     }
