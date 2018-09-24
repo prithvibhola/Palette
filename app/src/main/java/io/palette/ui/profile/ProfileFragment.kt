@@ -6,8 +6,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
+import android.widget.ImageView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.auth.AuthUI
@@ -18,6 +21,7 @@ import io.palette.data.models.Unsplash
 import io.palette.di.FragmentScoped
 import io.palette.ui.base.BaseFragment
 import io.palette.ui.detail.DetailActivity
+import io.palette.ui.settings.SettingsActivity
 import io.palette.utility.extentions.getViewModel
 import io.palette.utility.extentions.observe
 import io.palette.utility.extentions.toast
@@ -25,6 +29,7 @@ import io.palette.utility.extentions.visible
 import io.palette.utility.preference.PreferenceUtility
 import kotlinx.android.synthetic.main.fragment_profile.*
 import javax.inject.Inject
+
 
 @FragmentScoped
 class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Callback {
@@ -34,6 +39,8 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
 
     lateinit var viewModel: ProfileViewModel
     lateinit var profileAdapter: ProfileAdapter
+
+    lateinit var menuSettings: MenuItem
 
     private val RC_SIGN_IN = 9001
 
@@ -143,24 +150,35 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         if (menu == null || inflater == null) return
         inflater.inflate(R.menu.menu_profile, menu)
-        menu.findItem(R.id.action_settings)?.let { it.isVisible = true }
+        menuSettings = menu.findItem(R.id.action_settings)
+        menuSettings.isVisible = true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_settings -> {
+                startActivity(Intent(requireContext(), SettingsActivity::class.java))
+//                PopupMenu(requireContext(), item.actionView).apply {
+//                    menuInflater.inflate(R.menu.menu_settings, menu)
+//                    setOnMenuItemClickListener {
+//                        when (it.itemId) {
+//                            R.id.menuTvSettings -> startActivity(Intent(requireContext(), SettingsActivity::class.java))
+//                        }
+//                        true
+//                    }
+//                    show()
+//                }
                 true
             }
             else -> return super.onOptionsItemSelected(item)
         }
     }
 
-    override fun openDetail(view: View, unsplash: Unsplash) {
-        startActivity(DetailActivity.newInstance(requireContext(), unsplash, true),
-                ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        requireActivity(),
-                        view,
-                        getString(R.string.transition_image_unsplash)
-                ).toBundle())
-    }
+    override fun openDetail(view: View, unsplash: Unsplash) =
+            startActivity(DetailActivity.newInstance(requireContext(), unsplash, true),
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            requireActivity(),
+                            view,
+                            getString(R.string.transition_image_unsplash)
+                    ).toBundle())
 }

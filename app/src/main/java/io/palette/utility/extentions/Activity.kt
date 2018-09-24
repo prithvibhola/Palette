@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Handler
 import android.support.annotation.StringRes
 import android.support.v4.app.FragmentActivity
+import android.support.v7.app.ActionBar
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -26,3 +27,10 @@ fun Activity.longToast(message: String) = Toast.makeText(this, message, Toast.LE
 fun Activity.longToast(@StringRes resId: Int) = Toast.makeText(this, getString(resId), Toast.LENGTH_LONG).show()
 
 fun Activity.withDelay(delay: Long = 100L, block: () -> Unit) = Handler().postDelayed(Runnable(block), delay)
+
+fun ActionBar.setScreenTitle(screenTitle: String) {
+    this.apply {
+        setDisplayHomeAsUpEnabled(true)
+        title = screenTitle
+    }
+}
