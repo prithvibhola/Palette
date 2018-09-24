@@ -12,6 +12,7 @@ import io.palette.data.models.GeneratedPalette
 import io.palette.utility.extentions.dateConvert
 import io.palette.utility.extentions.inflate
 import io.palette.utility.extentions.titleCase
+import io.palette.utility.extentions.visible
 import kotlinx.android.synthetic.main.layout_detail.view.*
 import kotlinx.android.synthetic.main.layout_detail_info.view.*
 
@@ -20,7 +21,8 @@ class DetailAdapter(
         val context: Context,
         val name: String,
         val date: String,
-        isLiked: Boolean
+        isLiked: Boolean,
+        val showRgb: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var palette: List<GeneratedPalette> = listOf()
@@ -86,7 +88,10 @@ class DetailAdapter(
             itemView.apply {
                 rootLayout.setBackgroundColor(Color.parseColor("#${palette.hexCode}"))
                 tvHexCode.text = "#${palette.hexCode.substring(2)}"
-                tvRgb.text = "rgb${palette.rgb}"
+
+                tvRgb.visible = showRgb
+                if (showRgb) tvRgb.text = "rgb${palette.rgb}"
+
                 tvPopulation.text = palette.population.toString()
             }
         }

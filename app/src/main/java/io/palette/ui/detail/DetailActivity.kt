@@ -13,6 +13,7 @@ import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
 import io.palette.ui.base.BaseActivity
 import io.palette.utility.extentions.*
+import io.palette.utility.preference.PreferenceUtility
 import kotlinx.android.synthetic.main.activity_detail.*
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class DetailActivity @Inject constructor() : BaseActivity() {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var preferences: PreferenceUtility
 
     private lateinit var mAdapter: DetailAdapter
     private lateinit var viewModel: DetailViewModel
@@ -51,7 +53,8 @@ class DetailActivity @Inject constructor() : BaseActivity() {
 
         viewModel = getViewModel(DetailViewModel::class.java, viewModelFactory)
 
-        mAdapter = DetailAdapter(this, unsplash.user?.name ?: "Palette", unsplash.updatedAt, isLiked).apply {
+        mAdapter = DetailAdapter(this, unsplash.user?.name
+                ?: "Palette", unsplash.updatedAt, isLiked, preferences.prefShowRGB).apply {
             likePalette = { viewModel.likeUnlikePalette(unsplash, isLiked) }
             savePalette = { savePaletteWithPermissionCheck() }
             sharePalette = { sharePaletteWithPermissionCheck() }
