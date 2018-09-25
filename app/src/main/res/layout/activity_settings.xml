@@ -29,21 +29,21 @@
         android:layout_marginStart="@dimen/dimen_horizontal_margin"
         android:layout_marginTop="@dimen/dimen_vertical_margin"
         android:fontFamily="@font/roboto_medium"
-        android:text="Color options"
-        android:textColor="@color/colorWhite"
+        android:text="@string/color_options"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ablToolbar" />
-
 
     <TextView
         android:id="@+id/tvRgbOptionDesc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dimen_horizontal_margin"
+        android:layout_marginEnd="32dp"
         android:layout_marginStart="@dimen/dimen_horizontal_margin"
         android:layout_marginTop="@dimen/dimen_vertical_half_margin"
         android:fontFamily="@font/roboto_regular"
-        android:text="Turn on to also see the RGB value for the image."
+        android:text="@string/setting_rgb_desc"
         android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toStartOf="@+id/switchRgb"
         app:layout_constraintStart_toStartOf="parent"
