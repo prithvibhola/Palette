@@ -11,6 +11,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import com.google.firebase.firestore.MetadataChanges
 import io.palette.data.models.Optional
+import io.reactivex.Completable
 
 fun Query.getAsFlowable(): Flowable<QuerySnapshot> = Flowable.create({ emitter ->
     this.get().addOnCompleteListener {
@@ -57,11 +58,11 @@ fun DocumentReference.snapshotAsFlowable(): Flowable<DocumentSnapshot> = Flowabl
 }, BackpressureStrategy.BUFFER)
 
 
-fun <T : Any> Task<T>.toFlowable(): Flowable<T> {
+fun <T : Any> Task<T>.toFlowable(): Flowable<Boolean> {
     return Flowable.create({ emitter ->
-        this.addOnCompleteListener {
+        this@toFlowable.addOnCompleteListener {
             if (it.isSuccessful) {
-                emitter.onNext(it.result)
+                emitter.onNext(true)
                 emitter.onComplete()
             } else {
                 emitter.onError(it.exception ?: RuntimeException("Failed to finish the task"))
@@ -78,4 +79,11 @@ fun FirebaseAuth.currentUserFlowable(): Flowable<Optional<FirebaseUser>> {
         addAuthStateListener(authChangeListener)
         emitter.setCancellable { removeAuthStateListener(authChangeListener) }
     }, BackpressureStrategy.BUFFER)
+}
+
+fun <T : Any> Task<T>.getCompletable(): Completable {
+    return Completable.create { emitter ->
+        addOnSuccessListener { emitter.onComplete() }
+        addOnFailureListener { emitter.onError(it) }
+    }
 }

@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.net.Uri
-import android.os.Environment
 import android.support.v4.content.FileProvider
 import android.support.v4.util.LruCache
 import android.support.v7.graphics.Palette
@@ -16,9 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import io.palette.data.models.GeneratedPalette
 import io.palette.data.models.Unsplash
-import io.palette.utility.extentions.rgbString
-import io.palette.utility.extentions.toFlowable
-import io.palette.utility.extentions.toHex
+import io.palette.utility.extentions.*
 import io.palette.utility.preference.PreferenceUtility
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -57,7 +54,7 @@ class DetailRepository @Inject constructor(
                 val holder = adapter.createViewHolder(view, adapter.getItemViewType(i))
                 adapter.onBindViewHolder(holder, i)
                 holder.itemView.apply {
-                    measure(View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(if(preferences.prefShowRGB) 220 else 150, View.MeasureSpec.EXACTLY))
+                    measure(View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(if (preferences.prefShowRGB) 220 else 150, View.MeasureSpec.EXACTLY))
                     layout(0, 0, measuredWidth, measuredHeight)
                     isDrawingCacheEnabled = true
                     buildDrawingCache()
