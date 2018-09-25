@@ -30,6 +30,7 @@
 
         <activity android:name=".ui.detail.DetailActivity" />
         <activity android:name=".ui.settings.SettingsActivity" />
+        <activity android:name=".ui.about.AboutActivity" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

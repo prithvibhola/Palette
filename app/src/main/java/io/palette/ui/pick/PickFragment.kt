@@ -2,16 +2,16 @@ package io.palette.ui.pick
 
 import android.Manifest
 import android.arch.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import io.palette.R
 import io.palette.data.models.Response
 import io.palette.data.models.Source
 import io.palette.data.models.Unsplash
 import io.palette.data.models.Urls
 import io.palette.di.FragmentScoped
+import io.palette.ui.about.AboutActivity
 import io.palette.ui.base.BaseFragment
 import io.palette.ui.detail.DetailActivity
 import io.palette.utility.extentions.getViewModel
@@ -34,8 +34,10 @@ class PickFragment @Inject constructor() : BaseFragment() {
         fun newInstance() = PickFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_pick, container, false)!!
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        setHasOptionsMenu(true)
+        return inflater.inflate(R.layout.fragment_pick, container, false)!!
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,6 +70,22 @@ class PickFragment @Inject constructor() : BaseFragment() {
                         ), false))
                 Response.Status.ERROR -> TODO()
             }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        if (menu == null || inflater == null) return
+        inflater.inflate(R.menu.menu_pick, menu)
+        menu.findItem(R.id.action_info)?.let { it.isVisible = true }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_info -> {
+                startActivity(Intent(requireContext(), AboutActivity::class.java))
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
     }
 
