@@ -9,10 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import io.palette.R
 import io.palette.data.models.GeneratedPalette
-import io.palette.utility.extentions.dateConvert
-import io.palette.utility.extentions.inflate
-import io.palette.utility.extentions.titleCase
-import io.palette.utility.extentions.visible
+import io.palette.utility.extentions.*
 import kotlinx.android.synthetic.main.layout_detail.view.*
 import kotlinx.android.synthetic.main.layout_detail_info.view.*
 
@@ -70,7 +67,7 @@ class DetailAdapter(
 
         fun bind(palette: GeneratedPalette) {
 
-            itemView.ivLike.setImageDrawable(ContextCompat.getDrawable(context, if (isLiked) R.drawable.ic_favorite_black_24dp else R.drawable.ic_favorite_border_black_24dp))
+            itemView.ivLike.setImage(if (isLiked) R.drawable.ic_favorite_black_24dp else R.drawable.ic_favorite_border_black_24dp)
 
             itemView.apply {
                 infoRootLayout.setBackgroundColor(Color.parseColor("#${palette.hexCode}"))

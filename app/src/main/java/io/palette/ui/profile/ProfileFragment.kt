@@ -22,10 +22,7 @@ import io.palette.di.FragmentScoped
 import io.palette.ui.base.BaseFragment
 import io.palette.ui.detail.DetailActivity
 import io.palette.ui.settings.SettingsActivity
-import io.palette.utility.extentions.getViewModel
-import io.palette.utility.extentions.observe
-import io.palette.utility.extentions.toast
-import io.palette.utility.extentions.visible
+import io.palette.utility.extentions.*
 import io.palette.utility.preference.PreferenceUtility
 import kotlinx.android.synthetic.main.fragment_profile.*
 import javax.inject.Inject
@@ -70,7 +67,7 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
         ivStaggered.setOnClickListener {
             val invert = preference.prefLikedStaggered == 1
             preference.prefLikedStaggered = if (invert) 2 else 1
-            ivStaggered.setImageDrawable(ContextCompat.getDrawable(requireContext(), if (invert) R.drawable.ic_view_compact_black_24dp else R.drawable.ic_view_agenda_black_24dp))
+            ivStaggered.setImage(if (invert) R.drawable.ic_view_compact_black_24dp else R.drawable.ic_view_agenda_black_24dp)
             rvLikedPalettes.layoutManager = StaggeredGridLayoutManager(preference.prefLikedStaggered, StaggeredGridLayoutManager.VERTICAL)
             profileAdapter.notifyDataSetChanged()
         }
@@ -97,7 +94,7 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
                         false -> {
                             it.data ?: return@observe
                             viewModel.getPalettes()
-                            ivStaggered.setImageDrawable(ContextCompat.getDrawable(requireContext(), if (preference.prefUnsplashStaggered == 1) R.drawable.ic_view_agenda_black_24dp else R.drawable.ic_view_compact_black_24dp))
+                            ivStaggered.setImage(if (preference.prefUnsplashStaggered == 1) R.drawable.ic_view_agenda_black_24dp else R.drawable.ic_view_compact_black_24dp)
                             Glide.with(this)
                                     .setDefaultRequestOptions(RequestOptions().apply {
                                         placeholder(R.color.colorBlackThree)
