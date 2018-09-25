@@ -2,10 +2,14 @@
     <string name="app_name">Palette</string>
     <string name="menu_staggered">Staggered</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_about">About Palette</string>
 
     <string name="transition_image_unsplash" translatable="false">transition_image_unsplash</string>
     <string name="liked">Liked</string>
     <string name="empty_liked_palette">Your liked palettes will appear here.</string>
     <string name="sign_in_text">Sign in to save your liked images</string>
+    <string name="pick_image_desc">Please select an image to see its color palette.</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_from_gallery">Choose from Gallery</string>
 
 </resources>

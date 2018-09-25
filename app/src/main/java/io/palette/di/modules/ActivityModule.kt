@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import io.palette.ui.home.HomeActivity
 import io.palette.di.ActivityScoped
+import io.palette.ui.about.AboutActivity
 import io.palette.ui.detail.DetailActivity
 import io.palette.ui.home.HomeModule
 import io.palette.ui.settings.SettingsActivity
@@ -22,4 +23,8 @@ abstract class ActivityModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = [])
     abstract fun settingsActivity(): SettingsActivity
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = [])
+    abstract fun aboutActivityv(): AboutActivity
 }
