@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Environment
 import android.support.v7.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import io.palette.data.models.GeneratedPalette
 import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
@@ -22,7 +23,8 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
         private val repository: Repository,
         private val scheduler: Scheduler,
-        private val firebaseAuth: FirebaseAuth
+        private val firebaseAuth: FirebaseAuth,
+        private val fireStore: FirebaseFirestore
 ) : BaseViewModel() {
 
     private val PALETTE_WALL_FOLDER = File(Environment.getExternalStorageDirectory(), "Palette_Wall")
@@ -64,6 +66,7 @@ class DetailViewModel @Inject constructor(
         }
 
         likeUnlikePalette.value = Response.loading()
+
         (if (isLiked) repository.detailRepository.unlikePalette(unsplash) else repository.detailRepository.likePalette(unsplash))
                 .fromWorkerToMain(scheduler)
                 .subscribeBy(

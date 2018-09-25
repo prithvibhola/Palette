@@ -5,12 +5,8 @@ import android.arch.lifecycle.ViewModelProvider
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.*
-import android.widget.ImageView
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.firebase.ui.auth.AuthUI
@@ -26,7 +22,6 @@ import io.palette.utility.extentions.*
 import io.palette.utility.preference.PreferenceUtility
 import kotlinx.android.synthetic.main.fragment_profile.*
 import javax.inject.Inject
-
 
 @FragmentScoped
 class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Callback {
@@ -155,16 +150,6 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
         return when (item?.itemId) {
             R.id.action_settings -> {
                 startActivity(Intent(requireContext(), SettingsActivity::class.java))
-//                PopupMenu(requireContext(), item.actionView).apply {
-//                    menuInflater.inflate(R.menu.menu_settings, menu)
-//                    setOnMenuItemClickListener {
-//                        when (it.itemId) {
-//                            R.id.menuTvSettings -> startActivity(Intent(requireContext(), SettingsActivity::class.java))
-//                        }
-//                        true
-//                    }
-//                    show()
-//                }
                 true
             }
             else -> return super.onOptionsItemSelected(item)
