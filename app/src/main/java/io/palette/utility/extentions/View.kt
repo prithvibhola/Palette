@@ -1,5 +1,7 @@
 package io.palette.utility.extentions
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Handler
@@ -8,6 +10,7 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
 
 var View.visible: Boolean
     get() = visibility == View.VISIBLE
@@ -24,4 +27,17 @@ fun View.createBitmap(): Bitmap {
     val canvas = Canvas(bitmap)
     this.draw(canvas)
     return bitmap
+}
+
+fun View.animateAlpha(animDuration: Long = 700, animStartDelay: Long = 0) {
+    ObjectAnimator.ofFloat(this, "alpha", 0F, 1F).apply {
+        duration = animDuration
+        startDelay = animStartDelay
+        interpolator = LinearInterpolator()
+        addAnimatorListener(
+                onStart = { this@animateAlpha.isClickable = false },
+                onEnd = { this@animateAlpha.isClickable = true }
+        )
+        start()
+    }
 }

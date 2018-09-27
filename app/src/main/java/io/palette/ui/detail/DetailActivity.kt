@@ -64,6 +64,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
             layoutManager = LinearLayoutManager(this@DetailActivity)
             adapter = mAdapter
         }
+        rvPalette.animateAlpha()
 
         observe(viewModel.palette) {
             it ?: return@observe
