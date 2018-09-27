@@ -1,12 +1,10 @@
 package io.palette.utility.extentions
 
-import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.os.Handler
 import android.support.annotation.LayoutRes
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +35,27 @@ fun View.animateAlpha(animDuration: Long = 700, animStartDelay: Long = 0) {
         addAnimatorListener(
                 onStart = { this@animateAlpha.isClickable = false },
                 onEnd = { this@animateAlpha.isClickable = true }
+        )
+        start()
+    }
+}
+
+fun View.pulseAnimation(): ObjectAnimator {
+    return ObjectAnimator.ofPropertyValuesHolder(this,
+            PropertyValuesHolder.ofFloat("scaleX", 1.2f),
+            PropertyValuesHolder.ofFloat("scaleY", 1.2f)).apply {
+        duration = 300
+        repeatCount = ObjectAnimator.INFINITE
+        repeatMode = ObjectAnimator.REVERSE
+        addAnimatorListener(
+                onStart = {
+                    this@pulseAnimation.isClickable = false
+                },
+                onEnd = {
+                    this@pulseAnimation.isClickable = true
+                    this@pulseAnimation.scaleX = 1F
+                    this@pulseAnimation.scaleY = 1F
+                }
         )
         start()
     }

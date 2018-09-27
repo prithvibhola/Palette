@@ -1,6 +1,7 @@
 package io.palette.ui.detail
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
 import android.content.Intent
@@ -33,6 +34,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
     private var isLiked: Boolean = false
 
     private lateinit var unsplash: Unsplash
+    private var pulseAnimator: ObjectAnimator? = null
 
     companion object {
         const val ARG_UNSPLASH = "ARG_UNSPLASH"
@@ -55,7 +57,10 @@ class DetailActivity @Inject constructor() : BaseActivity() {
 
         mAdapter = DetailAdapter(this, unsplash.user?.name
                 ?: "Palette", unsplash.updatedAt, isLiked, preferences.prefShowRGB).apply {
-            likePalette = { viewModel.likeUnlikePalette(unsplash, isLiked) }
+            likePalette = {
+                pulseAnimator = it
+                viewModel.likeUnlikePalette(unsplash, isLiked)
+            }
             savePalette = { savePaletteWithPermissionCheck() }
             sharePalette = { sharePaletteWithPermissionCheck() }
             setWallpaper = { setWallpaperWithPermissionCheck() }
@@ -113,9 +118,11 @@ class DetailActivity @Inject constructor() : BaseActivity() {
                 }
                 Response.Status.SUCCESS -> {
                     it.data ?: return@observe
+                    pulseAnimator?.end()
                     mAdapter.isLiked = it.data
                 }
                 Response.Status.ERROR -> {
+                    pulseAnimator?.end()
                     toast("Error in liking palette")
                 }
             }
