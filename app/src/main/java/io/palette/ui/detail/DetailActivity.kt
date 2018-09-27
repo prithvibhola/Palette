@@ -35,6 +35,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
 
     private lateinit var unsplash: Unsplash
     private var pulseAnimator: ObjectAnimator? = null
+    private var downAnimator: ObjectAnimator? = null
 
     companion object {
         const val ARG_UNSPLASH = "ARG_UNSPLASH"
@@ -63,7 +64,10 @@ class DetailActivity @Inject constructor() : BaseActivity() {
             }
             savePalette = { savePaletteWithPermissionCheck() }
             sharePalette = { sharePaletteWithPermissionCheck() }
-            setWallpaper = { setWallpaperWithPermissionCheck() }
+            setWallpaper = {
+                downAnimator = it
+                setWallpaperWithPermissionCheck()
+            }
         }
         rvPalette.apply {
             layoutManager = LinearLayoutManager(this@DetailActivity)
@@ -132,10 +136,11 @@ class DetailActivity @Inject constructor() : BaseActivity() {
             it ?: return@observe
             when (it.status) {
                 Response.Status.LOADING -> {
-                    toast("Loading")
                 }
                 Response.Status.SUCCESS -> {
                     it.data ?: return@observe
+                    downAnimator?.end()
+                    mAdapter.showWallIcon = true
                     startActivity(Intent.createChooser(Intent(Intent.ACTION_ATTACH_DATA).apply {
                         addCategory(Intent.CATEGORY_DEFAULT)
                         setDataAndType(it.data, "image/*")
@@ -144,6 +149,8 @@ class DetailActivity @Inject constructor() : BaseActivity() {
                     }, "Set wallpaper"))
                 }
                 Response.Status.ERROR -> {
+                    downAnimator?.end()
+                    mAdapter.showWallIcon = true
                     toast("Error saving wallpaper. Please try again")
                 }
             }

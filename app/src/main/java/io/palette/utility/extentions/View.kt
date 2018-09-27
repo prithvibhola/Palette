@@ -48,13 +48,27 @@ fun View.pulseAnimation(): ObjectAnimator {
         repeatCount = ObjectAnimator.INFINITE
         repeatMode = ObjectAnimator.REVERSE
         addAnimatorListener(
-                onStart = {
-                    this@pulseAnimation.isClickable = false
-                },
+                onStart = { this@pulseAnimation.isClickable = false },
                 onEnd = {
                     this@pulseAnimation.isClickable = true
                     this@pulseAnimation.scaleX = 1F
                     this@pulseAnimation.scaleY = 1F
+                }
+        )
+        start()
+    }
+}
+
+fun View.downloadAnimation(): ObjectAnimator {
+    return ObjectAnimator.ofFloat(this, "translationY", -100F, 80F).apply {
+        duration = 1400
+        repeatCount = ObjectAnimator.INFINITE
+        repeatMode = ObjectAnimator.RESTART
+        addAnimatorListener(
+                onStart = { this@downloadAnimation.isClickable = false },
+                onEnd = {
+                    this@downloadAnimation.isClickable = true
+                    this@downloadAnimation.translationY = 0F
                 }
         )
         start()

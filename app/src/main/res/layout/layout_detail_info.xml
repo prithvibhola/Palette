@@ -41,22 +41,37 @@
         android:background="@drawable/image_circular_background"
         android:padding="@dimen/dimen_vertical_margin"
         android:src="@drawable/ic_share_black_24dp"
-        app:layout_constraintEnd_toStartOf="@+id/ivWallpaper"
+        app:layout_constraintEnd_toStartOf="@+id/llWallpaper"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
-    <ImageView
-        android:id="@+id/ivWallpaper"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/llWallpaper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/image_circular_background"
         android:padding="@dimen/dimen_vertical_margin"
-        android:src="@drawable/ic_wallpaper_black_24dp"
         app:layout_constraintBottom_toBottomOf="@+id/ivShare"
         app:layout_constraintEnd_toStartOf="@+id/ivSave"
         app:layout_constraintStart_toEndOf="@+id/ivShare"
-        app:layout_constraintTop_toTopOf="@+id/ivShare" />
+        app:layout_constraintTop_toTopOf="@+id/ivShare">
+
+        <ImageView
+            android:id="@+id/ivWallpaper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_file_download_black_24dp" />
+
+        <View
+            android:id="@+id/vDownLine"
+            android:layout_width="24dp"
+            android:layout_height="3dp"
+            android:background="@color/colorBlack"
+            app:layout_constraintBottom_toBottomOf="@+id/ivWallpaper"
+            app:layout_constraintEnd_toEndOf="@+id/ivWallpaper"
+            app:layout_constraintStart_toStartOf="@+id/ivWallpaper" />
+    </android.support.constraint.ConstraintLayout>
 
     <ImageView
         android:id="@+id/ivSave"
@@ -67,7 +82,7 @@
         android:src="@drawable/ic_style_black_24dp"
         app:layout_constraintBottom_toBottomOf="@+id/ivShare"
         app:layout_constraintEnd_toStartOf="@+id/llLike"
-        app:layout_constraintStart_toEndOf="@+id/ivWallpaper"
+        app:layout_constraintStart_toEndOf="@+id/llWallpaper"
         app:layout_constraintTop_toTopOf="@+id/ivShare" />
 
     <LinearLayout

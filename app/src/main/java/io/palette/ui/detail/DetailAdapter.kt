@@ -34,11 +34,16 @@ class DetailAdapter(
             field = value
             notifyDataSetChanged()
         }
+    var showWallIcon = true
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     var likePalette: ((animator: ObjectAnimator) -> Unit)? = null
     var savePalette: (() -> Unit)? = null
     var sharePalette: (() -> Unit)? = null
-    var setWallpaper: (() -> Unit)? = null
+    var setWallpaper: ((animator: ObjectAnimator) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
         R.layout.layout_detail_info -> ViewHolderDetailInfo(parent.inflate(R.layout.layout_detail_info))
@@ -66,17 +71,29 @@ class DetailAdapter(
                 likePalette?.invoke(animator)
             }
             itemView.ivShare.setOnClickListener { sharePalette?.invoke() }
-            itemView.ivWallpaper.setOnClickListener { setWallpaper?.invoke() }
+            itemView.ivWallpaper.setOnClickListener {
+                itemView.vDownLine.visible = true
+                itemView.ivWallpaper.setImage(R.drawable.ic_file_download_black_24dp)
+                val animator = itemView.ivWallpaper.downloadAnimation()
+                setWallpaper?.invoke(animator)
+            }
         }
 
         fun bind(palette: GeneratedPalette) {
 
-            itemView.ivLike.setImage(if (isLiked) R.drawable.ic_favorite_black_24dp else R.drawable.ic_favorite_border_black_24dp)
 
             itemView.apply {
                 infoRootLayout.setBackgroundColor(Color.parseColor("#${palette.hexCode}"))
                 tvPhotographerName.text = name
                 tvDate.text = date.dateConvert()
+
+                ivLike.setImage(if (isLiked) R.drawable.ic_favorite_black_24dp else R.drawable.ic_favorite_border_black_24dp)
+                ivWallpaper.setImage(if (showWallIcon) R.drawable.ic_wallpaper_black_24dp else R.drawable.ic_file_download_black_24dp)
+
+                vDownLine.apply {
+                    visible = !showWallIcon
+                    setBackgroundColor(Color.parseColor("#${palette.hexCode}"))
+                }
                 listOf(ivSave, ivLike, ivShare, ivWallpaper).forEach { it.setColorFilter(Color.parseColor("#${palette.hexCode}")) }
             }
         }
