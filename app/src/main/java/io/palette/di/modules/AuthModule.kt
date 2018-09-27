@@ -11,8 +11,6 @@ import dagger.Provides
 import javax.inject.Singleton
 import com.google.firebase.firestore.FirebaseFirestore
 
-
-
 @Module
 class AuthModule {
 
