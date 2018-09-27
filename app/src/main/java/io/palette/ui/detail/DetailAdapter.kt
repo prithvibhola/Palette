@@ -1,5 +1,6 @@
 package io.palette.ui.detail
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
@@ -34,7 +35,7 @@ class DetailAdapter(
             notifyDataSetChanged()
         }
 
-    var likePalette: (() -> Unit)? = null
+    var likePalette: ((animator: ObjectAnimator) -> Unit)? = null
     var savePalette: (() -> Unit)? = null
     var sharePalette: (() -> Unit)? = null
     var setWallpaper: (() -> Unit)? = null
@@ -60,7 +61,10 @@ class DetailAdapter(
 
         init {
             itemView.ivSave.setOnClickListener { savePalette?.invoke() }
-            itemView.ivLike.setOnClickListener { likePalette?.invoke() }
+            itemView.ivLike.setOnClickListener {
+                val animator = itemView.ivLike.pulseAnimation()
+                likePalette?.invoke(animator)
+            }
             itemView.ivShare.setOnClickListener { sharePalette?.invoke() }
             itemView.ivWallpaper.setOnClickListener { setWallpaper?.invoke() }
         }
