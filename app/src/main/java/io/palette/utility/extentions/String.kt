@@ -1,14 +1,19 @@
 package io.palette.utility.extentions
 
+import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
 import java.util.*
 
 val String.titleCase get() = this.split("\\s+").joinToString(" ") { it.toLowerCase().capitalize() }
 
-fun String.dateConvert(): String {
+@SuppressLint("ConstantLocale")
+val defaultDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
-    val defaultDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    val newDateFormat = SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault())
+@SuppressLint("ConstantLocale")
+val newDateFormat = SimpleDateFormat("dd-MMMM-yyyy", Locale.getDefault())
 
-    return newDateFormat.format(defaultDateFormat.parse(this@dateConvert.split("T")[0])).replace("-", " ")
-}
+fun String.dateConvert(): String = newDateFormat.format(defaultDateFormat.parse(this@dateConvert.split("T")[0])).replace("-", " ")
+
+fun String.alternative(alternate: String) = if (this.isEmpty()) alternate else this
+
+fun String.defaultDate(): String = if (this.isEmpty()) "${defaultDateFormat.format(Date(System.currentTimeMillis()))}T00:00:00-00:00" else this

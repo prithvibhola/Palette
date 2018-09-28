@@ -32,6 +32,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
 
     private var bitmap: Bitmap? = null
     private var isLiked: Boolean = false
+    private var isUnsplash: Boolean = false
 
     private lateinit var unsplash: Unsplash
     private var pulseAnimator: ObjectAnimator? = null
@@ -40,10 +41,12 @@ class DetailActivity @Inject constructor() : BaseActivity() {
     companion object {
         const val ARG_UNSPLASH = "ARG_UNSPLASH"
         const val ARG_IS_LIKED = "ARG_IS_LIKED"
+        const val ARG_IS_UNSPLASH = "ARG_IS_UNSPLASH"
 
-        fun newInstance(context: Context, unsplash: Unsplash, isLiked: Boolean) = Intent(context, DetailActivity::class.java).apply {
+        fun newInstance(context: Context, unsplash: Unsplash, isLiked: Boolean, isUnsplash: Boolean) = Intent(context, DetailActivity::class.java).apply {
             putExtra(ARG_UNSPLASH, unsplash)
             putExtra(ARG_IS_LIKED, isLiked)
+            putExtra(ARG_IS_UNSPLASH, isUnsplash)
         }
     }
 
@@ -53,11 +56,12 @@ class DetailActivity @Inject constructor() : BaseActivity() {
 
         unsplash = intent.getParcelableExtra(ARG_UNSPLASH)
         isLiked = intent.getBooleanExtra(ARG_IS_LIKED, false)
+        isUnsplash = intent.getBooleanExtra(ARG_IS_UNSPLASH, false)
 
         viewModel = getViewModel(DetailViewModel::class.java, viewModelFactory)
 
         mAdapter = DetailAdapter(this, unsplash.user?.name
-                ?: "Palette", unsplash.updatedAt, isLiked, preferences.prefShowRGB).apply {
+                ?: "Palette", unsplash.updatedAt.defaultDate(), isLiked, preferences.prefShowRGB, isUnsplash).apply {
             likePalette = {
                 pulseAnimator = it
                 viewModel.likeUnlikePalette(unsplash, isLiked)
