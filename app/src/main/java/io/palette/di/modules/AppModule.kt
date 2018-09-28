@@ -2,14 +2,12 @@ package io.palette.di.modules
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import io.palette.BuildConfig
-import prithvi.io.mvvmstarter.utility.rx.AppScheduler
-import prithvi.io.mvvmstarter.utility.rx.Scheduler
-import javax.inject.Named
+import io.palette.utility.rx.AppScheduler
+import io.palette.utility.rx.Scheduler
 import javax.inject.Singleton
 
 @Module

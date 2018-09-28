@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import io.palette.utility.extentions.get
 import kotlin.reflect.KClass
 
-@Suppress("IMPLICIT_CAST_TO_ANY")
+@Suppress("IMPLICIT_CAST_TO_ANY", "UNCHECKED_CAST")
 open class BasePreferences(private val preferences: SharedPreferences) {
 
     fun <T : Any> put(clazz: KClass<T>, key: String, value: T) {

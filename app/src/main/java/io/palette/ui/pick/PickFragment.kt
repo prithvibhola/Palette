@@ -67,7 +67,7 @@ class PickFragment @Inject constructor() : BaseFragment() {
                                         it.data.toString()),
                                 links = null,
                                 user = null
-                        ), false, false))
+                        ), false, false, false))
                 Response.Status.ERROR -> TODO()
             }
         }

@@ -1,4 +1,4 @@
-package prithvi.io.mvvmstarter.utility.rx
+package io.palette.utility.rx
 
 import io.reactivex.Scheduler
 

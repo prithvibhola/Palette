@@ -71,7 +71,7 @@ class DetailRepository @Inject constructor(
                 val bitmap1 = bitmapCache.get(i.toString())
                 bitmap1?.let {
                     bigCanvas.drawBitmap(bitmap1, 0f, iHeight, Paint())
-                    iHeight += bitmap1.height ?: 0
+                    iHeight += bitmap1.height
                     bitmap1.recycle()
                 }
             }
