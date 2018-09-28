@@ -120,10 +120,6 @@ class UnsplashFragment @Inject constructor() : BaseFragment(), UnsplashAdapter.C
 
     override fun openDetail(view: View, unsplash: Unsplash, isLiked: Boolean) {
         startActivity(DetailActivity.newInstance(requireContext(), unsplash, isLiked, true, false),
-                ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        requireActivity(),
-                        view,
-                        getString(R.string.transition_image_unsplash)
-                ).toBundle())
+                ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, getString(R.string.transition_image_unsplash)).toBundle())
     }
 }
