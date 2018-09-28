@@ -51,6 +51,7 @@
         android:layout_marginTop="@dimen/dimen_vertical_half_margin"
         android:fontFamily="@font/open_sans_bold"
         android:gravity="center"
+        android:textAllCaps="true"
         android:textColor="@color/colorWhite"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"

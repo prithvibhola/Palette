@@ -17,7 +17,7 @@ class SettingsActivity : BaseActivity() {
         setContentView(R.layout.activity_settings)
 
         setSupportActionBar(toolbar)
-        supportActionBar?.setScreenTitle("Settings")
+        supportActionBar?.setScreenTitle(getString(R.string.title_settings))
 
         switchRgb.apply {
             isChecked = preferences.prefShowRGB

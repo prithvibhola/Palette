@@ -4,7 +4,6 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_about">About Palette</string>
 
-    <string name="transition_image_unsplash" translatable="false">transition_image_unsplash</string>
     <string name="liked">Liked</string>
     <string name="empty_liked_palette">Your liked palettes will appear here.</string>
     <string name="sign_in_text">Sign in to save your liked images</string>
@@ -14,4 +13,7 @@
     <string name="color_options">Color options</string>
     <string name="setting_rgb_desc">Turn on to see the RGB value for the image.</string>
 
+    <string name="title_settings">Settings</string>
+
+    <string name="transition_image_unsplash" translatable="false">transition_image_unsplash</string>
 </resources>

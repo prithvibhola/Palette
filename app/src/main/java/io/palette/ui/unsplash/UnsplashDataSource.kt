@@ -20,7 +20,7 @@ class UnsplashDataSource(
 
     val networkState = MutableLiveData<Response<Unsplash>>()
     val initialLoad = MutableLiveData<Response<List<Unsplash>>>()
-    var page = 0
+    var page = 1
 
     private var retryCompletable: Completable? = null
 
