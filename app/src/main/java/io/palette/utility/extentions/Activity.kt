@@ -11,7 +11,6 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 
-
 internal fun <T : ViewModel> FragmentActivity.getViewModel(modelClass: Class<T>, viewModelFactory: ViewModelProvider.Factory? = null): T {
     return viewModelFactory?.let { ViewModelProviders.of(this, it).get(modelClass) }
             ?: ViewModelProviders.of(this).get(modelClass)

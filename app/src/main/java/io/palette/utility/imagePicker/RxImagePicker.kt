@@ -68,12 +68,6 @@ class RxImagePicker : Fragment() {
         attachedSubject!!.onComplete()
     }
 
-    override fun onAttach(activity: Activity?) {
-        super.onAttach(activity)
-        attachedSubject!!.onNext(true)
-        attachedSubject!!.onComplete()
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             pickImage()

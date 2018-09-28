@@ -16,16 +16,8 @@ var View.visible: Boolean
         visibility = if (value) View.VISIBLE else View.GONE
     }
 
-fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
-    return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
-}
-
-fun View.createBitmap(): Bitmap {
-    val bitmap = Bitmap.createBitmap(this.width, this.height, Bitmap.Config.ARGB_8888)
-    val canvas = Canvas(bitmap)
-    this.draw(canvas)
-    return bitmap
-}
+fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View =
+        LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
 
 fun View.animateAlpha(animDuration: Long = 700, animStartDelay: Long = 0) {
     ObjectAnimator.ofFloat(this, "alpha", 0F, 1F).apply {

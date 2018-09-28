@@ -12,9 +12,9 @@ import io.palette.data.models.Unsplash
 import io.palette.repository.Repository
 import io.palette.ui.base.BaseViewModel
 import io.palette.utility.extentions.fromWorkerToMain
+import io.palette.utility.rx.Scheduler
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
-import prithvi.io.mvvmstarter.utility.rx.Scheduler
 import timber.log.Timber
 import javax.inject.Inject
 

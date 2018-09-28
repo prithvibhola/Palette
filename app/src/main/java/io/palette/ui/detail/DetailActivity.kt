@@ -33,6 +33,9 @@ class DetailActivity @Inject constructor() : BaseActivity() {
     private var bitmap: Bitmap? = null
     private var isLiked: Boolean = false
     private var isUnsplash: Boolean = false
+    private var fromProfile: Boolean = false
+
+    private var likeStatusChanged: Boolean = false
 
     private lateinit var unsplash: Unsplash
     private var pulseAnimator: ObjectAnimator? = null
@@ -42,11 +45,13 @@ class DetailActivity @Inject constructor() : BaseActivity() {
         const val ARG_UNSPLASH = "ARG_UNSPLASH"
         const val ARG_IS_LIKED = "ARG_IS_LIKED"
         const val ARG_IS_UNSPLASH = "ARG_IS_UNSPLASH"
+        const val ARG_FROM_PROFILE = "ARG_FROM_PROFILE"
 
-        fun newInstance(context: Context, unsplash: Unsplash, isLiked: Boolean, isUnsplash: Boolean) = Intent(context, DetailActivity::class.java).apply {
+        fun newInstance(context: Context, unsplash: Unsplash, isLiked: Boolean, isUnsplash: Boolean, fromProfile: Boolean) = Intent(context, DetailActivity::class.java).apply {
             putExtra(ARG_UNSPLASH, unsplash)
             putExtra(ARG_IS_LIKED, isLiked)
             putExtra(ARG_IS_UNSPLASH, isUnsplash)
+            putExtra(ARG_FROM_PROFILE, fromProfile)
         }
     }
 
@@ -57,6 +62,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
         unsplash = intent.getParcelableExtra(ARG_UNSPLASH)
         isLiked = intent.getBooleanExtra(ARG_IS_LIKED, false)
         isUnsplash = intent.getBooleanExtra(ARG_IS_UNSPLASH, false)
+        fromProfile = intent.getBooleanExtra(ARG_FROM_PROFILE, false)
 
         viewModel = getViewModel(DetailViewModel::class.java, viewModelFactory)
 
@@ -87,7 +93,6 @@ class DetailActivity @Inject constructor() : BaseActivity() {
                 Response.Status.SUCCESS -> {
                     it.data ?: return@observe
                     mAdapter.palette = it.data
-//                    activityStatus.showContent()
                 }
                 Response.Status.ERROR -> TODO()
             }
@@ -127,7 +132,9 @@ class DetailActivity @Inject constructor() : BaseActivity() {
                 Response.Status.SUCCESS -> {
                     it.data ?: return@observe
                     pulseAnimator?.end()
-                    mAdapter.isLiked = it.data
+                    isLiked = it.data
+                    mAdapter.isLiked = isLiked
+                    likeStatusChanged = true
                 }
                 Response.Status.ERROR -> {
                     pulseAnimator?.end()
@@ -179,6 +186,14 @@ class DetailActivity @Inject constructor() : BaseActivity() {
         ivImage.maintainAspectRatio(unsplash.width, unsplash.height)
 
         ivBack.setOnClickListener { onBackPressed() }
+    }
+
+    override fun onBackPressed() {
+        when {
+            !fromProfile -> super.onBackPressed()
+            likeStatusChanged -> finish()
+            else -> super.onBackPressed()
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

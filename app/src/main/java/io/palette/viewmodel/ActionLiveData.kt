@@ -1,4 +1,4 @@
-package io.palette.utility
+package io.palette.viewmodel
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.MutableLiveData

@@ -8,7 +8,6 @@ import io.palette.di.ActivityScoped
 import io.palette.di.FragmentScoped
 import io.palette.ui.pick.PickFragment
 import io.palette.ui.profile.ProfileFragment
-import io.palette.ui.profile.ProfileModule
 import io.palette.ui.unsplash.UnsplashFragment
 
 @Module
@@ -23,7 +22,7 @@ abstract class HomeModule {
     internal abstract fun unsplashFragment(): UnsplashFragment
 
     @FragmentScoped
-    @ContributesAndroidInjector(modules = [ProfileModule::class])
+    @ContributesAndroidInjector(modules = [])
     internal abstract fun profileFragment(): ProfileFragment
 
     @Module
