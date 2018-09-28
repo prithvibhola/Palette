@@ -16,7 +16,7 @@ ext {
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion versions.compileSdk
 
     Properties properties = new Properties()
     properties.load(project.rootProject.file("local.properties").newDataInputStream())
@@ -24,7 +24,7 @@ android {
     defaultConfig {
         applicationId "io.palette"
         minSdkVersion versions.minSdk
-        targetSdkVersion versions.compileSdk
+        targetSdkVersion versions.targetSdk
         versionCode versions.code
         versionName versions.name
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

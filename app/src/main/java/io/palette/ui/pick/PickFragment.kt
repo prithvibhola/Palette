@@ -56,8 +56,8 @@ class PickFragment @Inject constructor() : BaseFragment() {
                                 id = "",
                                 createdAt = "",
                                 updatedAt = "",
-                                width = 0L,
-                                height = 0L,
+                                width = 2040L,
+                                height = 2900L,
                                 color = "",
                                 description = "",
                                 urls = Urls(it.data.toString(),
@@ -67,7 +67,7 @@ class PickFragment @Inject constructor() : BaseFragment() {
                                         it.data.toString()),
                                 links = null,
                                 user = null
-                        ), false))
+                        ), false, false))
                 Response.Status.ERROR -> TODO()
             }
         }

@@ -20,7 +20,8 @@ class DetailAdapter(
         val name: String,
         val date: String,
         isLiked: Boolean,
-        val showRgb: Boolean
+        val showRgb: Boolean,
+        val isUnsplash: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var palette: List<GeneratedPalette> = listOf()
@@ -65,22 +66,21 @@ class DetailAdapter(
     inner class ViewHolderDetailInfo(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         init {
+
+            itemView.llLike.visible = isUnsplash
+            itemView.llWallpaper.visible = isUnsplash
+
             itemView.ivSave.setOnClickListener { savePalette?.invoke() }
-            itemView.ivLike.setOnClickListener {
-                val animator = itemView.ivLike.pulseAnimation()
-                likePalette?.invoke(animator)
-            }
+            itemView.ivLike.setOnClickListener { likePalette?.invoke(itemView.ivLike.pulseAnimation()) }
             itemView.ivShare.setOnClickListener { sharePalette?.invoke() }
             itemView.ivWallpaper.setOnClickListener {
                 itemView.vDownLine.visible = true
                 itemView.ivWallpaper.setImage(R.drawable.ic_file_download_black_24dp)
-                val animator = itemView.ivWallpaper.downloadAnimation()
-                setWallpaper?.invoke(animator)
+                setWallpaper?.invoke(itemView.ivWallpaper.downloadAnimation())
             }
         }
 
         fun bind(palette: GeneratedPalette) {
-
 
             itemView.apply {
                 infoRootLayout.setBackgroundColor(Color.parseColor("#${palette.hexCode}"))

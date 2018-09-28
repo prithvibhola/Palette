@@ -69,9 +69,11 @@ class DetailRepository @Inject constructor(
 
             for (i in 0 until adapter.itemCount) {
                 val bitmap1 = bitmapCache.get(i.toString())
-                bigCanvas.drawBitmap(bitmap1, 0f, iHeight, Paint())
-                iHeight += bitmap1.height
-                bitmap1.recycle()
+                bitmap1?.let {
+                    bigCanvas.drawBitmap(bitmap1, 0f, iHeight, Paint())
+                    iHeight += bitmap1.height ?: 0
+                    bitmap1.recycle()
+                }
             }
         }
         return combineBitmap(imageBitmap, bitmap)
