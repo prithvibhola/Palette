@@ -1,7 +1,6 @@
 package io.palette.ui.unsplash
 
 import android.content.Context
-import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -10,17 +9,16 @@ import com.bumptech.glide.request.RequestOptions
 import io.palette.R
 import io.palette.data.models.Unsplash
 import io.palette.utility.PaginatedAdapter
+import io.palette.utility.extentions.getRandom
 import io.palette.utility.extentions.inflate
 import io.palette.utility.extentions.maintainAspectRatio
-import io.palette.ui.detail.DetailActivity
-import io.palette.utility.extentions.getRandom
 import kotlinx.android.synthetic.main.layout_unsplash.view.*
 import javax.inject.Inject
 
 class UnsplashAdapter @Inject constructor(context: Context, val callBack: Callback, retryCallback: () -> Unit) : PaginatedAdapter<Unsplash>(
         context,
-        R.string.app_name,
-        R.string.app_name,
+        R.string.unsplash_loading,
+        R.string.unsplash_error_loading,
         retryCallback
 ) {
 
@@ -46,7 +44,7 @@ class UnsplashAdapter @Inject constructor(context: Context, val callBack: Callba
                         error(R.color.colorBlackTwo)
                     })
                     .asBitmap()
-                    .load(item.urls!!.regular)
+                    .load(item.urls?.regular)
                     .into(itemView.ivImage)
             itemView.ivImage.maintainAspectRatio(item.width, item.height)
         }

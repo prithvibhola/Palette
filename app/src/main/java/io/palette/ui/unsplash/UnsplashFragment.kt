@@ -14,7 +14,6 @@ import io.palette.ui.base.BaseFragment
 import io.palette.ui.detail.DetailActivity
 import io.palette.utility.extentions.getViewModel
 import io.palette.utility.extentions.observe
-import io.palette.utility.extentions.toast
 import io.palette.utility.extentions.withDelay
 import io.palette.utility.preference.PreferenceUtility
 import kotlinx.android.synthetic.main.fragment_unsplash.*
@@ -60,33 +59,23 @@ class UnsplashFragment @Inject constructor() : BaseFragment(), UnsplashAdapter.C
                     withDelay(200) { swipeRefresh?.isRefreshing = false }
                     it.data ?: return@observe
                     when (it.data.isEmpty()) {
-                        true -> screenState.showEmpty(R.drawable.ic_hourglass_empty_black_24dp,
-                                "No data.",
-                                "No data from unsplash for now.")
+                        true -> screenState.showEmpty(R.drawable.ic_hourglass_empty_black_24dp, getString(R.string.unsplash_empty_title), getString(R.string.unsplash_empty_desc))
                         false -> screenState.showContent()
                     }
                 }
                 Response.Status.ERROR -> {
                     withDelay(200) { swipeRefresh?.isRefreshing = false }
                     screenState.showError(R.drawable.ic_error_outline_black_24dp,
-                            "Couldn't get data!!",
-                            "Unable to get unsplash images. Please try again.",
-                            "Retry") { viewModel.retry() }
+                            getString(R.string.unsplash_error_title),
+                            getString(R.string.unsplash_error_desc),
+                            getString(R.string.unsplash_error_retry)) { viewModel.retry() }
                 }
             }
         }
         observe(viewModel.likedPalettes) {
             it ?: return@observe
-            when (it.status) {
-                Response.Status.LOADING -> {
-                }
-                Response.Status.SUCCESS -> {
-                    it.data ?: return@observe
-                    mAdapter.likedPalettes = it.data
-                }
-                Response.Status.ERROR -> {
-                }
-            }
+            it.data ?: return@observe
+            if (it.status == Response.Status.SUCCESS) mAdapter.likedPalettes = it.data
         }
 
         swipeRefresh.setOnRefreshListener {
@@ -95,17 +84,15 @@ class UnsplashFragment @Inject constructor() : BaseFragment(), UnsplashAdapter.C
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        if (menu == null || inflater == null) return
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_unsplash, menu)
         menu.findItem(R.id.action_staggered)?.let {
-            it.isVisible = true
             it.icon = ContextCompat.getDrawable(requireContext(), if (preference.prefUnsplashStaggered == 1) R.drawable.ic_view_agenda_black_24dp else R.drawable.ic_view_compact_black_24dp)
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.action_staggered -> {
                 val invert = preference.prefUnsplashStaggered == 1
                 preference.prefUnsplashStaggered = if (invert) 2 else 1
@@ -120,6 +107,10 @@ class UnsplashFragment @Inject constructor() : BaseFragment(), UnsplashAdapter.C
 
     override fun openDetail(view: View, unsplash: Unsplash, isLiked: Boolean) {
         startActivity(DetailActivity.newInstance(requireContext(), unsplash, isLiked, true, false),
-                ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), view, getString(R.string.transition_image_unsplash)).toBundle())
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        requireActivity(),
+                        view,
+                        getString(R.string.transition_image_unsplash)
+                ).toBundle())
     }
 }

@@ -4,14 +4,12 @@ import android.arch.lifecycle.MutableLiveData
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.*
 import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
 import io.palette.repository.Repository
 import io.palette.ui.base.BaseViewModel
 import io.palette.utility.extentions.addTo
 import io.palette.utility.extentions.fromWorkerToMain
-import io.palette.utility.extentions.snapshotAsFlowable
 import io.palette.utility.rx.Scheduler
 import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
@@ -30,8 +28,8 @@ class ProfileViewModel @Inject constructor(
         if (response == null)
             user.value = Response.success(if (firebaseAuth.currentUser != null) firebaseAuth.currentUser else null)
         else {
+            user.value = Response.error(response.error?.fillInStackTrace() ?: Throwable("User could not sign in"))
             Timber.e(response.error, "User could not sign in")
-            user.value = Response.error(response.error!!.fillInStackTrace())
         }
     }
 

@@ -39,7 +39,25 @@ data class Unsplash(
         @Json(name = "urls") val urls: Urls? = null,
         @Json(name = "links") val links: Links? = null,
         @Json(name = "user") val user: User? = null
-) : Parcelable
+) : Parcelable {
+    companion object {
+
+        fun from(uri: String): Unsplash {
+            return Unsplash(
+                    id = "",
+                    createdAt = "",
+                    updatedAt = "",
+                    width = 2040L,
+                    height = 2900L,
+                    color = "",
+                    description = "",
+                    urls = Urls(uri, uri, uri, uri, uri),
+                    links = null,
+                    user = null
+            )
+        }
+    }
+}
 
 @Parcelize
 @SuppressLint("ParcelCreator")

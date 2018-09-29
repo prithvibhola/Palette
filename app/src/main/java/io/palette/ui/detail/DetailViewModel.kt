@@ -23,8 +23,7 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
         private val repository: Repository,
         private val scheduler: Scheduler,
-        private val firebaseAuth: FirebaseAuth,
-        private val fireStore: FirebaseFirestore
+        private val firebaseAuth: FirebaseAuth
 ) : BaseViewModel() {
 
     private val PALETTE_WALL_FOLDER = File(Environment.getExternalStorageDirectory(), "Palette_Wall")
@@ -41,7 +40,10 @@ class DetailViewModel @Inject constructor(
                 .fromWorkerToMain(scheduler)
                 .subscribeBy(
                         onNext = { palette.value = Response.success(it) },
-                        onError = { palette.value = Response.error(it) }
+                        onError = {
+                            palette.value = Response.error(it)
+                            Timber.e(it, "Error generating Palette.")
+                        }
                 )
                 .addTo(getCompositeDisposable())
     }
@@ -61,12 +63,11 @@ class DetailViewModel @Inject constructor(
 
     fun likeUnlikePalette(unsplash: Unsplash, isLiked: Boolean) {
         if (firebaseAuth.currentUser == null) {
-            likeUnlikePalette.value = Response.error(Exception("User is not registered"))
+            likeUnlikePalette.value = Response.success(null)
             return
         }
 
         likeUnlikePalette.value = Response.loading()
-
         (if (isLiked) repository.detailRepository.unlikePalette(unsplash) else repository.detailRepository.likePalette(unsplash))
                 .fromWorkerToMain(scheduler)
                 .subscribeBy(
@@ -94,5 +95,6 @@ class DetailViewModel @Inject constructor(
                             Timber.e(it, "Error in saving wallpaper")
                         }
                 )
+                .addTo(getCompositeDisposable())
     }
 }

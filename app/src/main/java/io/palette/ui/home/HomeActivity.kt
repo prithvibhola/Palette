@@ -1,7 +1,6 @@
 package io.palette.ui.home
 
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import io.palette.R
 import io.palette.di.ActivityScoped

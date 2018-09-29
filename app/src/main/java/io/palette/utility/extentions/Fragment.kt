@@ -18,5 +18,3 @@ fun Fragment.toast(message: String) = Toast.makeText(requireContext(), message, 
 fun Fragment.toast(@StringRes resId: Int) = Toast.makeText(requireContext(), this.getString(resId), Toast.LENGTH_SHORT).show()
 fun Fragment.longToast(message: String) = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
 fun Fragment.longToast(@StringRes resId: Int) = Toast.makeText(requireContext(), getString(resId), Toast.LENGTH_LONG).show()
-
-fun Fragment.withDelay(delay: Long = 100L, block: () -> Unit) = Handler().postDelayed(Runnable(block), delay)
