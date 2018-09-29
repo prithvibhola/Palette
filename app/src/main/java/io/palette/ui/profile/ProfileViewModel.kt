@@ -36,7 +36,7 @@ class ProfileViewModel @Inject constructor(
     fun getPalettes() {
         palettes.value = Response.loading()
         if (firebaseAuth.currentUser == null) {
-            palettes.value = Response.error(Exception("User is not registered"))
+            palettes.value = Response.success(null)
         } else {
             repository.profileRepository.getLikedPalettes()
                     .fromWorkerToMain(scheduler)

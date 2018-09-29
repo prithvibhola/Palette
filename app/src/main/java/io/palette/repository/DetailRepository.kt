@@ -28,11 +28,9 @@ import javax.inject.Singleton
 class DetailRepository @Inject constructor(
         private val context: Context,
         private val preferences: PreferenceUtility,
-        firebaseAuth: FirebaseAuth,
-        fireStore: FirebaseFirestore
+        private val firebaseAuth: FirebaseAuth,
+        private val fireStore: FirebaseFirestore
 ) {
-
-    private val fireStoreCollectionPath = fireStore.collection("users").document(firebaseAuth.currentUser!!.uid).collection("palettes")
 
     fun getPalette(bitmap: Bitmap): Flowable<List<GeneratedPalette>> =
             Flowable.just(bitmap)
@@ -124,14 +122,18 @@ class DetailRepository @Inject constructor(
     }, BackpressureStrategy.BUFFER)
 
     fun likePalette(unsplash: Unsplash): Flowable<Boolean> =
-            fireStoreCollectionPath
+            fireStore.collection("users")
+                    .document(firebaseAuth.currentUser!!.uid)
+                    .collection("palettes")
                     .document(unsplash.id)
                     .set(unsplash)
                     .toFlowable()
                     .map { true }
 
     fun unlikePalette(unsplash: Unsplash): Flowable<Boolean> =
-            fireStoreCollectionPath
+            fireStore.collection("users")
+                    .document(firebaseAuth.currentUser!!.uid)
+                    .collection("palettes")
                     .document(unsplash.id)
                     .delete()
                     .toFlowable()
