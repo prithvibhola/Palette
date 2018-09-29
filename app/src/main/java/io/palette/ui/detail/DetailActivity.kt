@@ -31,13 +31,14 @@ class DetailActivity @Inject constructor() : BaseActivity() {
     private lateinit var viewModel: DetailViewModel
 
     private var bitmap: Bitmap? = null
+
+    private lateinit var unsplash: Unsplash
     private var isLiked: Boolean = false
     private var isUnsplash: Boolean = false
     private var fromProfile: Boolean = false
 
     private var likeStatusChanged: Boolean = false
 
-    private lateinit var unsplash: Unsplash
     private var pulseAnimator: ObjectAnimator? = null
     private var downAnimator: ObjectAnimator? = null
 
@@ -67,13 +68,13 @@ class DetailActivity @Inject constructor() : BaseActivity() {
         viewModel = getViewModel(DetailViewModel::class.java, viewModelFactory)
 
         mAdapter = DetailAdapter(this, unsplash.user?.name
-                ?: "Palette", unsplash.updatedAt.defaultDate(), isLiked, preferences.prefShowRGB, isUnsplash).apply {
+                ?: getString(R.string.app_name), unsplash.updatedAt.defaultDate(), isLiked, preferences.prefShowRGB, isUnsplash).apply {
+            savePalette = { savePaletteWithPermissionCheck() }
+            sharePalette = { sharePaletteWithPermissionCheck() }
             likePalette = {
                 pulseAnimator = it
                 viewModel.likeUnlikePalette(unsplash, isLiked)
             }
-            savePalette = { savePaletteWithPermissionCheck() }
-            sharePalette = { sharePaletteWithPermissionCheck() }
             setWallpaper = {
                 downAnimator = it
                 setWallpaperWithPermissionCheck()
@@ -82,63 +83,57 @@ class DetailActivity @Inject constructor() : BaseActivity() {
         rvPalette.apply {
             layoutManager = LinearLayoutManager(this@DetailActivity)
             adapter = mAdapter
+            animateAlpha()
         }
-        rvPalette.animateAlpha()
 
         observe(viewModel.palette) {
             it ?: return@observe
-            when (it.status) {
-                Response.Status.LOADING -> {
-                }
-                Response.Status.SUCCESS -> {
-                    it.data ?: return@observe
-                    mAdapter.palette = it.data
-                }
-                Response.Status.ERROR -> TODO()
-            }
+            it.data ?: return@observe
+            if (it.status == Response.Status.SUCCESS) mAdapter.palette = it.data
         }
 
         observe(viewModel.shareUri) {
             it ?: return@observe
             when (it.status) {
-                Response.Status.LOADING -> TODO()
+                Response.Status.LOADING -> rootLayout.snackBar(R.string.please_wait)
                 Response.Status.SUCCESS -> {
                     startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK
                         type = "image/*"
                         putExtra(Intent.EXTRA_STREAM, it.data)
-                        putExtra(Intent.EXTRA_SUBJECT, "Palette")
-                    }, "Share palette using"))
+                        putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+                    }, getString(R.string.share_palette_using)))
                 }
-                Response.Status.ERROR -> toast("Error sharing palette. Please try again.")
+                Response.Status.ERROR -> rootLayout.snackBar(R.string.error_sharing_palette)
             }
         }
 
         observe(viewModel.savePalette) {
             it ?: return@observe
             when (it.status) {
-                Response.Status.LOADING -> TODO()
-                Response.Status.SUCCESS -> toast("Image saved successfully")
-                Response.Status.ERROR -> toast("Couldn't save image. Please try again.")
+                Response.Status.LOADING -> rootLayout.snackBar(R.string.please_wait)
+                Response.Status.SUCCESS -> rootLayout.snackBar(R.string.palette_saved)
+                Response.Status.ERROR -> rootLayout.snackBar(R.string.error_palette_saved)
             }
         }
 
         observe(viewModel.likeUnlikePalette) {
             it ?: return@observe
             when (it.status) {
-                Response.Status.LOADING -> {
-                    toast("Loading")
-                }
+                Response.Status.LOADING -> rootLayout.snackBar(R.string.please_wait)
                 Response.Status.SUCCESS -> {
-                    it.data ?: return@observe
                     pulseAnimator?.end()
-                    isLiked = it.data
-                    mAdapter.isLiked = isLiked
-                    likeStatusChanged = true
+                    if (it.data == null) {
+                        rootLayout.snackBar(R.string.user_not_logged_in)
+                    } else {
+                        isLiked = it.data
+                        mAdapter.isLiked = isLiked
+                        likeStatusChanged = true
+                    }
                 }
                 Response.Status.ERROR -> {
                     pulseAnimator?.end()
-                    toast("Error in liking palette")
+                    rootLayout.snackBar(R.string.error_liking_palette)
                 }
             }
         }
@@ -157,19 +152,19 @@ class DetailActivity @Inject constructor() : BaseActivity() {
                         setDataAndType(it.data, "image/*")
                         putExtra("mimeType", "image/*")
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    }, "Set wallpaper"))
+                    }, getString(R.string.set_wallpaper)))
                 }
                 Response.Status.ERROR -> {
                     downAnimator?.end()
                     mAdapter.showWallIcon = true
-                    toast("Error saving wallpaper. Please try again")
+                    rootLayout.snackBar(R.string.error_save_wallpaper)
                 }
             }
         }
 
         Glide.with(this)
                 .asBitmap()
-                .load(unsplash.urls!!.regular)
+                .load(unsplash.urls?.regular)
                 .listen(
                         resourceReady = { resource, _, _, _, _ ->
                             resource?.let {
@@ -178,9 +173,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
                                 bitmap = resource
                             }
                         },
-                        loadFailed = { e, _, _, _ ->
-                            Timber.e(e, "Glide error occurred!!")
-                        }
+                        loadFailed = { e, _, _, _ -> Timber.e(e, "Glide error occurred!!") }
                 )
                 .into(ivImage)
         ivImage.maintainAspectRatio(unsplash.width, unsplash.height)

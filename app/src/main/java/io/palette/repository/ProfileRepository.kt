@@ -10,14 +10,14 @@ import javax.inject.Singleton
 
 @Singleton
 class ProfileRepository @Inject constructor(
-        private val firebaseAuth: FirebaseAuth,
-        private val fireStore: FirebaseFirestore
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore
 ) {
 
+    private val fireStoreCollectionPath = fireStore.collection("users").document(firebaseAuth.currentUser!!.uid).collection("palettes")
+
     fun getLikedPalettes(): Flowable<List<Unsplash>> =
-            fireStore.collection("users")
-                    .document(firebaseAuth.currentUser!!.uid)
-                    .collection("palettes")
+            fireStoreCollectionPath
                     .snapshotAsFlowable()
                     .map { it.toObjects(Unsplash::class.java) }
 }

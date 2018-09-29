@@ -26,12 +26,13 @@ import javax.inject.Singleton
 
 @Singleton
 class DetailRepository @Inject constructor(
+        private val context: Context,
         private val preferences: PreferenceUtility,
-        private val firebaseAuth: FirebaseAuth,
-        private val fireStore: FirebaseFirestore
+        firebaseAuth: FirebaseAuth,
+        fireStore: FirebaseFirestore
 ) {
 
-    @Inject lateinit var context: Context
+    private val fireStoreCollectionPath = fireStore.collection("users").document(firebaseAuth.currentUser!!.uid).collection("palettes")
 
     fun getPalette(bitmap: Bitmap): Flowable<List<GeneratedPalette>> =
             Flowable.just(bitmap)
@@ -39,7 +40,7 @@ class DetailRepository @Inject constructor(
                     .flatMap { Flowable.fromIterable(it) }
                     .map { GeneratedPalette(hexCode = it.rgb.toHex(), rgb = it.rgb.rgbString(), population = it.population) }
                     .toList()
-                    .map { it.sortedByDescending { it.population } }
+                    .map { it -> it.sortedByDescending { it.population } }
                     .toFlowable()
 
     fun generateBitmap(view: RecyclerView, imageBitmap: Bitmap): Bitmap? {
@@ -82,7 +83,7 @@ class DetailRepository @Inject constructor(
     private fun combineBitmap(bitmap1: Bitmap, bitmap2: Bitmap): Bitmap {
         val width: Int
         val height: Int
-        val cs: Bitmap?
+        val cs: Bitmap
 
         if (bitmap1.width > bitmap2.width) {
             width = bitmap1.width
@@ -123,18 +124,14 @@ class DetailRepository @Inject constructor(
     }, BackpressureStrategy.BUFFER)
 
     fun likePalette(unsplash: Unsplash): Flowable<Boolean> =
-            fireStore.collection("users")
-                    .document(firebaseAuth.currentUser!!.uid)
-                    .collection("palettes")
+            fireStoreCollectionPath
                     .document(unsplash.id)
                     .set(unsplash)
                     .toFlowable()
                     .map { true }
 
     fun unlikePalette(unsplash: Unsplash): Flowable<Boolean> =
-            fireStore.collection("users")
-                    .document(firebaseAuth.currentUser!!.uid)
-                    .collection("palettes")
+            fireStoreCollectionPath
                     .document(unsplash.id)
                     .delete()
                     .toFlowable()

@@ -12,6 +12,7 @@ import io.palette.utility.extentions.fromWorkerToMain
 import io.palette.utility.rx.Scheduler
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import timber.log.Timber
 import javax.inject.Inject
 
 class PickViewModel @Inject constructor(
@@ -31,6 +32,7 @@ class PickViewModel @Inject constructor(
                         },
                         onError = {
                             image.sendAction(Response.error(it))
+                            Timber.e(it, "Error occurred while getting image")
                         }
                 )
                 .addTo(getCompositeDisposable())

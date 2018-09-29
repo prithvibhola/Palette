@@ -2,20 +2,19 @@ package io.palette.ui.pick
 
 import android.Manifest
 import android.arch.lifecycle.ViewModelProvider
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import io.palette.R
 import io.palette.data.models.Response
 import io.palette.data.models.Source
 import io.palette.data.models.Unsplash
-import io.palette.data.models.Urls
 import io.palette.di.FragmentScoped
 import io.palette.ui.about.AboutActivity
 import io.palette.ui.base.BaseFragment
 import io.palette.ui.detail.DetailActivity
 import io.palette.utility.extentions.getViewModel
 import io.palette.utility.extentions.observe
+import io.palette.utility.extentions.snackBar
 import kotlinx.android.synthetic.main.fragment_pick.*
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
@@ -25,8 +24,7 @@ import javax.inject.Inject
 @RuntimePermissions
 class PickFragment @Inject constructor() : BaseFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var viewModel: PickViewModel
 
@@ -50,39 +48,23 @@ class PickFragment @Inject constructor() : BaseFragment() {
         observe(viewModel.image) {
             it ?: return@observe
             when (it.status) {
-                Response.Status.LOADING -> TODO()
-                Response.Status.SUCCESS -> startActivity(DetailActivity.newInstance(requireContext(),
-                        Unsplash(
-                                id = "",
-                                createdAt = "",
-                                updatedAt = "",
-                                width = 2040L,
-                                height = 2900L,
-                                color = "",
-                                description = "",
-                                urls = Urls(it.data.toString(),
-                                        it.data.toString(),
-                                        it.data.toString(),
-                                        it.data.toString(),
-                                        it.data.toString()),
-                                links = null,
-                                user = null
-                        ), false, false, false))
-                Response.Status.ERROR -> TODO()
+                Response.Status.LOADING -> { //Nothing to show
+                }
+                Response.Status.SUCCESS -> startActivity(DetailActivity.newInstance(requireContext(), Unsplash.from(it.data.toString()), false, false, false))
+                Response.Status.ERROR -> rootLayout.snackBar(R.string.error_getting_image)
             }
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        if (menu == null || inflater == null) return
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_pick, menu)
-        menu.findItem(R.id.action_info)?.let { it.isVisible = true }
+        menu.findItem(R.id.action_info)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.action_info -> {
-                startActivity(Intent(requireContext(), AboutActivity::class.java))
+                startActivity(AboutActivity.newInstance(requireContext()))
                 true
             }
             else -> return super.onOptionsItemSelected(item)

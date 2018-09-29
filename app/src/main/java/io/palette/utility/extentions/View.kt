@@ -5,10 +5,17 @@ import android.animation.PropertyValuesHolder
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.support.annotation.LayoutRes
+import android.support.annotation.StringRes
+import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
+
+fun View.snackBar(@StringRes resId: Int) = Snackbar.make(this, resId, Snackbar.LENGTH_SHORT).show()
+fun View.snackBarLong(@StringRes resId: Int) = Snackbar.make(this, resId, Snackbar.LENGTH_LONG).show()
+fun View.snackBar(text: String) = Snackbar.make(this, text, Snackbar.LENGTH_SHORT).show()
+fun View.snackBarLong(text: String) = Snackbar.make(this, text, Snackbar.LENGTH_LONG).show()
 
 var View.visible: Boolean
     get() = visibility == View.VISIBLE

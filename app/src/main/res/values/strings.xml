@@ -1,19 +1,52 @@
 <resources>
     <string name="app_name">Palette</string>
-    <string name="menu_staggered">Staggered</string>
-    <string name="menu_settings">Settings</string>
-    <string name="menu_about">About Palette</string>
+    <string name="transition_image_unsplash" translatable="false">transition_image_unsplash</string>
 
-    <string name="liked">Liked</string>
-    <string name="empty_liked_palette">Your liked palettes will appear here.</string>
-    <string name="sign_in_text">Sign in to save your liked images</string>
+    <!--HOME ACTIVITY-->
+    <string name="title_pick">Pick</string>
+    <string name="title_unsplash">Unsplash</string>
+    <string name="title_profile">Profile</string>
+
+    <!--PICK FRAGMENT-->
     <string name="pick_image_desc">Please select an image to see its color palette.</string>
     <string name="take_photo">Take Photo</string>
     <string name="choose_from_gallery">Choose from Gallery</string>
+    <string name="error_getting_image">Some error occurred in getting image. Please try again.</string>
+    <string name="menu_about">About Palette</string>
+
+    <!--UNSPLASH FRAGMENT-->
+    <string name="menu_staggered">Staggered</string>
+    <string name="unsplash_empty_title">No data.</string>
+    <string name="unsplash_empty_desc">No data from Unsplash for now.</string>
+    <string name="unsplash_error_title">Could not get data!!</string>
+    <string name="unsplash_error_desc">Unable to get unsplash images. Please try again.</string>
+    <string name="unsplash_error_retry">Retry</string>
+    <string name="unsplash_loading">Loading</string>
+    <string name="unsplash_error_loading">Error loading data. Please try again.</string>
+    <string name="unsplash_loading_items">Loading items…</string>
+
+    <!--PROFILE FRAGMENT-->
+    <string name="menu_settings">Settings</string>
+    <string name="liked">Liked</string>
+    <string name="empty_liked_palette">Your liked palettes will appear here.</string>
+    <string name="sign_in_text">Sign in to save your liked images</string>
+    <string name="sign_in_with_google">Sign In with Google</string>
+    <string name="error_sign_in">Error occurred while signing. Please try again.</string>
+    <string name="error_getting_palettes">Some error occurred while getting your liked Palettes. Please try after some time.</string>
+
+    <!--SETTINGS ACTIVITY-->
     <string name="color_options">Color options</string>
     <string name="setting_rgb_desc">Turn on to see the RGB value for the image.</string>
-
     <string name="title_settings">Settings</string>
 
-    <string name="transition_image_unsplash" translatable="false">transition_image_unsplash</string>
+    <!--DETAIL ACTIVITY-->
+    <string name="please_wait">Please wait....</string>
+    <string name="share_palette_using">Share palette using</string>
+    <string name="error_sharing_palette">Error sharing palette. Please try again.</string>
+    <string name="palette_saved">Palette saved successfully.</string>
+    <string name="error_palette_saved">Could not save Palette. Please try again.</string>
+    <string name="error_liking_palette">Some error occurred. Please try again.</string>
+    <string name="user_not_logged_in">Please login to like Palette.</string>
+    <string name="set_wallpaper">Set wallpaper using</string>
+    <string name="error_save_wallpaper">Some error occurred while saving wallpaper. Please try again.</string>
 </resources>

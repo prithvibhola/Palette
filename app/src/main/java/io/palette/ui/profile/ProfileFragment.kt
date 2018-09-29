@@ -32,8 +32,6 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
     lateinit var viewModel: ProfileViewModel
     lateinit var profileAdapter: ProfileAdapter
 
-    lateinit var menuSettings: MenuItem
-
     private val RC_SIGN_IN = 9001
 
     companion object {
@@ -78,7 +76,7 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
         observe(viewModel.user) {
             it ?: return@observe
             when (it.status) {
-                Response.Status.LOADING -> {
+                Response.Status.LOADING -> { //Nothing to show
                 }
                 Response.Status.SUCCESS -> {
                     when (it.data == null) {
@@ -109,7 +107,7 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
                 Response.Status.ERROR -> {
                     grpUserInfo.visible = false
                     grpSignIn.visible = true
-                    toast("Error occurred while signing. Please try again.")
+                    rootLayout.snackBar(R.string.error_sign_in)
                 }
             }
         }
@@ -117,7 +115,7 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
         observe(viewModel.palettes) {
             it ?: return@observe
             when (it.status) {
-                Response.Status.LOADING -> {
+                Response.Status.LOADING -> { //Nothing to show
                 }
                 Response.Status.SUCCESS -> {
                     it.data ?: return@observe
@@ -128,7 +126,10 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
                         tvEmptyList.visible = true
                     }
                 }
-                Response.Status.ERROR -> toast("Error")
+                Response.Status.ERROR -> {
+                    tvEmptyList.visible = true
+                    rootLayout.snackBar(R.string.error_getting_palettes)
+                }
             }
         }
     }
@@ -139,17 +140,15 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
             viewModel.setUser(if (resultCode == RESULT_OK) null else IdpResponse.fromResultIntent(data))
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        if (menu == null || inflater == null) return
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_profile, menu)
-        menuSettings = menu.findItem(R.id.action_settings)
-        menuSettings.isVisible = true
+        menu.findItem(R.id.action_settings)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.action_settings -> {
-                startActivity(Intent(requireContext(), SettingsActivity::class.java))
+                startActivity(SettingsActivity.newInstance(requireContext()))
                 true
             }
             else -> return super.onOptionsItemSelected(item)
