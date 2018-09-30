@@ -34,6 +34,10 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
 
     private val RC_SIGN_IN = 9001
 
+    private val LOWEST_IMAGE_SIDE_Y = 30
+    var rvYScroll = 0
+    var viewAlpha = 1.0F
+
     companion object {
         fun newInstance() = ProfileFragment()
     }
@@ -70,6 +74,39 @@ class ProfileFragment @Inject constructor() : BaseFragment(), ProfileAdapter.Cal
             layoutManager = StaggeredGridLayoutManager(preference.prefLikedStaggered, StaggeredGridLayoutManager.VERTICAL)
             adapter = profileAdapter
         }
+
+        rvLikedPalettes.scrollWatcher(
+                onScroll = { _, _, dy ->
+                    rvYScroll += dy
+
+                    if (rvYScroll >= LOWEST_IMAGE_SIDE_Y) {
+                        val newAlpha = viewAlpha - 0.1f
+                        if (newAlpha >= 0) {
+                            tvLiked.alpha = newAlpha
+                            ivStaggered.alpha = newAlpha
+                            viewAlpha = newAlpha
+                        }
+                    } else {
+                        val newAlpha = viewAlpha + 0.1f
+                        if (newAlpha <= 1) {
+                            tvLiked.alpha = newAlpha
+                            ivStaggered.alpha = newAlpha
+                            viewAlpha = newAlpha
+                        }
+                    }
+
+                    if (rvYScroll >= 40) {
+                        tvLiked.alpha = 0F
+                        ivStaggered.alpha = 0F
+                        ivStaggered.isEnabled = false
+                    }
+                    if (rvYScroll <= 15) {
+                        tvLiked.alpha = 01F
+                        ivStaggered.alpha = 1F
+                        ivStaggered.isEnabled = true
+                    }
+                }
+        )
 
         viewModel.setUser(null)
         viewModel.getPalettes()
