@@ -26,5 +26,5 @@ abstract class ActivityModule {
 
     @ActivityScoped
     @ContributesAndroidInjector(modules = [])
-    abstract fun aboutActivityv(): AboutActivity
+    abstract fun aboutActivity(): AboutActivity
 }

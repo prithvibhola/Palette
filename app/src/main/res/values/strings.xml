@@ -49,4 +49,12 @@
     <string name="user_not_logged_in">Please login to like Palette.</string>
     <string name="set_wallpaper">Set wallpaper using</string>
     <string name="error_save_wallpaper">Some error occurred while saving wallpaper. Please try again.</string>
+
+    <!--ABOUT ACTIVITY-->
+    <string name="title_about">About</string>
+    <string name="palette_desc">Palette helps to get the #hexcode and rgb() color for any image to be used by the designers. It also uses Unsplash API to show the work of photographers from all over the world.</string>
+    <string name="github">Github</string>
+    <string name="github_desc">Palette is now an open source project. Help us to improve this project and add more functionality to it.</string>
+    <string name="github_checkout">Checkout out the project on Github.</string>
+
 </resources>
