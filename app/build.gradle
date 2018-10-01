@@ -5,14 +5,10 @@ apply plugin: 'io.fabric'
 apply plugin: 'kotlin-kapt'
 
 ext {
-//    debug_key_alias = "androiddebugkey"
-//    debug_key_password = "android"
-//    debug_keystore_path = "../debug.keystore"
-//    debug_keystore_password = "android"
-//    release_key_alias = "password"
-//    release_key_password = "password"
-//    release_keystore_path = "../app/keystore.jks"
-//    release_keystore_password = "password"
+    debug_key_alias = "androiddebugkey"
+    debug_key_password = "android"
+    debug_keystore_path = "../debug.keystore"
+    debug_keystore_password = "android"
 }
 
 android {
@@ -32,20 +28,20 @@ android {
         resValue "string", "base_url_unsplash", properties.getProperty("base.url.unsplash", "")
     }
 
-    //    signingConfigs {
-//        debug {
-//            keyAlias debug_key_alias
-//            keyPassword debug_key_password
-//            storeFile file(debug_keystore_path)
-//            storePassword debug_keystore_password
-//        }
-//        release {
-//            keyAlias release_key_alias
-//            keyPassword release_key_password
-//            storeFile file(release_keystore_path)
-//            storePassword release_keystore_password
-//        }
-//    }
+    signingConfigs {
+        debug {
+            keyAlias debug_key_alias
+            keyPassword debug_key_password
+            storeFile file(debug_keystore_path)
+            storePassword debug_keystore_password
+        }
+        release {
+            keyAlias properties.getProperty("release.key.alias", "")
+            keyPassword properties.getProperty("release.key.password", "")
+            storeFile file(properties.getProperty("release.keystore.path", ""))
+            storePassword properties.getProperty("release.keystore.password", "")
+        }
+    }
 
     buildTypes {
         debug {
@@ -53,8 +49,8 @@ android {
             minifyEnabled false
             shrinkResources false
             zipAlignEnabled false
-//            applicationIdSuffix ".debug"
-//            signingConfig signingConfigs.debug
+            applicationIdSuffix ".debug"
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
@@ -62,7 +58,7 @@ android {
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
-//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -107,7 +103,9 @@ dependencies {
     implementation deps.square.retrofit
     implementation deps.square.moshi
     implementation deps.square.rxjava2
-    implementation deps.square.kotlin
+    implementation(deps.square.kotlin) {
+        exclude group: "org.jetbrains.kotlin", module: "kotlin-reflect"
+    }
     implementation deps.square.okhttp
 
     // OkHttp interceptors
