@@ -35,9 +35,9 @@ buildscript {
             'fabric'               : '1.25.4',
 
             'firebase_database'    : '16.0.1',
-            'firebase_core'        : '15.0.2',
-            'firebase_auth'        : '15.1.0',
-            'firebase_firestore'   : '16.0.0',
+            'firebase_core'        : '16.0.3',
+            'firebase_auth'        : '16.0.3',
+            'firebase_firestore'   : '17.1.0',
             'firebase_ui_auth'     : '4.1.0',
 
             'sourceCompat'         : JavaVersion.VERSION_1_8,
