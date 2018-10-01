@@ -173,4 +173,4 @@
 -keepattributes *Annotation*
 -keepattributes EnclosingMethod
 -keepattributes InnerClasses
--keep class com.firebase.** { *; }
+-keep class com.google.firebase.** { *; }
