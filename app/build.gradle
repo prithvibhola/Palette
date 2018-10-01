@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'org.jetbrains.kotlin.android.extensions'
 
 ext {
     debug_key_alias = "androiddebugkey"
@@ -103,9 +104,7 @@ dependencies {
     implementation deps.square.retrofit
     implementation deps.square.moshi
     implementation deps.square.rxjava2
-    implementation(deps.square.kotlin) {
-        exclude group: "org.jetbrains.kotlin", module: "kotlin-reflect"
-    }
+    implementation deps.square.kotlin
     implementation deps.square.okhttp
 
     // OkHttp interceptors

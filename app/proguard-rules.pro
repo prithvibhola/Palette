@@ -1,9 +1,5 @@
 
--dontwarn uk.co.chrishenx.calligraphy.**
-
 # Dagger ProGuard rules.
-# https://github.com/square/dagger
-
 -dontwarn dagger.internal.codegen.**
 -keepclassmembers,allowobfuscation class * {
     @javax.inject.* *;
@@ -17,21 +13,9 @@
 -keep class * extends dagger.internal.ModuleAdapter
 -keep class * extends dagger.internal.StaticInjection
 
-
-# Butterknife ProGuard rules.
-# Retain generated class which implement Unbinder.
--keep public class * implements butterknife.Unbinder { public <init>(**, android.view.View); }
-
-# Prevent obfuscation of types which use ButterKnife annotations since the simple name
-# is used to reflectively look up the generated ViewBinding.
--keep class butterknife.*
--keepclasseswithmembernames class * { @butterknife.* <methods>; }
--keepclasseswithmembernames class * { @butterknife.* <fields>; }
-
 #ohttp3
 -dontwarn okhttp3.**
 -dontwarn okio.**
-
 
 # Retrofit 2.X
 ## https://square.github.io/retrofit/ ##
@@ -77,46 +61,7 @@
   public *;
 }
 
-
-
-##---------------Begin: proguard configuration for Gson  ----------
-# Gson uses generic type information stored in a class file when working with fields. Proguard
-# removes such information by default, so configure it to keep all of it.
--keepattributes Signature
-
-# For using GSON @Expose annotation
--keepattributes *Annotation*
-
-# Gson specific classes
--keep class sun.misc.Unsafe { *; }
-#-keep class com.google.gson.stream.** { *; }
-
-# Application classes that will be serialized/deserialized over Gson
--keep class com.google.gson.examples.android.model.** { *; }
-
-# Prevent proguard from stripping interface information from TypeAdapterFactory,
-# JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
--keep class * implements com.google.gson.TypeAdapterFactory
--keep class * implements com.google.gson.JsonSerializer
--keep class * implements com.google.gson.JsonDeserializer
-
-
-
-# autovalue
--dontwarn javax.lang.**
--dontwarn javax.tools.**
--dontwarn javax.annotation.**
--dontwarn autovalue.shaded.com.**
--dontwarn com.google.auto.value.**
--dontwarn javax.annotation.GuardedBy
-
-# autovalue gson extension
--keep class **.AutoParcelGson_*
--keepnames @auto.parcelgson.AutoParcelGson class *
-
-
 #android
-
 -optimizationpasses 5
 -dontusemixedcaseclassnames
 -dontskipnonpubliclibraryclasses
@@ -155,7 +100,7 @@
 }
 
 
--keep class javax.annotation.** { *; }
+-keep class javax.annotatio.** { *; }
 -dontwarn javax.annotation.**
 
 
@@ -213,51 +158,19 @@
 -dontwarn java.lang.reflect.**
 -keep class kotlin.** { *; }
 
--keepnames @kotlin.Metadata class com.lifcare.launch.data.models.**
--keep class com.lifcare.launch.data.models.** { *; }
--keepclassmembers class com.lifcare.launch.data.models.** { *; }
+-keepnames @kotlin.Metadata class io.palette.data.models.**
+-keep class io.palette.data.models.** { *; }
+-keepclassmembers class io.palette.data.models.** { *; }
 
--keepnames @kotlin.Metadata class com.lifcare.launch.data.persistence.**
--keep class com.lifcare.launch.data.persistence.** { *; }
--keepclassmembers class com.lifcare.launch.data.persistence.** { *; }
+-keepnames @kotlin.Metadata class io.palette.data.persistence.**
+-keep class io.palette.data.persistence.** { *; }
+-keepclassmembers class io.palette.data.persistence.** { *; }
 
--keep class com.lifcare.launch.utility.Identifiable
+-keep class io.palette.utility.Identifiable
 
--keepclassmembers class android.support.design.internal.BottomNavigationMenuView {
-    boolean mShiftingMode;
-}
 
-####################################################################################################
-
-# DeepLinkDispatch
--keep class com.airbnb.deeplinkdispatch.** { *; }
--keepclasseswithmembers class * {
-     @com.airbnb.deeplinkdispatch.DeepLink <methods>;
-}
-
--keep @interface com.lifcare.launch.ui.deeplink.** { *; }
--keepclasseswithmembers class * {
-    @com.lifcare.launch.ui.deeplink.* <methods>;
-}
-
-# Appsflyer
--dontwarn com.android.installreferrerCopy
--dontwarn com.appsflyer.*
--dontwarn com.bumptech.glide.load.resource.bitmap.VideoDecoder
-
-#############RAZORPAY#########################
--keepclassmembers class * {
-    @android.webkit.JavascriptInterface <methods>;
-}
-
--keepattributes JavascriptInterface
+#FIREBASE
 -keepattributes *Annotation*
-
--dontwarn com.razorpay.**
--keep class com.razorpay.** {*;}
-
--optimizations !method/inlining/*
-
--keepclasseswithmembers class * {
-  public void onPayment*(...);
-}
+-keepattributes EnclosingMethod
+-keepattributes InnerClasses
+-keep class com.firebase.** { *; }
