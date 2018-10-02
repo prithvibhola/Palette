@@ -39,8 +39,8 @@ data class Unsplash(
         @Json(name = "links") val links: Links? = null,
         @Json(name = "user") val user: User? = null
 ) : Parcelable {
-    companion object {
 
+    companion object {
         fun from(uri: String): Unsplash {
             return Unsplash(
                     id = "",
