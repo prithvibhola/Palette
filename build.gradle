@@ -9,8 +9,8 @@ buildscript {
             'name'                 : "1.0",
 
             'play_services_auth'   : '15.0.1',
-            'android_gradle'       : '3.3.0-alpha07',
-            'gms_service'          : '4.0.1',
+            'android_gradle'       : '3.3.0-alpha12',
+            'gms_service'          : '4.0.0',
             'kotlin'               : '1.2.61',
             'support_lib'          : '28.0.0',
             'support_multi_dex'    : '1.0.3',

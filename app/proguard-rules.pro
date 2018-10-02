@@ -99,7 +99,6 @@
   public static final android.os.Parcelable$Creator *;
 }
 
-
 -keep class javax.annotatio.** { *; }
 -dontwarn javax.annotation.**
 
@@ -174,3 +173,6 @@
 -keepattributes EnclosingMethod
 -keepattributes InnerClasses
 -keep class com.google.firebase.** { *; }
+-keep class io.grpc.** {*;}
+
+-keep class io.palette.data.models.** { *; }

@@ -25,7 +25,7 @@ fun Query.getAsFlowable(): Flowable<QuerySnapshot> = Flowable.create({ emitter -
 }, BackpressureStrategy.BUFFER)
 
 fun Query.snapshotAsFlowable(): Flowable<QuerySnapshot> = Flowable.create({ emitter ->
-    val registration = this.addSnapshotListener(MetadataChanges.INCLUDE) { snapshot, exception ->
+    val registration = this@snapshotAsFlowable.addSnapshotListener(MetadataChanges.INCLUDE) { snapshot, exception ->
         if (exception != null) {
             emitter.onError(exception)
             return@addSnapshotListener

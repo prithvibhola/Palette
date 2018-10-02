@@ -19,5 +19,6 @@ class ProfileRepository @Inject constructor(
                     .document(firebaseAuth.currentUser!!.uid)
                     .collection("palettes")
                     .snapshotAsFlowable()
+                    .filter { !it.isEmpty }
                     .map { it.toObjects(Unsplash::class.java) }
 }
