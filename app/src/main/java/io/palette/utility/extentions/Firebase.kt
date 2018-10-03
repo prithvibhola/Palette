@@ -3,15 +3,14 @@ package io.palette.utility.extentions
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import com.google.firebase.firestore.MetadataChanges
 import io.palette.data.models.Optional
 import io.reactivex.Completable
+
+fun FirebaseFirestore.profile() = collection("users")
+fun FirebaseFirestore.paletteCollection(uid: String) = profile().document(uid).collection("palettes")
 
 fun Query.getAsFlowable(): Flowable<QuerySnapshot> = Flowable.create({ emitter ->
     this.get().addOnCompleteListener {

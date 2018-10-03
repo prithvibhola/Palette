@@ -122,18 +122,14 @@ class DetailRepository @Inject constructor(
     }, BackpressureStrategy.BUFFER)
 
     fun likePalette(unsplash: Unsplash): Flowable<Boolean> =
-            fireStore.collection("users")
-                    .document(firebaseAuth.currentUser!!.uid)
-                    .collection("palettes")
+            fireStore.paletteCollection(firebaseAuth.currentUser!!.uid)
                     .document(unsplash.id)
                     .set(unsplash)
                     .toFlowable()
                     .map { true }
 
     fun unlikePalette(unsplash: Unsplash): Flowable<Boolean> =
-            fireStore.collection("users")
-                    .document(firebaseAuth.currentUser!!.uid)
-                    .collection("palettes")
+            fireStore.paletteCollection(firebaseAuth.currentUser!!.uid)
                     .document(unsplash.id)
                     .delete()
                     .toFlowable()
