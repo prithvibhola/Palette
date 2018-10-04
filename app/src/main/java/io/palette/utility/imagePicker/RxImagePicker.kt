@@ -2,7 +2,7 @@ package io.palette.utility.imagePicker
 
 import android.Manifest
 import android.annotation.TargetApi
-import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -14,17 +14,11 @@ import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
-
-import java.text.SimpleDateFormat
-import java.util.ArrayList
-import java.util.Date
-import java.util.Locale
-
+import io.palette.data.models.Source
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-
-import android.app.Activity.RESULT_OK
-import io.palette.data.models.Source
+import java.text.SimpleDateFormat
+import java.util.*
 
 class RxImagePicker : Fragment() {
 
@@ -64,12 +58,18 @@ class RxImagePicker : Fragment() {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        attachedSubject!!.onNext(true)
-        attachedSubject!!.onComplete()
+        try {
+            if (attachedSubject != null) {
+                attachedSubject?.onNext(true)
+                attachedSubject?.onComplete()
+            }
+        } catch (e: Exception) {
+
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             pickImage()
         }
     }
@@ -81,7 +81,7 @@ class RxImagePicker : Fragment() {
                 TAKE_PHOTO -> onImagePicked(cameraPictureUrl)
             }
         } else {
-            canceledSubject!!.onNext(requestCode)
+            canceledSubject?.onNext(requestCode)
         }
     }
 
@@ -94,7 +94,7 @@ class RxImagePicker : Fragment() {
                     imageUris.add(clipData.getItemAt(i).uri)
                 }
             } else {
-                imageUris.add(data.data)
+                imageUris.add(data?.data)
             }
             onImagesPicked(imageUris)
         } else {
@@ -104,7 +104,7 @@ class RxImagePicker : Fragment() {
 
     private fun requestPickImage() {
         if (!isAdded) {
-            attachedSubject!!.subscribe { pickImage() }
+            attachedSubject?.subscribe { pickImage() }
         } else {
             pickImage()
         }
@@ -164,15 +164,15 @@ class RxImagePicker : Fragment() {
 
     private fun onImagesPicked(uris: List<Uri>) {
         if (publishSubjectMultipleImages != null) {
-            publishSubjectMultipleImages!!.onNext(uris)
-            publishSubjectMultipleImages!!.onComplete()
+            publishSubjectMultipleImages?.onNext(uris)
+            publishSubjectMultipleImages?.onComplete()
         }
     }
 
     private fun onImagePicked(uri: Uri?) {
         if (publishSubject != null) {
-            publishSubject!!.onNext(uri!!)
-            publishSubject!!.onComplete()
+            publishSubject?.onNext(uri!!)
+            publishSubject?.onComplete()
         }
     }
 
