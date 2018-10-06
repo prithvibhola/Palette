@@ -24,7 +24,7 @@
 - [Chuck](https://github.com/jgilfelt/chuck)
 - [Progress Activity](https://github.com/vlonjatg/progress-activity)
 
-# Play Store Like
+# Play Store Link
 > This GitHub project is available on the play store as an android application. Please download, share and give your reviews.
 
 <a target="_blank" href="https://play.google.com/store/apps/details?id=io.palette&hl=en"><img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="60"></a>
