@@ -1,5 +1,7 @@
 package io.palette
 
+import android.content.Context
+import android.support.multidex.MultiDex
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
 import com.google.firebase.FirebaseApp
@@ -11,6 +13,11 @@ import io.palette.utility.CrashlyticsTree
 import timber.log.Timber
 
 class PaletteApplication : DaggerApplication() {
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
+    }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
         val appComponent = DaggerAppComponent.builder().application(this).build()
