@@ -8,10 +8,13 @@ class PreferenceUtility @Inject constructor(preferences: SharedPreferences) : Ba
     enum class Key {
         PREF_KEY_UNSPLASH_STAGGERED,
         PREF_KEY_LIKED_STAGGERED,
-        PREF_KEY_SHOW_RGB
+        PREF_KEY_SHOW_RGB,
+        PREF_FCM_TOKEN
     }
 
     var prefUnsplashStaggered by bindInt(Key.PREF_KEY_UNSPLASH_STAGGERED.name, 2)
     var prefLikedStaggered by bindInt(Key.PREF_KEY_LIKED_STAGGERED.name, 2)
     var prefShowRGB by bindBoolean(Key.PREF_KEY_SHOW_RGB.name, true)
+
+    var prefFCMToken by bindString(Key.PREF_FCM_TOKEN.name)
 }

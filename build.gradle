@@ -1,4 +1,5 @@
 buildscript {
+    ext.kotlin_version = '1.2.71'
 
     ext.versions = [
             'minSdk'               : 17,
@@ -39,6 +40,7 @@ buildscript {
             'firebase_auth'        : '16.0.3',
             'firebase_firestore'   : '17.1.0',
             'firebase_ui_auth'     : '4.1.0',
+            'firebase_messaging'   : '17.1.0',
 
             'sourceCompat'         : JavaVersion.VERSION_1_8,
             'targetCompat'         : JavaVersion.VERSION_1_8,
@@ -113,7 +115,8 @@ buildscript {
                     'auth'     : "com.google.firebase:firebase-auth:${versions.firebase_auth}",
                     'firestore': "com.google.firebase:firebase-firestore:${versions.firebase_firestore}",
                     'uiAuth'   : "com.firebaseui:firebase-ui-auth:${versions.firebase_ui_auth}",
-                    'database' : "com.google.firebase:firebase-database:${versions.firebase_database}"
+                    'database' : "com.google.firebase:firebase-database:${versions.firebase_database}",
+                    'messaging': "com.google.firebase:firebase-messaging:${versions.firebase_messaging}"
             ],
             fabric     : [
                     'gradle'     : "io.fabric.tools:gradle:${versions.fabric}",
@@ -145,6 +148,7 @@ buildscript {
         classpath deps.google.gmsservice
         classpath deps.fabric.gradle
         classpath deps.firebase.plugins
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 

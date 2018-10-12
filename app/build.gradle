@@ -145,6 +145,7 @@ dependencies {
     implementation deps.firebase.firestore
     implementation deps.firebase.uiAuth
     implementation deps.firebase.database
+    implementation deps.firebase.messaging
 
     implementation(deps.fabric.crashlytics) {
         transitive = true;
@@ -156,3 +157,6 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}
