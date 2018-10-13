@@ -17,3 +17,11 @@ fun String.dateConvert(): String = newDateFormat.format(defaultDateFormat.parse(
 fun String.alternative(alternate: String) = if (this.isEmpty()) alternate else this
 
 fun String.defaultDate(): String = if (this.isEmpty()) "${defaultDateFormat.format(Date(System.currentTimeMillis()))}T00:00:00-00:00" else this
+
+fun String.parseInt(): Int? {
+    return try {
+        Integer.parseInt(this)
+    } catch (e: NumberFormatException) {
+        null
+    }
+}
