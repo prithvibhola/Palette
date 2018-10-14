@@ -20,6 +20,7 @@ import javax.inject.Singleton
     ViewModelModule::class,
     AuthModule::class,
     FlavourDI::class,
+    ServiceModule::class,
     AndroidSupportInjectionModule::class,
     AndroidInjectionModule::class
 ])

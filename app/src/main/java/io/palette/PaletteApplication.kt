@@ -10,9 +10,13 @@ import dagger.android.DaggerApplication
 import io.fabric.sdk.android.Fabric
 import io.palette.di.component.DaggerAppComponent
 import io.palette.utility.CrashlyticsTree
+import io.palette.utility.notification.Channels
 import timber.log.Timber
+import javax.inject.Inject
 
 class PaletteApplication : DaggerApplication() {
+
+    @Inject lateinit var channels: Channels
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
@@ -38,5 +42,7 @@ class PaletteApplication : DaggerApplication() {
         } else {
             Timber.plant(CrashlyticsTree())
         }
+
+        channels.register()
     }
 }
