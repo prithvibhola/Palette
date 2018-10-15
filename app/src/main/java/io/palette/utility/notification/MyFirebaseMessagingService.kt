@@ -25,6 +25,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import io.palette.utility.notification.Channels.Channel
 import io.palette.R
+import io.palette.ui.home.HomeActivity
 import io.palette.utility.extentions.belowApi
 import java.util.*
 
@@ -136,7 +137,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(), HasServiceInjecto
         }
 
         fun intent(context: Context): Intent? = when {
-            deepLinkUrl.isEmpty() -> Intent(context, MainActivity::class.java)
+            deepLinkUrl.isEmpty() -> Intent(context, HomeActivity::class.java)
             else -> Intent(Intent.ACTION_VIEW, Uri.parse(deepLinkUrl))
         }
     }

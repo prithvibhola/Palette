@@ -10,3 +10,6 @@
 .externalNativeBuild
 app/*.jks
 app/*.keystore
+
+# google-services
+google-services.json

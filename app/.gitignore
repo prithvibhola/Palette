@@ -103,3 +103,6 @@ captures/
 freeline.py
 freeline/
 freeline_project_description.json
+
+# google-services
+google-services.json
