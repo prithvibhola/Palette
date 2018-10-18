@@ -106,3 +106,6 @@ freeline_project_description.json
 
 # google-services
 google-services.json
+
+#Fabric
+fabric.properties

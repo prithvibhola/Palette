@@ -13,3 +13,6 @@ app/*.keystore
 
 # google-services
 google-services.json
+
+#Fabric
+fabric.properties

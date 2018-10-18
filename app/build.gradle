@@ -148,7 +148,7 @@ dependencies {
     implementation deps.firebase.messaging
 
     implementation(deps.fabric.crashlytics) {
-        transitive = true;
+        transitive = true
     }
 
     testImplementation deps.test.junit
