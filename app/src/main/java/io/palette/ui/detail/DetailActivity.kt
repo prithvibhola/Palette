@@ -13,6 +13,8 @@ import io.palette.R
 import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
 import io.palette.ui.base.BaseActivity
+import io.palette.utility.deeplink.AppDeepLink
+import io.palette.utility.deeplink.WebDeepLink
 import io.palette.utility.extentions.*
 import io.palette.utility.preference.PreferenceUtility
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -21,6 +23,8 @@ import permissions.dispatcher.RuntimePermissions
 import timber.log.Timber
 import javax.inject.Inject
 
+@AppDeepLink("detail/{unsplash_id}")
+@WebDeepLink("detail/{unsplash_id}")
 @RuntimePermissions
 class DetailActivity @Inject constructor() : BaseActivity() {
 

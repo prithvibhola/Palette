@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import com.bumptech.glide.Glide
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -44,7 +43,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService(), HasServiceInjecto
         super.onNewToken(token)
         try {
             if (token != null) preferences.prefFCMToken = token
-            Log.d("Token", token)
         } catch (e: Exception) {
             Timber.e(e, "Problem in registering user")
         }

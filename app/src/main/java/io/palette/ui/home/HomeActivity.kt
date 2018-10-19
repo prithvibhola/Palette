@@ -5,10 +5,14 @@ import android.support.v4.view.ViewPager
 import io.palette.R
 import io.palette.di.ActivityScoped
 import io.palette.ui.base.BaseActivity
+import io.palette.utility.deeplink.AppDeepLink
+import io.palette.utility.deeplink.WebDeepLink
 import io.palette.utility.extentions.setColor
 import kotlinx.android.synthetic.main.activity_home.*
 import javax.inject.Inject
 
+@AppDeepLink("home")
+@WebDeepLink("home")
 @ActivityScoped
 class HomeActivity @Inject constructor() : BaseActivity() {
 
