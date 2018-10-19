@@ -25,6 +25,7 @@ android {
         versionCode versions.code
         versionName versions.name
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        android.defaultConfig.javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
 
         resValue "string", "base_url_unsplash", properties.getProperty("base.url.unsplash", "")
     }
@@ -147,9 +148,14 @@ dependencies {
     implementation deps.firebase.database
     implementation deps.firebase.messaging
 
+    //Fabric
     implementation(deps.fabric.crashlytics) {
         transitive = true
     }
+
+    //DeepLink
+    implementation deps.airbnb.deeplink
+    implementation deps.airbnb.deeplinkProcessor
 
     testImplementation deps.test.junit
     androidTestImplementation deps.test.runner

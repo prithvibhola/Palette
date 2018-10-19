@@ -34,6 +34,8 @@ buildscript {
             'progress_activity'    : '2.0.5',
             'firebase'             : '1.1.5',
             'fabric'               : '1.25.4',
+            'deeplinkdispatch'     : '3.1.1',
+            'deeplinkProcessor'    : '3.1.1',
 
             'firebase_database'    : '16.0.1',
             'firebase_core'        : '16.0.3',
@@ -121,6 +123,10 @@ buildscript {
             fabric     : [
                     'gradle'     : "io.fabric.tools:gradle:${versions.fabric}",
                     'crashlytics': "com.crashlytics.sdk.android:crashlytics:2.9.2@aar"
+            ],
+            airbnb     : [
+                    'deeplink'         : "com.airbnb:deeplinkdispatch:${versions.deeplinkdispatch}",
+                    'deeplinkProcessor': "com.airbnb:deeplinkdispatch-processor:${versions.deeplinkProcessor}"
             ],
             others     : [
                     'chuck'                : "com.readystatesoftware.chuck:library:${versions.chuck}",

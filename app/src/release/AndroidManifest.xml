@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="io.palette">
+
+    <application
+        android:name=".PaletteApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <activity android:name=".utility.deeplink.DeepLinkActivity">
+
+            <intent-filter android:autoVerify="true" tools:ignore="UnusedAttribute">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" android:host="palette.com" android:pathPattern=".*" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true" tools:ignore="UnusedAttribute">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="palette.com" android:pathPattern=".*" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true" tools:ignore="UnusedAttribute">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" android:host="www.palette.com" android:pathPattern=".*" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true" tools:ignore="UnusedAttribute">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="www.palette.com" android:pathPattern=".*" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="app" android:host="palette" android:pathPattern=".*" />
+            </intent-filter>
+
+        </activity>
+
+    </application>
+
+</manifest>
