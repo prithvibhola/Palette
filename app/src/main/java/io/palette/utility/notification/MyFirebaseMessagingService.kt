@@ -14,20 +14,19 @@ import android.util.Log
 import com.bumptech.glide.Glide
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.readystatesoftware.chuck.internal.ui.MainActivity
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasServiceInjector
-import io.palette.utility.extentions.parseInt
-import io.palette.utility.preference.PreferenceUtility
-import timber.log.Timber
-import javax.inject.Inject
-import io.palette.utility.notification.Channels.Channel
-import io.palette.R
 import io.palette.ui.home.HomeActivity
 import io.palette.utility.extentions.belowApi
+import io.palette.utility.extentions.parseInt
+import io.palette.utility.notification.Channels.Channel
+import io.palette.utility.preference.PreferenceUtility
+import timber.log.Timber
+import io.palette.R
 import java.util.*
+import javax.inject.Inject
 
 class MyFirebaseMessagingService : FirebaseMessagingService(), HasServiceInjector {
 
@@ -51,9 +50,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService(), HasServiceInjecto
         }
     }
 
-    override fun onMessageReceived(remoteMessage: RemoteMessage?) {
-        when (remoteMessage) {
-            null -> return
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        when {
+            remoteMessage.data == null -> return
             else -> showNotification(remoteMessage)
         }
     }
@@ -112,7 +111,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(), HasServiceInjecto
             fun from(value: String) = try {
                 Action.valueOf(value)
             } catch (e: Exception) {
-                Action.GENERAL
+                GENERAL
             }
         }
     }
@@ -131,7 +130,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(), HasServiceInjecto
                     action = Action.from(remoteMessage.data["action"] as String),
                     title = remoteMessage.data["title"] ?: remoteMessage.notification?.title ?: "",
                     body = remoteMessage.data["body"] ?: remoteMessage.notification?.body ?: "",
-                    imageUrl = remoteMessage.data["image_url"] as String,
+                    imageUrl = remoteMessage.data["image_url"] ?: "",
                     deepLinkUrl = remoteMessage.data["deep_link_url"] as String
             )
         }
