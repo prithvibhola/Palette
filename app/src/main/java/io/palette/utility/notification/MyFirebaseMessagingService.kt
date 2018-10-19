@@ -79,8 +79,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService(), HasServiceInjecto
                     .setPriority(NotificationCompat.PRIORITY_MAX)
                     .setDefaults(Notification.DEFAULT_VIBRATE)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                    .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
-                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setColor(ContextCompat.getColor(this, R.color.colorAccent))
+                    .setSmallIcon(R.drawable.ic_style_black_24dp)
                     .setContentIntent(contentPendingIntent)
 
             if (belowApi(Build.VERSION_CODES.O)) builder.setDefaults(Notification.DEFAULT_SOUND)
