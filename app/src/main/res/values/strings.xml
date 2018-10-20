@@ -49,6 +49,9 @@
     <string name="user_not_logged_in">Please login to like Palette.</string>
     <string name="set_wallpaper">Set wallpaper using</string>
     <string name="error_save_wallpaper">Some error occurred while saving wallpaper. Please try again.</string>
+    <string name="error_unsplash_image_title">Could not get the image.</string>
+    <string name="error_unsplash_image_desc">Unable to get unsplash image. Please try again.</string>
+    <string name="error_unsplash_image_retry">Retry</string>
 
     <!--ABOUT ACTIVITY-->
     <string name="title_about">About</string>

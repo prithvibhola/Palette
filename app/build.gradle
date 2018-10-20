@@ -28,6 +28,7 @@ android {
         android.defaultConfig.javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
 
         resValue "string", "base_url_unsplash", properties.getProperty("base.url.unsplash", "")
+        resValue "string", "unsplash_api_key", properties.getProperty("unsplash.api.key", "")
     }
 
     signingConfigs {

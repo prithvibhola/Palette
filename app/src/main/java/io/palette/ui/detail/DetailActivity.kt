@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import com.airbnb.deeplinkdispatch.DeepLink
 import com.bumptech.glide.Glide
 import io.palette.R
 import io.palette.data.models.Response
@@ -64,30 +65,23 @@ class DetailActivity @Inject constructor() : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        unsplash = intent.getParcelableExtra(ARG_UNSPLASH)
-        isLiked = intent.getBooleanExtra(ARG_IS_LIKED, false)
-        isUnsplash = intent.getBooleanExtra(ARG_IS_UNSPLASH, false)
-        fromProfile = intent.getBooleanExtra(ARG_FROM_PROFILE, false)
-
         viewModel = getViewModel(DetailViewModel::class.java, viewModelFactory)
 
-        mAdapter = DetailAdapter(this, unsplash.user?.name
-                ?: getString(R.string.app_name), unsplash.updatedAt.defaultDate(), isLiked, preferences.prefShowRGB, isUnsplash).apply {
-            savePalette = { savePaletteWithPermissionCheck() }
-            sharePalette = { sharePaletteWithPermissionCheck() }
-            likePalette = {
-                pulseAnimator = it
-                viewModel.likeUnlikePalette(unsplash, isLiked)
+        when {
+            intent.getBooleanExtra(DeepLink.IS_DEEP_LINK, false) -> {
+                viewModel.getUnplashPhoto(intent?.extras?.getString("unsplash_id") ?: "")
+                isLiked = false
+                isUnsplash = true
+                fromProfile = false
             }
-            setWallpaper = {
-                downAnimator = it
-                setWallpaperWithPermissionCheck()
+            else -> {
+                unsplash = intent.getParcelableExtra(ARG_UNSPLASH)
+                isLiked = intent.getBooleanExtra(ARG_IS_LIKED, false)
+                isUnsplash = intent.getBooleanExtra(ARG_IS_UNSPLASH, false)
+                fromProfile = intent.getBooleanExtra(ARG_FROM_PROFILE, false)
+                setAdapter()
+                setPalette()
             }
-        }
-        rvPalette.apply {
-            layoutManager = LinearLayoutManager(this@DetailActivity)
-            adapter = mAdapter
-            animateAlpha()
         }
 
         observe(viewModel.palette) {
@@ -166,23 +160,66 @@ class DetailActivity @Inject constructor() : BaseActivity() {
             }
         }
 
+        observe(viewModel.unsplashPhoto) {
+            it ?: return@observe
+            when (it.status) {
+                Response.Status.LOADING -> pclRootLayout.showLoading()
+                Response.Status.SUCCESS -> {
+                    it.data ?: return@observe
+                    unsplash = it.data
+                    setAdapter()
+                    setPalette()
+                }
+                Response.Status.ERROR -> pclRootLayout.showError(R.drawable.ic_error_outline_black_24dp,
+                        getString(R.string.error_unsplash_image_title),
+                        getString(R.string.error_unsplash_image_desc),
+                        getString(R.string.error_unsplash_image_retry)) { setPalette() }
+            }
+        }
+
+        ivBack.setOnClickListener { onBackPressed() }
+    }
+
+    private fun setAdapter() {
+        mAdapter = DetailAdapter(this, unsplash.user?.name
+                ?: getString(R.string.app_name), unsplash.updatedAt.defaultDate(), isLiked, preferences.prefShowRGB, isUnsplash).apply {
+            savePalette = { savePaletteWithPermissionCheck() }
+            sharePalette = { sharePaletteWithPermissionCheck() }
+            likePalette = {
+                pulseAnimator = it
+                viewModel.likeUnlikePalette(unsplash, isLiked)
+            }
+            setWallpaper = {
+                downAnimator = it
+                setWallpaperWithPermissionCheck()
+            }
+        }
+        rvPalette.apply {
+            layoutManager = LinearLayoutManager(this@DetailActivity)
+            adapter = mAdapter
+            animateAlpha()
+        }
+    }
+
+    private fun setPalette() {
         Glide.with(this)
                 .asBitmap()
                 .load(unsplash.urls?.regular)
                 .listen(
                         resourceReady = { resource, _, _, _, _ ->
                             resource?.let {
-                                ivImage.setImageBitmap(resource)
+                                ivImage.apply {
+                                    setImageBitmap(resource)
+                                    maintainAspectRatio(unsplash.width, unsplash.height)
+                                }
                                 viewModel.generatePalette(resource)
                                 bitmap = resource
+                                pclRootLayout.showContent()
                             }
                         },
                         loadFailed = { e, _, _, _ -> Timber.e(e, "Glide error occurred!!") }
                 )
                 .into(ivImage)
-        ivImage.maintainAspectRatio(unsplash.width, unsplash.height)
-
-        ivBack.setOnClickListener { onBackPressed() }
     }
 
     override fun onBackPressed() {
@@ -205,11 +242,8 @@ class DetailActivity @Inject constructor() : BaseActivity() {
     fun savePalette() = viewModel.savePalette(rvPalette, false, bitmap!!)
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    fun setWallpaper() =
-            Glide.with(this)
-                    .asBitmap()
-                    .load(unsplash.urls?.full)
-                    .loadInto(
-                            resourceReady = { resource, _ -> viewModel.saveWallpaper(resource) }
-                    )
+    fun setWallpaper() = Glide.with(this)
+            .asBitmap()
+            .load(unsplash.urls?.full)
+            .loadInto(resourceReady = { resource, _ -> viewModel.saveWallpaper(resource) })
 }

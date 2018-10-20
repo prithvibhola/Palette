@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Environment
 import android.support.v7.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import io.palette.data.models.GeneratedPalette
 import io.palette.data.models.Response
 import io.palette.data.models.Unsplash
@@ -34,6 +33,7 @@ class DetailViewModel @Inject constructor(
     var savePalette: MutableLiveData<Response<Uri>> = MutableLiveData()
     var likeUnlikePalette: MutableLiveData<Response<Boolean>> = MutableLiveData()
     var saveWallpaper: MutableLiveData<Response<Uri>> = MutableLiveData()
+    val unsplashPhoto: MutableLiveData<Response<Unsplash>> = MutableLiveData()
 
     fun generatePalette(bitmap: Bitmap) {
         repository.detailRepository.getPalette(bitmap)
@@ -93,6 +93,22 @@ class DetailViewModel @Inject constructor(
                         onError = {
                             saveWallpaper.value = Response.error(it)
                             Timber.e(it, "Error in saving wallpaper")
+                        }
+                )
+                .addTo(getCompositeDisposable())
+    }
+
+    fun getUnplashPhoto(unsplashId: String) {
+        unsplashPhoto.value = Response.loading()
+        repository.detailRepository.getUnsplashPhoto(unsplashId)
+                .fromWorkerToMain(scheduler)
+                .subscribeBy(
+                        onNext = {
+                            unsplashPhoto.value = Response.success(it)
+                        },
+                        onError = {
+                            unsplashPhoto.value = Response.error(it)
+                            Timber.e(it, "Error getting user liked palettes")
                         }
                 )
                 .addTo(getCompositeDisposable())

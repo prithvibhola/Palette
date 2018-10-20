@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import io.palette.data.api.Api
 import io.palette.data.models.GeneratedPalette
 import io.palette.data.models.Unsplash
 import io.palette.utility.extentions.*
@@ -21,6 +22,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import java.io.File
 import java.io.FileOutputStream
+import io.palette.R
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,7 +31,8 @@ class DetailRepository @Inject constructor(
         private val context: Context,
         private val preferences: PreferenceUtility,
         private val firebaseAuth: FirebaseAuth,
-        private val fireStore: FirebaseFirestore
+        private val fireStore: FirebaseFirestore,
+        private val api: Api
 ) {
 
     fun getPalette(bitmap: Bitmap): Flowable<List<GeneratedPalette>> =
@@ -134,4 +137,9 @@ class DetailRepository @Inject constructor(
                     .delete()
                     .toFlowable()
                     .map { false }
+
+    fun getUnsplashPhoto(unsplashId: String): Flowable<Unsplash> =
+            api.getUnsplashPhoto(unsplashId, context.resources.getString(R.string.unsplash_api_key))
+                    .toFlowable()
+
 }
