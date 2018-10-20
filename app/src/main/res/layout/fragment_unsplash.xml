@@ -12,10 +12,10 @@
         app:emptyContentTextColor="@color/colorWhite"
         app:emptyTitleTextColor="@color/colorWhite"
         app:errorButtonBackgroundColor="@color/colorWhite"
-        app:errorButtonTextColor="@color/colorBlack"
+        app:errorButtonTextColor="@color/colorAccent"
         app:errorContentTextColor="@color/colorWhite"
         app:errorTitleTextColor="@color/colorWhite"
-        app:loadingProgressBarColor="@color/colorWhite">
+        app:loadingProgressBarColor="@color/colorAccent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvUnsplash"

@@ -3,7 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/pclRootLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorBlack"
+    app:emptyContentTextColor="@color/colorWhite"
+    app:emptyTitleTextColor="@color/colorWhite"
+    app:errorButtonBackgroundColor="@color/colorWhite"
+    app:errorButtonTextColor="@color/colorAccent"
+    app:errorContentTextColor="@color/colorWhite"
+    app:errorTitleTextColor="@color/colorWhite"
+    app:loadingProgressBarColor="@color/colorAccent">
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/rootLayout"
@@ -14,6 +22,7 @@
             android:id="@+id/rvPalette"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/colorWhite"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <android.support.design.widget.AppBarLayout
