@@ -41,6 +41,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
     private var isLiked: Boolean = false
     private var isUnsplash: Boolean = false
     private var fromProfile: Boolean = false
+    private var unsplashId: String = ""
 
     private var likeStatusChanged: Boolean = false
 
@@ -69,7 +70,8 @@ class DetailActivity @Inject constructor() : BaseActivity() {
 
         when {
             intent.getBooleanExtra(DeepLink.IS_DEEP_LINK, false) -> {
-                viewModel.getUnplashPhoto(intent?.extras?.getString("unsplash_id") ?: "")
+                unsplashId = intent?.extras?.getString("unsplash_id") ?: ""
+                viewModel.getUnplashPhoto(unsplashId)
                 isLiked = false
                 isUnsplash = true
                 fromProfile = false
@@ -173,7 +175,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
                 Response.Status.ERROR -> pclRootLayout.showError(R.drawable.ic_error_outline_black_24dp,
                         getString(R.string.error_unsplash_image_title),
                         getString(R.string.error_unsplash_image_desc),
-                        getString(R.string.error_unsplash_image_retry)) { setPalette() }
+                        getString(R.string.error_unsplash_image_retry)) { viewModel.getUnplashPhoto(unsplashId) }
             }
         }
 
@@ -199,6 +201,7 @@ class DetailActivity @Inject constructor() : BaseActivity() {
             adapter = mAdapter
             animateAlpha()
         }
+        pclRootLayout.showContent()
     }
 
     private fun setPalette() {
@@ -214,7 +217,6 @@ class DetailActivity @Inject constructor() : BaseActivity() {
                                 }
                                 viewModel.generatePalette(resource)
                                 bitmap = resource
-                                pclRootLayout.showContent()
                             }
                         },
                         loadFailed = { e, _, _, _ -> Timber.e(e, "Glide error occurred!!") }
