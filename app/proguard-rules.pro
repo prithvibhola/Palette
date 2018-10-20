@@ -152,3 +152,14 @@
 -dontwarn org.joda.time.**
 -dontwarn org.shaded.apache.**
 -dontwarn org.ietf.jgss.**
+
+##########################DEEP LINK ##########################
+-keep @interface com.airbnb.deeplinkdispatch.DeepLink
+-keepclasseswithmembers class * {
+    @com.airbnb.deeplinkdispatch.DeepLink <methods>;
+}
+-keep class com.airbnb.deeplinkdispatch.** { *; }
+-keep @interface io.palette.ui.deeplink.** { *; }
+-keepclasseswithmembers class * {
+    @io.palette.ui.deeplink.* <methods>;
+}
