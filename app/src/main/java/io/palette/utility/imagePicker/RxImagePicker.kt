@@ -19,6 +19,10 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.text.SimpleDateFormat
 import java.util.*
+import android.R.attr.data
+import android.app.Activity.RESULT_CANCELED
+import android.graphics.Bitmap
+
 
 class RxImagePicker : Fragment() {
 
@@ -75,7 +79,7 @@ class RxImagePicker : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK) {
+        if (resultCode != RESULT_CANCELED && resultCode == RESULT_OK) {
             when (requestCode) {
                 SELECT_PHOTO -> handleGalleryResult(data)
                 TAKE_PHOTO -> onImagePicked(cameraPictureUrl)
@@ -98,7 +102,7 @@ class RxImagePicker : Fragment() {
             }
             onImagesPicked(imageUris)
         } else {
-            onImagePicked(data!!.data)
+            onImagePicked(data?.data)
         }
     }
 
@@ -163,15 +167,15 @@ class RxImagePicker : Fragment() {
     }
 
     private fun onImagesPicked(uris: List<Uri>) {
-        if (publishSubjectMultipleImages != null) {
+        if (publishSubjectMultipleImages != null && uris.isNotEmpty()) {
             publishSubjectMultipleImages?.onNext(uris)
             publishSubjectMultipleImages?.onComplete()
         }
     }
 
     private fun onImagePicked(uri: Uri?) {
-        if (publishSubject != null) {
-            publishSubject?.onNext(uri!!)
+        if (publishSubject != null && uri != null) {
+            publishSubject?.onNext(uri)
             publishSubject?.onComplete()
         }
     }
