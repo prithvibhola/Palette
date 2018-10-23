@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -57,5 +58,57 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnCamera" />
+
+    <io.palette.ui.common.ElevationCardView
+        android:id="@+id/cardAppUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dimen_vertical_margin"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        card_view:cardUseCompatPadding="true">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/yellow">
+
+            <TextView
+                android:id="@+id/tvUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_bold"
+                android:paddingStart="@dimen/dimen_horizontal_margin"
+                android:paddingTop="@dimen/dimen_vertical_margin"
+                android:paddingEnd="@dimen/dimen_horizontal_margin"
+                android:text="@string/update_available"
+                android:textAllCaps="true"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/tvUpdateDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_vertical_half_margin"
+                android:fontFamily="@font/open_sans_regular"
+                android:paddingLeft="@dimen/dimen_horizontal_margin"
+                android:paddingRight="@dimen/dimen_horizontal_margin"
+                android:paddingBottom="@dimen/dimen_vertical_margin"
+                android:text="@string/update_available_desc"
+                android:textColor="@color/colorWhite"
+                app:layout_constraintTop_toBottomOf="@+id/tvUpdate" />
+
+            <ImageView
+                android:id="@+id/ivCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dimen_horizontal_margin"
+                android:src="@drawable/ic_cancel_black_24dp"
+                android:tint="@color/colorWhite"
+                app:layout_constraintBottom_toBottomOf="@+id/tvUpdate"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+    </io.palette.ui.common.ElevationCardView>
 
 </android.support.constraint.ConstraintLayout>

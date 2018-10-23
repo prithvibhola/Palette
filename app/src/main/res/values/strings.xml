@@ -69,5 +69,7 @@ In case, you have any feedback for us please contact us at prithvibhola08@gmail
     <string name="channel_general_description">Updates about new colors on Palette</string>
     <string name="channel_unsplash_title">Unsplash</string>
     <string name="channel_unsplash_description">Updates about new colors on Images</string>
+    <string name="update_available">Update available</string>
+    <string name="update_available_desc">Please update to the latest version to access all features.</string>
 
 </resources>
