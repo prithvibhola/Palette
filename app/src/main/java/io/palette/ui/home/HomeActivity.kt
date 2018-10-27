@@ -2,6 +2,7 @@ package io.palette.ui.home
 
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+import com.google.firebase.messaging.FirebaseMessaging
 import io.palette.R
 import io.palette.di.ActivityScoped
 import io.palette.ui.base.BaseActivity
@@ -22,6 +23,8 @@ class HomeActivity @Inject constructor() : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        FirebaseMessaging.getInstance().subscribeToTopic("all")
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
