@@ -1,4 +1,4 @@
-package com.lifcare.launch.ui.deeplink
+package io.palette.utility.deeplink
 
 import com.airbnb.deeplinkdispatch.DeepLinkSpec
 

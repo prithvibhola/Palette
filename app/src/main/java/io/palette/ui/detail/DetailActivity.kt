@@ -24,9 +24,9 @@ import permissions.dispatcher.RuntimePermissions
 import timber.log.Timber
 import javax.inject.Inject
 
+@RuntimePermissions
 @AppDeepLink("detail/{unsplash_id}")
 @WebDeepLink("detail/{unsplash_id}")
-@RuntimePermissions
 class DetailActivity @Inject constructor() : BaseActivity() {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory

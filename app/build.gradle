@@ -156,7 +156,7 @@ dependencies {
 
     //DeepLink
     implementation deps.airbnb.deeplink
-    implementation deps.airbnb.deeplinkProcessor
+    kapt deps.airbnb.deeplinkProcessor
 
     testImplementation deps.test.junit
     androidTestImplementation deps.test.runner

@@ -12,9 +12,9 @@ import io.palette.utility.extentions.setColor
 import kotlinx.android.synthetic.main.activity_home.*
 import javax.inject.Inject
 
+@ActivityScoped
 @AppDeepLink("home")
 @WebDeepLink("home")
-@ActivityScoped
 class HomeActivity @Inject constructor() : BaseActivity() {
 
     @Inject

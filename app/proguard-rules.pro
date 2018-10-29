@@ -159,7 +159,7 @@
     @com.airbnb.deeplinkdispatch.DeepLink <methods>;
 }
 -keep class com.airbnb.deeplinkdispatch.** { *; }
--keep @interface io.palette.ui.deeplink.** { *; }
+-keep @interface io.palette.utility.deeplink.** { *; }
 -keepclasseswithmembers class * {
-    @io.palette.ui.deeplink.* <methods>;
+    @io.palette.utility.deeplink.* <methods>;
 }
