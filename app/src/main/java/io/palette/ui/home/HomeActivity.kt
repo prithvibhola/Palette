@@ -2,6 +2,7 @@ package io.palette.ui.home
 
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+import com.airbnb.deeplinkdispatch.DeepLink
 import com.google.firebase.messaging.FirebaseMessaging
 import io.palette.R
 import io.palette.di.ActivityScoped
@@ -13,8 +14,8 @@ import kotlinx.android.synthetic.main.activity_home.*
 import javax.inject.Inject
 
 @ActivityScoped
-@AppDeepLink("home")
-@WebDeepLink("home")
+@AppDeepLink("home/{id}")
+@WebDeepLink("home/{id}")
 class HomeActivity @Inject constructor() : BaseActivity() {
 
     @Inject
@@ -29,6 +30,15 @@ class HomeActivity @Inject constructor() : BaseActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         window.setBackgroundDrawableResource(R.color.colorPrimary)
+
+        when {
+            intent.getBooleanExtra(DeepLink.IS_DEEP_LINK, false) -> {
+                viewPager.currentItem = intent?.extras?.getInt("id") ?: 0
+            }
+            else -> {
+                viewPager.currentItem = 0
+            }
+        }
 
         ivPickImage.setColor(R.color.colorAccent)
 
