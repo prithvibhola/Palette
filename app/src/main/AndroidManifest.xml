@@ -34,7 +34,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="xxxxxxxxxxxxxxxxxxxxx" />
+            android:value="49f32668d3b6217027f3f63edca43ed5e7272270" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

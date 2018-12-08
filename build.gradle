@@ -32,6 +32,7 @@ buildscript {
             'glide'                : '4.7.1',
             'permission_dispatcher': '3.3.1',
             'progress_activity'    : '2.0.5',
+            'app_updater'          : '2.7',
             'firebase'             : '1.1.5',
             'fabric'               : '1.25.4',
             'deeplinkdispatch'     : '3.1.1',
@@ -134,7 +135,8 @@ buildscript {
                     'glide'                : "com.github.bumptech.glide:glide:${versions.glide}",
                     'progress'             : "com.github.vlonjatg:progress-activity:${versions.progress_activity}",
                     'permissions'          : "com.github.hotchemi:permissionsdispatcher:${versions.permission_dispatcher}",
-                    'permissions_processor': "com.github.hotchemi:permissionsdispatcher-processor:${versions.permission_dispatcher}"
+                    'permissions_processor': "com.github.hotchemi:permissionsdispatcher-processor:${versions.permission_dispatcher}",
+                    'app_updater'          : "com.github.javiersantos:AppUpdater:${versions.app_updater}",
             ],
             test       : [
                     'junit'   : "junit:junit:${versions.junit}",

@@ -135,6 +135,7 @@ dependencies {
     implementation deps.square.timber
     implementation deps.others.glide
     implementation deps.others.progress
+    implementation deps.others.app_updater
     implementation(deps.others.permissions) {
         exclude module: "support-v13"
     }
