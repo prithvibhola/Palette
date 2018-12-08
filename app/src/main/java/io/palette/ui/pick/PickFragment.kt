@@ -4,6 +4,9 @@ import android.Manifest
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
+import com.github.javiersantos.appupdater.AppUpdaterUtils
+import com.github.javiersantos.appupdater.enums.AppUpdaterError
+import com.github.javiersantos.appupdater.objects.Update
 import io.palette.R
 import io.palette.data.models.Response
 import io.palette.data.models.Source
@@ -19,12 +22,19 @@ import kotlinx.android.synthetic.main.fragment_pick.*
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import javax.inject.Inject
+import android.content.Intent
+import android.net.Uri
+import io.palette.utility.extentions.visible
+import timber.log.Timber
+
 
 @FragmentScoped
 @RuntimePermissions
 class PickFragment @Inject constructor() : BaseFragment() {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    lateinit var appUpdaterUtils: AppUpdaterUtils
 
     lateinit var viewModel: PickViewModel
 
@@ -42,6 +52,8 @@ class PickFragment @Inject constructor() : BaseFragment() {
 
         viewModel = getViewModel(PickViewModel::class.java, viewModelFactory)
 
+        appUpdaterUtils = AppUpdaterUtils(requireContext())
+
         btnCamera.setOnClickListener { pickFromCameraWithPermissionCheck() }
         btnGallery.setOnClickListener { pickFromGalleryWithPermissionCheck() }
 
@@ -54,6 +66,27 @@ class PickFragment @Inject constructor() : BaseFragment() {
                 Response.Status.ERROR -> rootLayout.snackBar(R.string.error_getting_image)
             }
         }
+
+        appUpdaterUtils.withListener(object : AppUpdaterUtils.UpdateListener {
+            override fun onSuccess(update: Update, isUpdateAvailable: Boolean) {
+                cardAppUpdate.visible = isUpdateAvailable
+            }
+
+            override fun onFailed(error: AppUpdaterError?) {
+                Timber.e(error.toString(), "Error in checking app update")
+            }
+        }).start()
+
+        cardAppUpdate.setOnClickListener {
+            val appPackageName = requireContext().packageName
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+            } catch (e: android.content.ActivityNotFoundException) {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
+            }
+        }
+
+        ivCancel.setOnClickListener { cardAppUpdate.visible = false }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -74,6 +107,11 @@ class PickFragment @Inject constructor() : BaseFragment() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         onRequestPermissionsResult(requestCode, grantResults)
+    }
+
+    override fun onDestroy() {
+        appUpdaterUtils.stop()
+        super.onDestroy()
     }
 
     @NeedsPermission(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
