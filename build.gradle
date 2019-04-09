@@ -6,8 +6,8 @@ buildscript {
             'compileSdk'           : 28,
             'targetSdk'            : 28,
 
-            'code'                 : 13,
-            'name'                 : "2.5",
+            'code'                 : 14,
+            'name'                 : "2.6",
 
             'play_services_auth'   : '15.0.1',
             'android_gradle'       : '3.3.2',
