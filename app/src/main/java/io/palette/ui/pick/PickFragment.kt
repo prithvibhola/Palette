@@ -34,7 +34,7 @@ class PickFragment @Inject constructor() : BaseFragment() {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var appUpdaterUtils: AppUpdaterUtils
+//    lateinit var appUpdaterUtils: AppUpdaterUtils
 
     lateinit var viewModel: PickViewModel
 
@@ -52,7 +52,7 @@ class PickFragment @Inject constructor() : BaseFragment() {
 
         viewModel = getViewModel(PickViewModel::class.java, viewModelFactory)
 
-        appUpdaterUtils = AppUpdaterUtils(requireContext())
+//        appUpdaterUtils = AppUpdaterUtils(requireContext())
 
         btnCamera.setOnClickListener { pickFromCameraWithPermissionCheck() }
         btnGallery.setOnClickListener { pickFromGalleryWithPermissionCheck() }
@@ -67,24 +67,24 @@ class PickFragment @Inject constructor() : BaseFragment() {
             }
         }
 
-        appUpdaterUtils.withListener(object : AppUpdaterUtils.UpdateListener {
-            override fun onSuccess(update: Update, isUpdateAvailable: Boolean) {
-                cardAppUpdate.visible = isUpdateAvailable
-            }
+//        appUpdaterUtils.withListener(object : AppUpdaterUtils.UpdateListener {
+//            override fun onSuccess(update: Update, isUpdateAvailable: Boolean) {
+//                cardAppUpdate.visible = isUpdateAvailable
+//            }
+//
+//            override fun onFailed(error: AppUpdaterError?) {
+//                Timber.e(error.toString(), "Error in checking app update")
+//            }
+//        }).start()
 
-            override fun onFailed(error: AppUpdaterError?) {
-                Timber.e(error.toString(), "Error in checking app update")
-            }
-        }).start()
-
-        cardAppUpdate.setOnClickListener {
-            val appPackageName = requireContext().packageName
-            try {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
-            } catch (e: android.content.ActivityNotFoundException) {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
-            }
-        }
+//        cardAppUpdate.setOnClickListener {
+//            val appPackageName = requireContext().packageName
+//            try {
+//                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+//            } catch (e: android.content.ActivityNotFoundException) {
+//                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
+//            }
+//        }
 
         ivCancel.setOnClickListener { cardAppUpdate.visible = false }
     }
@@ -110,7 +110,7 @@ class PickFragment @Inject constructor() : BaseFragment() {
     }
 
     override fun onDestroy() {
-        appUpdaterUtils.stop()
+//        appUpdaterUtils.stop()
         super.onDestroy()
     }
 
