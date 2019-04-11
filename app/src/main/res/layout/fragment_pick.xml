@@ -60,12 +60,12 @@
         app:layout_constraintTop_toBottomOf="@+id/btnCamera" />
 
     <io.palette.ui.common.ElevationCardView
-        android:id="@+id/cardAppUpdate"
+        android:id="@+id/cardNotify"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimen_vertical_margin"
-        app:cardCornerRadius="8dp"
-        android:visibility="gone"
+        android:layout_marginBottom="-8dp"
+        android:visibility="visible"
+        app:cardCornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         card_view:cardUseCompatPadding="true">
 
@@ -75,29 +75,30 @@
             android:background="@color/yellow">
 
             <TextView
-                android:id="@+id/tvUpdate"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvNotifyTitle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_bold"
-                android:paddingStart="@dimen/dimen_horizontal_margin"
-                android:paddingTop="@dimen/dimen_vertical_margin"
-                android:paddingEnd="@dimen/dimen_horizontal_margin"
+                android:padding="@dimen/dimen_horizontal_margin"
                 android:text="@string/update_available"
                 android:textAllCaps="true"
-                android:textColor="@color/colorWhite" />
+                android:textColor="@color/colorWhite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tvUpdateDesc"
+                android:id="@+id/tvNotifyDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_vertical_half_margin"
                 android:fontFamily="@font/open_sans_regular"
                 android:paddingLeft="@dimen/dimen_horizontal_margin"
                 android:paddingRight="@dimen/dimen_horizontal_margin"
-                android:paddingBottom="@dimen/dimen_vertical_margin"
+                android:paddingBottom="@dimen/dimen_vertical_double_margin"
                 android:text="@string/update_available_desc"
                 android:textColor="@color/colorWhite"
-                app:layout_constraintTop_toBottomOf="@+id/tvUpdate" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvNotifyTitle" />
 
             <ImageView
                 android:id="@+id/ivCancel"
@@ -106,7 +107,8 @@
                 android:layout_marginEnd="@dimen/dimen_horizontal_margin"
                 android:src="@drawable/ic_cancel_black_24dp"
                 android:tint="@color/colorWhite"
-                app:layout_constraintBottom_toBottomOf="@+id/tvUpdate"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/tvNotifyTitle"
                 app:layout_constraintEnd_toEndOf="parent" />
 
         </android.support.constraint.ConstraintLayout>

@@ -4,4 +4,6 @@
     <dimen name="dimen_horizontal_half_margin">8dp</dimen>
     <dimen name="dimen_vertical_margin">16dp</dimen>
     <dimen name="dimen_vertical_half_margin">8dp</dimen>
+
+    <dimen name="dimen_vertical_double_margin">32dp</dimen>
 </resources>

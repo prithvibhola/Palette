@@ -27,12 +27,12 @@ import android.net.Uri
 import io.palette.utility.extentions.visible
 import timber.log.Timber
 
-
 @FragmentScoped
 @RuntimePermissions
 class PickFragment @Inject constructor() : BaseFragment() {
 
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
 //    lateinit var appUpdaterUtils: AppUpdaterUtils
 
@@ -60,7 +60,7 @@ class PickFragment @Inject constructor() : BaseFragment() {
         observe(viewModel.image) {
             it ?: return@observe
             when (it.status) {
-                Response.Status.LOADING -> { //Nothing to show
+                Response.Status.LOADING -> {
                 }
                 Response.Status.SUCCESS -> startActivity(DetailActivity.newInstance(requireContext(), Unsplash.from(it.data.toString()), false, false, false))
                 Response.Status.ERROR -> rootLayout.snackBar(R.string.error_getting_image)
@@ -86,7 +86,7 @@ class PickFragment @Inject constructor() : BaseFragment() {
 //            }
 //        }
 
-        ivCancel.setOnClickListener { cardAppUpdate.visible = false }
+        ivCancel.setOnClickListener { cardNotify.visible = false }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
