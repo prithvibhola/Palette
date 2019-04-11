@@ -3,6 +3,7 @@ package io.palette.ui.pick
 import android.app.Application
 import android.net.Uri
 import android.support.v4.app.FragmentManager
+import io.palette.data.models.CardNotification
 import io.palette.data.models.Response
 import io.palette.data.models.Source
 import io.palette.repository.Repository
@@ -22,6 +23,7 @@ class PickViewModel @Inject constructor(
 ) : BaseAndroidViewModel(application) {
 
     val image = ActionLiveData<Response<Uri>>()
+    val cardNotification = ActionLiveData<Response<CardNotification>>()
 
     fun openImagePicker(fragmentManager: FragmentManager, source: Source) {
         repository.pickRepository.getImage(fragmentManager, source)
@@ -33,6 +35,21 @@ class PickViewModel @Inject constructor(
                         onError = {
                             image.sendAction(Response.error(it))
                             Timber.e(it, "Error occurred while getting image")
+                        }
+                )
+                .addTo(getCompositeDisposable())
+    }
+
+    fun cardNotification() {
+        repository.pickRepository.cardNotify()
+                .fromWorkerToMain(scheduler)
+                .subscribeBy(
+                        onNext = {
+                            cardNotification.sendAction(Response.success(it))
+                        },
+                        onError = {
+                            cardNotification.sendAction(Response.error(it))
+                            Timber.e(it, "Error in getting card notification")
                         }
                 )
                 .addTo(getCompositeDisposable())

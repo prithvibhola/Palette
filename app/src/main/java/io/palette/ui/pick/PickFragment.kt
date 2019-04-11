@@ -51,6 +51,7 @@ class PickFragment @Inject constructor() : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = getViewModel(PickViewModel::class.java, viewModelFactory)
+        viewModel.cardNotification()
 
 //        appUpdaterUtils = AppUpdaterUtils(requireContext())
 
@@ -64,6 +65,14 @@ class PickFragment @Inject constructor() : BaseFragment() {
                 }
                 Response.Status.SUCCESS -> startActivity(DetailActivity.newInstance(requireContext(), Unsplash.from(it.data.toString()), false, false, false))
                 Response.Status.ERROR -> rootLayout.snackBar(R.string.error_getting_image)
+            }
+        }
+        observe(viewModel.cardNotification) {
+            it ?: return@observe
+            when (it.status) {
+                Response.Status.LOADING -> TODO()
+                Response.Status.SUCCESS -> TODO()
+                Response.Status.ERROR -> TODO()
             }
         }
 

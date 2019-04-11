@@ -28,7 +28,8 @@ class ProfileViewModel @Inject constructor(
         if (response == null)
             user.value = Response.success(if (firebaseAuth.currentUser != null) firebaseAuth.currentUser else null)
         else {
-            user.value = Response.error(response.error?.fillInStackTrace() ?: Throwable("User could not sign in"))
+            user.value = Response.error(response.error?.fillInStackTrace()
+                    ?: Throwable("User could not sign in"))
             Timber.e(response.error, "User could not sign in")
         }
     }

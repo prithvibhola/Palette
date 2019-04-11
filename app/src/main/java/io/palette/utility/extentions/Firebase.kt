@@ -11,6 +11,7 @@ import io.reactivex.Completable
 
 fun FirebaseFirestore.profile() = collection("users")
 fun FirebaseFirestore.paletteCollection(uid: String) = profile().document(uid).collection("palettes")
+fun FirebaseFirestore.cardNotify() = collection("notify").document("spndZYgmeZ2NVUmM3h65")
 
 fun Query.getAsFlowable(): Flowable<QuerySnapshot> = Flowable.create({ emitter ->
     this.get().addOnCompleteListener {

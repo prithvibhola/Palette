@@ -2,6 +2,7 @@ package io.palette.data.models
 
 import android.annotation.SuppressLint
 import android.os.Parcelable
+import com.google.firebase.firestore.DocumentSnapshot
 import com.squareup.moshi.Json
 import kotlinx.android.parcel.Parcelize
 
@@ -89,3 +90,28 @@ data class GeneratedPalette(
         val rgb: String,
         val population: Int
 )
+
+data class CardNotification(
+        @Json(name = "id") val id: String,
+        @Json(name = "title") val title: String,
+        @Json(name = "description") val description: String,
+        @Json(name = "deep_link_url") val deep_link_url: String,
+        @Json(name = "cancelable") val cancelable: Boolean,
+        @Json(name = "type") val type: CardType,
+        @Json(name = "card_color_code") val cardColorCode: String
+) {
+
+    companion object {
+        fun from(snapshot: DocumentSnapshot) = CardNotification(
+                id = snapshot.id,
+                title = snapshot["title"] as String,
+                description = snapshot["description"] as String,
+                deep_link_url = snapshot["deep_link_url"] as String,
+                cancelable = snapshot["cancelable"] as Boolean,
+                type = snapshot["type"] as CardType,
+                cardColorCode = snapshot["card_color_code"] as String
+        )
+    }
+}
+
+enum class CardType { GENERAL, AD, UPDATE, RATING }
